@@ -1,6 +1,6 @@
 #Cmyster's Openstack TripleO Installer
 
-An assortment of bash scripts that I used to prepare and install Openstack using TripleO. I added and combined them all to this script to install with one command. Though I am a Redhat employee, this has nothing to do with how Redhat are installing Openstack. All of the work here is for my personal experimentation and you should not infer that any of it as related to my work at Redhat.
+An assortment of bash scripts that I used to prepare and install Openstack using TripleO. I added and combined them all to this script to install with one command. Though I am a Redhat employee, this has nothing to do with how Redhat are installing Openstack. All of the work here is for my personal experimentation and you should not infer that any of it is related to my work at Redhat.
 
 It is a side project of mine because I needed some flexibility and did not want to keep adjusting things manually and for something as simple and as straight forward as installing Openstack and other solutions, though better in many aspects, were much "heavier" then a bunch of scripts.
 

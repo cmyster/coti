@@ -1,0 +1,29 @@
+heat_template_version: 2014-10-16
+
+parameters:
+  server:
+    description: ID of the controller node to apply this config to
+    type: string
+
+resources:
+  NodeConfig:
+    type: OS::Heat::SoftwareConfig
+    properties:
+      group: script
+      config: |
+        #!/bin/sh
+        dd if=/dev/zero of=/swap bs=1M count=FINDSWP
+        chmod 600 /swap
+        mkswap /swap
+        echo /swap none swap defaults 0 0 >> /etc/fstab
+        swapon /swap
+
+  NodeDeployment:
+    type: OS::Heat::SoftwareDeployment
+    properties:
+      config: {get_resource: NodeConfig}
+      server: {get_param: server}
+outputs:
+  deploy_stdout:
+    description: Deployment reference, used to trigger post-deploy on changes
+    value: {get_attr: [NodeDeployment, deploy_stdout]}

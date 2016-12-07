@@ -1,0 +1,171 @@
+###    General variables.
+
+# Project name.
+# This will be used for files and folder names.
+PROJECT="coti"
+
+# The script works here.
+# It is deleted and recreated in each run.
+WORK_DIR=${WORK_DIR:-"/tmp/$PROJECT"}
+
+# Starting location, used to resolve paths.
+CWD=$(pwd)
+
+# Shortcut to the tripleo heat templates.
+THT="/usr/share/openstack-tripleo-heat-templates"
+
+# Shortcut to libvirt's image folder.
+VIRT_IMG="/var/lib/libvirt/images"
+
+# Log file
+LOG_FILE=${LOG_FILE:-"$(pwd)/logs/$PROJECT-$(date +%s).log"}
+
+# Run tempest on the overcloud after a successful deployment.
+RUN_TEMPEST=${RUN_TEMPEST:-"false"}
+
+# Selinux state on the undercloud.
+UNDER_SEL=${UNDER_SEL:-"permissive"}
+
+# Selinux state on the overcloud.
+OVER_SEL=${OVER_SEL:-"permissive"}
+
+# Network type for undecloud nodes
+NET_TYPE=${NET_TYPE:-"vxlan"}
+
+# How images are accessed with virt-commands.
+LIBGUESTFS_BACKEND=direct
+
+# Base path to EPEL
+EPEL="https://dl.fedoraproject.org/pub/epel/7/x86_64"
+
+# Messge to display on long operations
+LONG=${LONG:-"(this step takes time)"}
+
+# RPM location of latest rhos-release
+LATEST_RR=${LATEST_RR:-"http://rhos-release.virt.bos.redhat.com/repos/rhos-release/rhos-release-latest.noarch.rpm"}
+
+# Director version to install.
+OSPD_VER=10
+
+# Argument to pass to rhos-release, for instance "-p 2016-10-31.1"
+RR_CMD=${RR_CMD:-"$OSPD_VER"}
+
+# DNS to be used.
+# The default here is to use the host's configuration.
+DNS="${DNS:-$(grep nameserver /etc/resolv.conf | head -n 1 | cut -d " " -f 2)}"
+
+# Host default nic.
+NIC=$(ip route get $DNS | grep dev | awk '{print $5}')
+
+# Host IP.
+HOST_IP=$(ifconfig $NIC | grep "inet " | awk '{print $2}')
+
+# Host root password.
+HOST_PASS="12345678"
+
+###   File server location.   
+###   This is were the script gets stuff like guest images,
+###   and also where it keeps modified ones.
+
+# Server to download images from.
+FILE_SERVER=${FILE_SERVER:-"http://ikook.tlv.redhat.com"}
+
+# Server's domain.
+SRV_DOMAIN=${FILE_SERVER##*://}
+
+# RHEL guest image.
+RHEL_GUEST=${GUEST_DIR:-"$FILE_SERVER/gen_images/cloud/rhel-guest-image-latest.qcow2"}
+GUEST_FILE=$(basename $RHEL_GUEST)
+
+# Director image RPMs path.
+OC_IMAGES=${OC_IMAGES:-"$FILE_SERVER/rpms/rhos$OSPD_VER/rhosp-director-images-$OSPD_VER-latest.rpm"}
+OC_IPA=${OC_IPA:-"$FILE_SERVER/rpms/rhos$OSPD_VER/rhosp-director-images-$OSPD_VER-ipa-latest.rpm"}
+
+# Path to the folder that contains all the repos
+AUTO_PATH=${AUTO_PATH:-"$FILE_SERVER/auto"}
+
+# Guest image time zone.
+# The default is taken from the host's.
+GUEST_TZ=${GUEST_TZ:-$(timedatectl | grep "Time zone" | awk '{print $3}')}
+
+# How and where to upload images.
+UPLOAD_URL=${UPLOAD_URL:-"${SRV_DOMAIN}:/home/ftp/auto"}
+UPLOAD_DIR=${UPLOAD_URL##*:}
+UPLOAD_USER=${UPLOAD_USER:-"rhos-qe"}
+UPLOAD_PASS=${UPLOAD_PASS:-"qum5net"}
+
+# Nodes and undercloud's root password.
+ROOT_PASS=${ROOT_PASS:-"12345678"}
+
+# NTP server to be used.
+# Default is taken from the host.
+NTP="${NTP:-$(grep "'^server'\|iburst" /etc/ntp.conf | cut -d " " -f 2)}"
+
+###   Nodes and per node settings.
+
+# Node names.
+# Nodes will be _defined_ in this order.
+# Keep undercloud first!
+NODES=(
+        "undercloud" 
+        "controller"
+        "compute"
+        "ceph"
+      )
+
+# Network setup per node.
+# Always keep provisioning network first.
+NETWORKS=(
+           "ControlPlane"
+           "StorageIP"
+           "StorageMGT"
+           "Internal"
+           "Tenant"
+           "External"
+         )
+
+# Node numbers and settings.
+#!!! The base name needs to be the same as the node names in the NODES array.
+# NUM - How many of that node.
+# RAM - RAM in MB.
+# SWP - SWAP in MB.
+# CPU - How many vCPU.
+# DUM - Extra (Dummy) nodes of the same type.
+# DSK - Size of disk in GB.
+# OS  - Corresponds to <os> in libvirt.
+
+# undercloud nodes
+undercloud_NUM=${undercloud_NUM:-1}
+undercloud_RAM=${undercloud_RAM:-16384}
+undercloud_SWP=${undercloud_SWP:-1024}
+undercloud_CPU=${undercloud_CPU:-4}
+undercloud_DUM=${undercloud_DUM:-0}
+undercloud_DSK=${undercloud_DSK:-24}
+undercloud_OS=${undercloud_OS:-"rhel7.3.0"}
+
+# controller nodes
+controller_NUM=${controller_NUM:-3}
+controller_RAM=${controller_RAM:-16384}
+controller_SWP=${controller_SWP:-1024}
+controller_CPU=${controller_CPU:-3}
+controller_DUM=${controller_DUM:-0}
+controller_DSK=${controller_DSK:-18}
+controller_OS=${controller_OS:-"rhel7.3.0"}
+
+# compute nodes
+compute_NUM=${compute_NUM:-2}
+compute_RAM=${compute_RAM:-16384}
+compute_SWP=${compute_SWP:-1024}
+compute_CPU=${compute_CPU:-3}
+compute_DUM=${compute_DUM:-0}
+compute_DSK=${compute_DSK:-18}
+compute_OS=${compute_OS:-"rhel7.3.0"}
+
+# ceph nodes
+ceph_NUM=${ceph_NUM:-3}
+ceph_RAM=${ceph_RAM:-4096}
+ceph_SWP=${ceph_SWP:-1024}
+ceph_CPU=${ceph_CPU:-2}
+ceph_DUM=${ceph_DUM:-0}
+ceph_DSK=${ceph_DSK:-24}
+ceph_OS=${ceph_OS:-"rhel7.3.0"}

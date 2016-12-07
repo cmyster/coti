@@ -1,0 +1,7 @@
+parameter_defaults:
+  EC2MetadataIp: FINDEC2
+  ExternalAllocationPools: [{'start': 'FINDSTRT', 'end': 'FINDEND'}]
+  ExternalNetCidr: FINDCIDR
+  ExternalInterfaceDefaultRoute: FINDEXT 
+
+

@@ -1,0 +1,29 @@
+#!/bin/bash
+
+source conf
+for file in $(ls functions/*.sh)
+do
+    source $file
+done
+
+CWD=$(pwd)
+rm -rf $WORK_DIR
+mkdir -p $WORK_DIR
+cd $WORK_DIR
+
+START=$(date +%s)
+
+run ()
+{
+    echo "[$(date +%T)] running [$1] $2" | tee -a $LOG_FILE
+    SECONDS=0
+    $1
+    echo "$1 finished with no errors and ran for $(time_diff $SECONDS)" | tee -a $LOG_FILE
+    echo ""
+}
+
+run clean_vms
+run clean_vnets
+run clean_pool
+run clean
+echo "DONE in $(time_diff $(( $(date +%s) - $START)))"

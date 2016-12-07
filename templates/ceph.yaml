@@ -1,0 +1,20 @@
+parameter_defaults:
+  # Setting the sizes to less than 3 (the default) will save space.
+  CephPools:
+    volumes:
+      size: 2,
+      pg_num: 128,
+      pgp_num: 128
+    vms:
+      size: 2,
+      pg_num: 128,
+      pgp_num: 128
+    images:
+      size: 2,
+      pg_num: 128,
+      pgp_num: 128
+  ExtraConfig:
+    # VDA houses the root OS and components. VDB is used for storage.
+    ceph::profile::params::osds:
+      '/dev/vdb': {}
+    ceph::profile::params::osd_crush_update_on_start: false

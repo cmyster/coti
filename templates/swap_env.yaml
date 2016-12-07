@@ -1,0 +1,4 @@
+resource_registry:
+    OS::TripleO::ControllerExtraConfigPre: controller_swap.yaml
+    OS::TripleO::ComputeExtraConfigPre: compute_swap.yaml
+    OS::TripleO::CephStorageExtraConfigPre: ceph_swap.yaml

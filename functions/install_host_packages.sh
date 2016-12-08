@@ -2,6 +2,7 @@ install_host_packages ()
 {
     echo "adding needed | wanted packages to the hostmachine"
     PACKAGES=( 
+              elinks
               facter
               libguestfs-tools-c
               libguestfs-xfs

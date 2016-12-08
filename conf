@@ -45,9 +45,15 @@ LONG=${LONG:-"(this step takes time)"}
 LATEST_RR=${LATEST_RR:-"http://rhos-release.virt.bos.redhat.com/repos/rhos-release/rhos-release-latest.noarch.rpm"}
 
 # Director version to install.
-OSPD_VER=10
+OSPD_VER=${OSPD_VER:-"10"}
 
-# Argument to pass to rhos-release, for instance "-p 2016-10-31.1"
+# Puddle version to install.
+PUDDLE_VER=${PUDDLE_VER:-"latest"}
+
+# Puddles repository parent directory
+REPO_PATH=${REPO_PATH:-"http://download-node-02.eng.bos.redhat.com/rcm-guest/puddles/OpenStack"}
+
+# Argument to pass to rhos-release.
 RR_CMD=${RR_CMD:-"$OSPD_VER"}
 
 # DNS to be used.
@@ -162,7 +168,7 @@ compute_DSK=${compute_DSK:-18}
 compute_OS=${compute_OS:-"rhel7.3.0"}
 
 # ceph nodes
-ceph_NUM=${ceph_NUM:-3}
+ceph_NUM=${ceph_NUM:-0}
 ceph_RAM=${ceph_RAM:-4096}
 ceph_SWP=${ceph_SWP:-1024}
 ceph_CPU=${ceph_CPU:-2}

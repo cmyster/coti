@@ -33,7 +33,7 @@ host_preprerations ()
     run install_host_packages "$LONG"
     run set_host_repos
     run set_puddle_params
-    run update_os
+    run update_os "$LONG""
     run host_tweaks
     run fix_host_ssh
     run fix_virt_access

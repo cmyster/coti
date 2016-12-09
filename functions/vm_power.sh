@@ -4,8 +4,8 @@ vm_power ()
     OPTION=$2
 
     # Test string for nc to send. Its supposed to fail the SSH handshake.
-    TEST_FILE="/tmp/nc_test_string_$HOST"
-    TMPFILE="/tmp/nc_tmpfile_$HOST"
+    TEST_FILE="nc_test_string_$HOST"
+    TMPFILE="nc_tmpfile_$HOST"
     EXE="nc -w 1 $1 22"
     echo "Hello, is it me you're looking for?" > $TEST_FILE
 

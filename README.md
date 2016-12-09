@@ -29,7 +29,7 @@ Change to the folder, go over the `conf` file as installing will not work OOB, a
 
 Go over `run` and see the order in which things are executed. You can play around with the order, remove bits or add exit points but note that most steps (still) rely on previous ones.
 
-Run `./run`. A log file will be created in `./logs` and a work directory at `/tmp/codi`.
+Run `./run`. A log file will be created in `./logs` and a work directory at `/tmp/coti`.
 
 If you want to chnage a parameter on the fly, you can do something like 'controller_NUM=4 ./run' to overwrite the default number of controllers deployed.
 

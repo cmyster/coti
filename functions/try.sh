@@ -1,7 +1,7 @@
 try ()
 {
-    rm -rf /tmp/tmpcmd /tmp/tmpcmd-err
-    echo $@ &> /tmp/tmpcmd
-    $@ 2> /tmp/tmpcmd-err
+    rm -rf tmpcmd tmpcmd-err
+    echo $@ &> tmpcmd
+    $@ 2> tmpcmd-err
     return $?
 }

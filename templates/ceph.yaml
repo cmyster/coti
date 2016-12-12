@@ -1,4 +1,4 @@
-prameter_defaults:
+parameter_defaults:
   ceph::profile::params::osd_crush_update_on_start: false
   ceph::profile::params::osds:
     '/dev/vdb':

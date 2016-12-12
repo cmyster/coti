@@ -1,6 +1,6 @@
 tempest_packages ()
 {
-    UNDER_HOST_NAME=$1
+    HOST_NAME=$1
     cat > tempest_packages <<EOF
 PACKAGES=(
           aodh
@@ -36,5 +36,5 @@ do
 done
 EOF
 
-run_script_file tempest_packages root $UNDER_HOST_NAME /root
+run_script_file tempest_packages root $HOST_NAME /root
 }

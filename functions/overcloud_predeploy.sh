@@ -1,6 +1,6 @@
 overcloud_predeploy ()
 {
-    UNDER_HOST_NAME=$1
+    HOST_NAME=$1
     cat > predeploy <<EOF
 set -e
 cd /home/stack/
@@ -60,5 +60,5 @@ openstack baremetal introspection bulk start
 echo "cleaning up"
 rm -rf ironic-python-agent.* overcloud-full.* deploy-ramdisk-ironic.* images.tar
 EOF
-    run_script_file predeploy stack $UNDER_HOST_NAME /home/stack/
+    run_script_file predeploy stack $HOST_NAME /home/stack/
 }

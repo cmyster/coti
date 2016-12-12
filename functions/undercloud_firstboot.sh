@@ -3,15 +3,15 @@ undercloud_firstboot ()
     # since I use a lot of firstboot scripts and I can't run more then one in
     # a specific order, I split it to this script and the nodes firstboot is
     # configures elsewhere. This script is reserved for undecloud stuff only.
-    UNDER_NODE_NAME="$1"
+    NODE_NAME="$1"
     cat > undercloud_boot <<EOF
 #!/bin/bash
 echo "copying the script to homedir"
 cp \$0 /root/
 
 echo "assigning a new hostname"
-echo "${UNDER_NODE_NAME}.redhat.com" > /etc/hostname
-hostnamectl set-hostname ${UNDER_NODE_NAME}.redhat.com
+echo "${NODE_NAME}.redhat.com" > /etc/hostname
+hostnamectl set-hostname ${NODE_NAME}.redhat.com
 
 NICS=${#NETWORKS[@]}
 for nic in \$(seq 0 \$NICS)
@@ -55,5 +55,5 @@ echo MAC=\$MAC >> \$HELLO
 sshpass -p $HOST_PASS scp -q \$HELLO root@$HOST_IP:$WORK_DIR/
 EOF
     chmod +x undercloud_boot
-    try virt-customize -m 4096 --smp 4 -q -a $VIRT_IMG/${UNDER_NODE_NAME}.raw --firstboot ./undercloud_boot || failure
+    try virt-customize -m 4096 --smp 4 -q -a $VIRT_IMG/${NODE_NAME}.raw --firstboot ./undercloud_boot || failure
 }

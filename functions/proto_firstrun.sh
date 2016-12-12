@@ -103,5 +103,5 @@ shutdown -hP -t 0 now
 
 EOF
     chmod +x firstboot
-    try virt-customize -q -a $VIRT_IMG/proto.qcow2 --firstboot ./firstboot || failure
+    try virt-customize -m 4096 --smp 4 -q -a $VIRT_IMG/proto.qcow2 --firstboot ./firstboot || failure
 }

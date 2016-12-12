@@ -55,5 +55,5 @@ echo MAC=\$MAC >> \$HELLO
 sshpass -p $HOST_PASS scp -q \$HELLO root@$HOST_IP:$WORK_DIR/
 EOF
     chmod +x undercloud_boot
-    try virt-customize -q -a $VIRT_IMG/${UNDER_NODE_NAME}.raw --firstboot ./undercloud_boot || failure
+    try virt-customize -m 4096 --smp 4 -q -a $VIRT_IMG/${UNDER_NODE_NAME}.raw --firstboot ./undercloud_boot || failure
 }

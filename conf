@@ -168,7 +168,7 @@ compute_DSK=${compute_DSK:-18}
 compute_OS=${compute_OS:-"rhel7.3.0"}
 
 # ceph nodes
-ceph_NUM=${ceph_NUM:-0}
+ceph_NUM=${ceph_NUM:-3}
 ceph_RAM=${ceph_RAM:-4096}
 ceph_SWP=${ceph_SWP:-1024}
 ceph_CPU=${ceph_CPU:-2}

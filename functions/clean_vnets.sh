@@ -3,18 +3,23 @@ clean_vnets ()
     remove_vnet ()
     {
         echo "clearing virtual network: $1"
-        try virsh net-destroy $1 &> /dev/null || failure
+        if $(virsh net-list --all | grep $1 | grep " active" &> /dev/null)
+        then
+            try virsh net-destroy $1 &> /dev/null || failure
+        fi
         try virsh net-undefine $1 &> /dev/null || failure
     }
+
     if [ $# -gt 0 ]
     then
         for vnet in $@
         do
+            echo "Removing ${vnet}."
             remove_vnet $vnet
         done
     else
-        echo "stopping and undefining all virtual networks"
-        for vnet in $(virsh net-list | grep -v default | grep -v -e "Name.*State\|---\|^$" | awk '{print $1}')
+        echo "Stopping and undefining all virtual networks."
+        for vnet in $(virsh net-list --all | grep -v default | grep -v -e "Name.*State\|---\|^$" | awk '{print $1}')
         do
             remove_vnet $vnet
         done

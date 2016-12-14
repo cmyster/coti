@@ -21,6 +21,7 @@ add_templates ()
     sed -i "s|FINDEND|${ext_base}.220|g" ./templates/overrides.yaml
     sed -i "s|FINDVER|${RR_CMD}|g" ./templates/node_tweaks.yaml
     sed -i "s|FINDNSRV|${namesrv}|g" ./templates/node_tweaks.yaml
+    sed -i "s|FINDDNS|${DNS}|g" ./templates/node_tweaks.yaml
     tar cf templates.tar templates
 
     try scp -q templates.tar stack@${NODES[0]}-0: || failure

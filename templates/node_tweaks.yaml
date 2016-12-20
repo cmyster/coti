@@ -11,7 +11,7 @@ resources:
     properties:
       group: script
       config: |
-        #!/bin/sh
+        #!/bin/bash
         echo "FINDNSRV" >> /etc/resolv.conf
         yum remove -y rhos-release
         rpm -ivh http://rhos-release.virt.bos.redhat.com/repos/rhos-release/rhos-release-latest.noarch.rpm

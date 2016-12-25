@@ -139,6 +139,7 @@ NETWORKS=(
 # DUM - Extra (Dummy) nodes of the same type.
 # DSK - Size of disk in GB.
 # OS  - Corresponds to <os> in libvirt.
+# OSD - Ceph specific, this is the size for the Ceph storage drive.
 
 # undercloud nodes
 undercloud_NUM=${undercloud_NUM:-1}
@@ -146,7 +147,7 @@ undercloud_RAM=${undercloud_RAM:-16384}
 undercloud_SWP=${undercloud_SWP:-1024}
 undercloud_CPU=${undercloud_CPU:-4}
 undercloud_DUM=${undercloud_DUM:-0}
-undercloud_DSK=${undercloud_DSK:-24}
+undercloud_DSK=${undercloud_DSK:-16}
 undercloud_OS=${undercloud_OS:-"rhel7.3.0"}
 
 # controller nodes
@@ -155,7 +156,7 @@ controller_RAM=${controller_RAM:-16384}
 controller_SWP=${controller_SWP:-1024}
 controller_CPU=${controller_CPU:-3}
 controller_DUM=${controller_DUM:-0}
-controller_DSK=${controller_DSK:-18}
+controller_DSK=${controller_DSK:-8}
 controller_OS=${controller_OS:-"rhel7.3.0"}
 
 # compute nodes
@@ -164,7 +165,7 @@ compute_RAM=${compute_RAM:-16384}
 compute_SWP=${compute_SWP:-1024}
 compute_CPU=${compute_CPU:-3}
 compute_DUM=${compute_DUM:-0}
-compute_DSK=${compute_DSK:-18}
+compute_DSK=${compute_DSK:-8}
 compute_OS=${compute_OS:-"rhel7.3.0"}
 
 # ceph nodes
@@ -173,5 +174,6 @@ ceph_RAM=${ceph_RAM:-4096}
 ceph_SWP=${ceph_SWP:-1024}
 ceph_CPU=${ceph_CPU:-2}
 ceph_DUM=${ceph_DUM:-0}
-ceph_DSK=${ceph_DSK:-24}
+ceph_DSK=${ceph_DSK:-8}
+ceph_OSD=${ceph_OSD:-8}
 ceph_OS=${ceph_OS:-"rhel7.3.0"}

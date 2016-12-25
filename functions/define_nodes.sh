@@ -13,6 +13,7 @@ define_nodes ()
         eval RAM=\$${NODES[$index]}_RAM
         eval CPU=\$${NODES[$index]}_CPU
         eval DSK=\$${NODES[$index]}_DSK
+        eval OSD=\$${NODES[$index]}_OSD
         eval OS=\$${NODES[$index]}_OS
 
         if [ $TOT -gt 0 ]
@@ -25,6 +26,7 @@ define_nodes ()
                 echo "cpu=$CPU" >> $INV
                 echo "memory=$RAM" >> $INV
                 echo "disk=$DSK" >> $INV
+                echo "OSD=$OSD" >> $INV
                 uuid=$(cat /proc/sys/kernel/random/uuid)
                 echo "uuid=$uuid" >> $INV
                 echo "<domain type='kvm' id='$VM_ID'>" > ${NODES[$index]}-${i}.xml
@@ -49,15 +51,15 @@ EOF
                     cat >> ${NODES[$index]}-${i}.xml <<EOF
     <disk type='file' device='disk'>
       <driver name='qemu' type='raw' cache='none' io='native'/>
-      <source file='/var/lib/libvirt/images/${NODES[$index]}-${i}_a.raw'/>
+      <source file='/var/lib/libvirt/images/${NODES[$index]}-${i}.raw'/>
       <target dev='vda' bus='virtio'/>
       <address type='pci' domain='0x0000' bus='0x01' slot='0x01' function='0x0'/>
     </disk>
 EOF
-                    cat >> ${NODES[$index]}-${i}.xml <<EOF
+                    cat >> ${NODES[$index]}-${i}_osd.xml <<EOF
     <disk type='file' device='disk'>
       <driver name='qemu' type='raw' cache='none' io='native'/>
-      <source file='/var/lib/libvirt/images/${NODES[$index]}-${i}_b.raw'/>
+      <source file='/var/lib/libvirt/images/${NODES[$index]}-${i}_osd.raw'/>
       <target dev='vdb' bus='virtio'/>
       <address type='pci' domain='0x0000' bus='0x01' slot='0x02' function='0x0'/>
     </disk>

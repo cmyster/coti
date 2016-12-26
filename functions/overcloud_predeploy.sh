@@ -34,7 +34,7 @@ echo "recreating flavors and assigning them"
 for flavor in compute control ceph-storage
 do
     openstack flavor delete \$flavor
-    openstack flavor create --id auto --ram 1024 --disk 8 --vcpus 1 \$flavor
+    openstack flavor create --id auto --ram 512 --disk 2 --vcpus 1 \$flavor
     openstack flavor set --property "cpu_arch"="x86_64" --property "capabilities:boot_option"="local" --property "capabilities:profile"="\$flavor" \$flavor
 done
 

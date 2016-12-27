@@ -19,22 +19,24 @@ prepare_puddle_images ()
     # adding repos and selinux stuff
     cat > edit_image << EOF
 #!/bin/bash
-/usr/sbin/setenforce 0
+LOG=edit_image.log
+cp \$0 /root/edit_image
+/usr/sbin/setenforce 0 | tee -a \$LOG
 cd /root/
-yum remove -y rhos-release
+yum remove -y rhos-release | tee -a \$LOG
 if [ -r files.tar ]
 then
-    tar xf files.tar
+    tar xf files.tar | tee -a \$LOG
     rm -rf files.tar
 fi
-rpm -Uvh rhos-release.rpm
-rm -rf rhos-release.rpm
-rhos-release $RR_CMD
-yum update -y
-yum install vim mc git python-psutil
+rpm -Uvh rhos-release-latest.noarch.rpm | tee -a \$LOG
+rm -rf rhos-release-latest.noarch.rpm | tee -a \$LOG
+rhos-release $RR_CMD | tee -a \$LOG
+yum update -y | tee -a \$LOG
+yum install vim mc git python-psutil | tee -a \$LOG
 for rpm in \$(ls *.rpm)
 do
-    rpm -Uvh \$rpm
+    rpm -Uvh \$rpm | tee -a \$LOG
     rm -rf \$rpm
 done
 /usr/bin/sed -i "s/SELINUX=.*/SELINUX=$OVER_SEL/" /etc/selinux/config
@@ -45,7 +47,7 @@ EOF
     chmod 0755 edit_image
     mv overcloud-full.qcow2 temp.qcow2
     echo "editing the overcloud image"
-    try virt-customize -m 4096 --smp 4 -q -a temp.qcow2 --run edit_image || failure
+    try virt-customize -q -m 8192 --smp 4 -a temp.qcow2 --run edit_image || failure
     echo "sparsing and compressing free space to make the image smaller"
     try virt-sparsify -q --compress temp.qcow2 overcloud-full.qcow2 || failure
     rm -rf temp.qcow2

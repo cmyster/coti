@@ -6,15 +6,16 @@ description: >
 parameters:
   public_network_name:
     type: string
-    default: public
+    default: heat_public_net
 
+  # This name is hardcoded into tests.
   private_network_name:
     type: string
     default: heat-net
 
   public_subnet_name:
     type: string
-    default: public_subnet
+    default: heat_public_subnet
   public_subnet_cidr:
     type: string
     default: 172.16.0.0/24
@@ -30,7 +31,7 @@ parameters:
 
   private_subnet_name:
     type: string
-    default: private_subnet
+    default: heat_private_subnet
   private_subnet_cidr:
     type: string
     default: 10.0.0.0/24
@@ -44,36 +45,70 @@ parameters:
     type: string
     default: 10.0.0.200
 
-  glance_image_name:
+  glance_image_fedora_name:
     type: string
-    default: fedora_heat
-  glance_image_location:
+    default: heat_fedora_image
+  glance_image_fedora_location:
     type: string
     #default: https://download.fedoraproject.org/pub/alt/atomic/stable/Fedora-Atomic-25-20161207.0/CloudImages/x86_64/images/Fedora-Atomic-25-20161207.0.x86_64.qcow2
     default: http://ikook.tlv.redhat.com/gen_images/cloud/Fedora-Atomic-25-20161207.0.x86_64.qcow2
+
+  glance_image_cirros_name:
+    type: string
+    default: heat_cirros_name
+  glance_image_cirros_location:
+    type: string
+    #default: http://download.cirros-cloud.net/0.3.4/cirros-0.3.4-x86_64-disk.img
+    default: http://ikook.tlv.redhat.com/gen_images/cloud/cirros-0.3.4-x86_64-disk.img
 
   keypair_name:
     type: string
     default: keypair_heat
 
+  # Flavor names are hard coded.
+  flavor_tiny_name:
+    type: string
+    default: m1.tiny
+  flavor_tiny_disk:
+    type: string
+    default: 1
+  flavor_tiny_vcpus:
+    type: string
+    default: 1
+  flavor_tiny_ram:
+    type: string
+    default: 512
+
+  flavor_small_name:
+    type: string
+    default: m1.small
+  flavor_small_disk:
+    type: string
+    default: 8
+  flavor_small_vcpus:
+    type: string
+    default: 1
+  flavor_small_ram:
+    type: string
+    default: 2048
+
 resources:
 
-  ### flavors should be removed as soon as they are no longer hard-coded
   flavor_tiny:
     type: OS::Nova::Flavor
     properties:
-      disk: 1
-      ram: 512
-      vcpus: 1
-      name: m1.tiny
+      name: {get param: flavor_tiny_name}
+      disk: {get param: flavor_tiny_disk}
+      vcpus: {get param: flavor_tiny_vcpus}
+      ram: {get param: flavor_tiny_ram}
 
   flavor_small:
     type: OS::Nova::Flavor
     properties:
-      disk: 8
-      ram: 2048
-      vcpus: 1
-      name: m1.small
+      name: {get param: flavor_small_name}
+      disk: {get param: flavor_small_disk}
+      vcpus: {get param: flavor_small_vcpus}
+      ram: {get param: flavor_small_ram}
 
   public_network:
     type: OS::Neutron::Net
@@ -131,35 +166,104 @@ resources:
       router_id: {get_resource: router}
       subnet_id: {get_resource: private_subnet}
 
-  glance_image:
+  glance_image_fedora:
     type: OS::Glance::Image
     properties:
-      extra_properties: {
-        "os-image-api-version": "1",}
       container_format: bare
       disk_format: qcow2
-      is_public: true
-      location: {get_param: glance_image_name}
-      min_disk: 8
-      min_ram: 1024
-      name: {get_param: glance_image_name}
-      protected: false
+      location: {get_param: glance_image_fedora_location}
+      name: {get_param: glance_image_fedora_name}
+
+  glance_image_cirros:
+    type: OS::Glance::Image
+    properties:
+      container_format: bare
+      disk_format: qcow2
+      location: {get_param: glance_image_cirros_location}
+      name: {get_param: glance_image_cirros_name}
 
   keypair:
     type: OS::Nova::KeyPair
     properties:
       name: {get_param: keypair_name}
 
-outputs:
-  public_network_id:
-    description: Public network ID
-    value: {get_resource: public_network}
-  public_subnet_id:
-    description: Public subnet ID
-    value: {get_resource: public_subnet}
-  private_network_id:
-    description: Private network ID
-    value: {get_resource: private_network}
-  private_subnet_id:
-    description: Private subnet ID
-    value: {get_resource: private_subnet}
+  role_demo:
+    type: OS::Keystone::Role
+    properties:
+      name: demo
+
+  role_alt_demo:
+    type: OS::Keystone::Role
+    properties:
+      name: alt_demo
+
+  project_demo:
+    type: OS::Keystone::Project
+    properties:
+      name: demo
+      domain: default
+      enabled: true
+
+  project_alt_demo:
+    type: OS::Keystone::Project
+    properties:
+      name: alt_demo
+      domain: default
+      enabled: true
+
+  user_demo:
+    type: OS::Keystone::User
+    properties:
+      name: demo
+      domain: default
+      enabled: true
+      email: demo@example.com
+      password: demo
+      default_project: {get_resource: project_demo}
+      groups:
+        - {get_resource: group_admins}
+      roles:
+        - role: {get_resource: role_demo}
+          domain: default
+        - role: {get_resource: role_demo}
+          project: {get_resource: project_demo}
+
+  user_alt_demo:
+    type: OS::Keystone::User
+    properties:
+      name: alt_demo
+      domain: default
+      enabled: true
+      email: alt_demo@example.com
+      password: alt_demo
+      default_project: {get_resource: project_alt_demo}
+      groups:
+        - {get_resource: group_nonadmins}
+      roles:
+        - role: {get_resource: role_alt_demo}
+          domain: default
+        - role: {get_resource: role_alt_demo}
+          project: {get_resource: project_alt_demo}
+
+  group_admins:
+    type: OS::Keystone::Group
+    properties:
+      name: admins
+      domain: default
+      roles:
+        - role: {get_resource: role_demo}
+          domain: default
+        - role: {get_resource: role_demo}
+          project: {get_resource: project_demo}
+
+  group_nonadmins:
+    type: OS::Keystone::Group
+    properties:
+      name: nonadmins
+      domain: default
+      roles:
+        - role: {get_resource: role_alt_demo}
+          domain: default
+        - role: {get_resource: role_alt_demo}
+          project: {get_resource: project_alt_demo}
+

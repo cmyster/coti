@@ -33,7 +33,7 @@ rpm -Uvh rhos-release-latest.noarch.rpm | tee -a \$LOG
 rm -rf rhos-release-latest.noarch.rpm | tee -a \$LOG
 rhos-release $RR_CMD | tee -a \$LOG
 yum update -y | tee -a \$LOG
-yum install vim mc git python-psutil | tee -a \$LOG
+yum install -y vim mc git python-psutil | tee -a \$LOG
 for rpm in \$(ls *.rpm)
 do
     rpm -Uvh \$rpm | tee -a \$LOG

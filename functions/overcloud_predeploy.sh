@@ -30,14 +30,6 @@ openstack overcloud image upload
 echo "importing json file"
 openstack baremetal import --json instackenv.json
 
-echo "recreating flavors and assigning them"
-for flavor in compute control ceph-storage
-do
-    openstack flavor delete \$flavor
-    openstack flavor create --id auto --ram 512 --disk 2 --vcpus 1 \$flavor
-    openstack flavor set --property "cpu_arch"="x86_64" --property "capabilities:boot_option"="local" --property "capabilities:profile"="\$flavor" \$flavor
-done
-
 for node in \$(ironic node-list | grep -i control | cut -d " " -f 2)
 do
     ironic node-update \$node add properties/capabilities=profile:control,boot_option:local

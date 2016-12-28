@@ -120,7 +120,7 @@ NODES=(
       )
 
 # Network setup per node.
-# Always keep provisioning network first.
+# Always keep provisioning network first and the external network last.
 NETWORKS=(
            "ControlPlane"
            "StorageIP"

@@ -154,17 +154,11 @@ resources:
       external_gateway_info:
         network: {get_resource: public_network}
 
-  router_gateway:
-    type: OS::Neutron::RouterGateway
-    properties:
-      router_id: {get_resource: router}
-      network_id: {get_resource: public_network}
-
   router_interface:
     type: OS::Neutron::RouterInterface
     properties:
-      router_id: {get_resource: router}
-      subnet_id: {get_resource: private_subnet}
+      router: {get_resource: router}
+      subnet: {get_resource: private_subnet}
 
   glance_image_fedora:
     type: OS::Glance::Image

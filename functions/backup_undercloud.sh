@@ -1,5 +1,6 @@
 backup_undercloud ()
 {
+    HOST_NAME=$1
     cat > backup_undercloud <<EOF
 ### because of https://bugzilla.redhat.com/show_bug.cgi?id=1058526 I need to exit cleanly
 rm -rf /root/backup /root/undercloud-backup.tar /root/undercloud-all-databases.sql
@@ -19,6 +20,6 @@ tar -cf /root/undercloud-backup.tar  \
 exit 0
 EOF
 
-    run_script_file backup_undercloud root undercloud-0 /root/
-    try scp -q root@undercloud-0:/root/undercloud-backup.tar .
+    run_script_file backup_undercloud root $HOST_NAME /root/
+    try scp -q root@${HOST_NAME}:/root/undercloud-backup.tar .
 }

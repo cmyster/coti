@@ -6,7 +6,7 @@ source conf
 # Almost nothing happens here, all the functions are defined elsewhere.
 for file in $(ls functions/*.sh)
 do
-    echo "adding function: $(head -n 1 $file | cut -d " " -f 1)"
+    echo "Adding function: $(head -n 1 $file | cut -d " " -f 1)"
     source $file
 done
 
@@ -21,7 +21,7 @@ START=$(date +%s)
 # This is where functions are executed.
 run ()
 {
-    echo "[$(date +%T)] running $1 $2" | tee -a $LOG_FILE
+    echo "[$(date +%T)] Running $1 $2" | tee -a $LOG_FILE
     SECONDS=0
     $1
     echo "$1 finished with no errors and ran for $(time_diff $SECONDS)" | tee -a $LOG_FILE
@@ -134,6 +134,12 @@ restoring_undercloud ()
     echo -e "Undercloud restored after $(time_diff $(( $(date +%s) - $START)))\n"
 }
 
+run_automation ()
+{
+    # Run automation tests
+    "run_heat_tests ${NODES[0]}-0"
+}
+
 host_preprerations
 virt_setup
 create_installation_images
@@ -143,5 +149,6 @@ predeploy_overcloud
 deploy_overcloud
 # backup_undercloud
 # restoring_undercloud
+# run_automation
 
 echo "ALL DONE in $(time_diff $(( $(date +%s) - $START)))"

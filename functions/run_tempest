@@ -1,0 +1,81 @@
+#!/bin/bash
+set -e
+
+source /home/stack/overcloudrc
+
+echo "Gathering configuration."
+DEFAULT_DOMAIN=$(mysql -Nrse "select id from keystone.project where domain_id like '%root%';" | grep --color=never -i default)
+DEFAULT_REGION=$(mysql -Nsre "select id from keystone.region;")
+SERVICE_PROJECT=$(openstack project list -f value -c Name | grep --color=never service)
+MEMBER_ROLE=$(openstack role list -f value -c Name | grep --color=never -i member)
+DEFAULT_IMAGE="heat_fedora_image"
+MINIMAL_IMAGE="heat_cirros_image"
+DEFAULT_INSTANCE="m1.small"
+MINIMAL_INSTANCE="m1.tiny"
+DEFAULT_KEYPAIR="heat_keypair"
+
+echo "Recreating the tempest folder."
+yum remove -y openstack-tempest python-tempest
+rm -rf /usr/share/openstack-tempest-13.0.0
+yum install -y openstack-tempest python-tempest
+
+echo "Removing resources for cleaner operation."
+
+for stack in $(openstack stack list -f value -c "ID")
+do
+    echo "Removing stack with ID $stack"
+    openstack stack delete $stack --wait --yes
+done
+
+for resource in port subnet network
+do
+    for id in $(openstack $resource list -f value -c ID)
+    do
+        echo "Removing $resource with ID $id"
+        openstack $resource delete $id
+    done
+done
+
+echo "Creating a stack providing resources needed for tempest."
+openstack stack create --wait tempest-env -t /home/stack/templates/integrationtests_environment.yaml
+
+echo "Editing default tempest configuration."
+cd /usr/share/openstack-tempest-13.0.0
+sed -i "s|m1.nano|$MINIMAL_INSTANCE|g" tempest/config.py
+sed -i "s|m1.micro|$DEFAULT_INSTANCE|g" tempest/config.py
+sed -i "s|m1.nano|$MINIMAL_INSTANCE|g" tools/config_tempest.py
+sed -i "s|m1.micro|$DEFAULT_INSTANCE|g" tools/config_tempest.py
+sed -i "s|cirros-0.3.4-x86_64-disk.img|$MINIMAL_IMAGE|g" tools/config_tempest.py
+sed -i 's/name + "_alt"/name/g' tools/config_tempest.py
+
+echo "Installing test packages for tempest."
+tools/install_test_packages.py
+
+echo "Running tempest configuration."
+tools/config_tempest.py identity.uri $OS_AUTH_URL identity.admin_password $OS_PASSWORD --deployer-input /home/stack/stack-deployer-input.conf
+
+echo "Setting heat_plugin."
+yum install -q -y crudini mlocate
+updatedb
+crudini --set etc/tempest.conf heat_plugin auth_url $OS_AUTH_URL
+crudini --set etc/tempest.conf heat_plugin username $OS_USERNAME
+crudini --set etc/tempest.conf heat_plugin password $OS_PASSWORD
+crudini --set etc/tempest.conf heat_plugin admin_username $OS_USERNAME
+crudini --set etc/tempest.conf heat_plugin admin_password $OS_PASSWORD
+crudini --set etc/tempest.conf heat_plugin tenant_name $OS_TENANT_NAME
+crudini --set etc/tempest.conf heat_plugin region $DEFAULT_REGION
+crudini --set etc/tempest.conf heat_plugin instance_type $DEFAULT_INSTANCE
+crudini --set etc/tempest.conf heat_plugin minimal_instance_type $MINIMAL_INSTANCE
+crudini --set etc/tempest.conf heat_plugin image_ref $DEFAULT_IMAGE
+crudini --set etc/tempest.conf heat_plugin minimal_image_ref $MINIMAL_IMAGE
+crudini --set etc/tempest.conf heat_plugin keypair_name $DEFAULT_KEYPAIR
+crudini --set etc/tempest.conf heat_plugin boot_config_env $(locate test_image_env.yaml | head -n 1)
+crudini --set etc/tempest.conf heat_plugin heat_config_notify_script $(locate heat-config-notify | head -n 1)
+crudini --set etc/tempest.conf heat_plugin skip_functional_test_list "AwsStackTest, CancelUpdateTest, RoleBasedExposureTest, OSWaitCondition, PurgeTest, NotificationTest, ResourceGroupAdoptTest, TemplateResourceAdoptTest, ParallelDeploymentsTest, StackTagTest, ZaqarSignalTransportTest, ZaqarWaitConditionTest, ZaqarEventSinkTest, ReloadOnSighupTest.test_api_cloudwatch_on_sighup"
+crudini --set etc/tempest.conf heat_plugin skip_scenario_test_list "ServerSignalIntegrationTest, AodhAlarmTest, SoftwareConfigIntegrationTest, CfnInitIntegrationTest, VolumeBackupRestoreIntegrationTest"
+
+set +e
+echo "Running tempest"
+tools/run-tests.sh heat_integrationtests
+
+mv tempest.xml ~

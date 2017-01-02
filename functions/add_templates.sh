@@ -17,8 +17,8 @@ add_templates ()
     namesrv="$(grep nameserver /etc/resolv.conf | head -n 1)"
     sed -i "s|FINDEXT|$ext_gw|g" ./templates/overrides.yaml
     sed -i "s|FINDCIDR|${ext_base}.0/24|g" ./templates/overrides.yaml
-    sed -i "s|FINDSTRT|${ext_base}.10|g" ./templates/overrides.yaml
-    sed -i "s|FINDEND|${ext_base}.220|g" ./templates/overrides.yaml
+    sed -i "s|FINDSTRT|${ext_base}.${DHCP_IN_START}|g" ./templates/overrides.yaml
+    sed -i "s|FINDEND|${ext_base}.${DHCP_IN_END}|g" ./templates/overrides.yaml
     sed -i "s|FINDVER|${RR_CMD}|g" ./templates/node_tweaks.yaml
     sed -i "s|FINDNSRV|${namesrv}|g" ./templates/node_tweaks.yaml
     sed -i "s|FINDDNS|${DNS}|g" ./templates/overrides.yaml

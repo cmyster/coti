@@ -6,23 +6,33 @@ undercloud_firstboot ()
     NODE_NAME="$1"
     cat > undercloud_boot <<EOF
 #!/bin/bash
-echo "copying the script to homedir"
 cp \$0 /root/
 
-echo "assigning a new hostname"
+# NIC configuration folder
+NETCFG_DIR="/etc/sysconfig/network-scripts"
+
+# Changing the default hostname to something meaningful.
 echo "${NODE_NAME}.redhat.com" > /etc/hostname
 hostnamectl set-hostname ${NODE_NAME}.redhat.com
 
+# Creating a condifuration file for each NIC.
 NICS=${#NETWORKS[@]}
 for nic in \$(seq 0 \$NICS)
 do
-    echo "setting up "
-    echo DEVICE=eth\$nic > /etc/sysconfig/network-scripts/ifcfg-eth\$nic
-    echo ONBOOT=yes >> /etc/sysconfig/network-scripts/ifcfg-eth\$nic
-    echo NM_CONTROLLED=no >> /etc/sysconfig/network-scripts/ifcfg-eth\$nic
+    echo "DEVICE=eth\$nic
+DEVICE=eth\$nic
+ONBOOT=yes
+NM_CONTROLLED=no
+USERCTL=yes
+PEERDNS=yes
+TYPE=Ethernet" > \$NETCFG_DIR/ifcfg-eth\$nic
 done
 
-echo "the last nic will have a connection to libvirt's DHCP for accessing it"
+# Adding DHCP to N-1 network which in this case is the External network.
+echo BOOTPROTO=dhcp >> \$NETCFG_DIR/ifcfg-eth$(( NICS - 1))
+
+# Creating a specific configuration for the final network which is connected
+# to the default libvirt network with its own DHCP and settings.
 echo "DEVICE=eth$NICS
 BOOTPROTO=dhcp
 BOOTPROTOv6=dhcp
@@ -33,17 +43,17 @@ PEERDNS=yes
 IPV6INIT=yes
 PERSISTENT_DHCLIENT=1" > /etc/sysconfig/network-scripts/ifcfg-eth$NICS
 
-echo "starting dhclient on eth\$NICS"
+# Starting DHCP client on the NIC connected to the default network.
 dhclient eth\$NICS
 
-# If restoring from a backup, use the backed up repos
+# If restoring from a backup, use the backed up repos.
 if [ -r undercloud-backup.tar ]
 then
     rm -rf /etc/yum.repos.d
     tar -xC / -f undercloud-backup.tar etc/yum.repos.d
 fi
 
-echo "gathering facts and sending to a hello file"
+# Gathering facts and saving to a hello file.
 IP=\$(ifconfig eth\$NICS | grep "inet " | awk '{print \$2}')
 MAC=\$(ifconfig eth\$NICS | grep "ether " | awk '{print \$2}')
 SHORT_HOST=\$(hostname | cut -d "." -f 1)
@@ -52,8 +62,9 @@ echo HOST=\${SHORT_HOST} > \$HELLO
 echo IP=\$IP >> \$HELLO
 echo MAC=\$MAC >> \$HELLO
 
+# Sending hello file to the host.
 sshpass -p $HOST_PASS scp -q \$HELLO root@$HOST_IP:$WORK_DIR/
 EOF
     chmod +x undercloud_boot
-    try virt-customize -m 4096 --smp 4 -q -a $VIRT_IMG/${NODE_NAME}.raw --firstboot ./undercloud_boot || failure
+    try virt-customize -m 8192 --smp 4 -q -a $VIRT_IMG/${NODE_NAME}.raw --firstboot ./undercloud_boot || failure
 }

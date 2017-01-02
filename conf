@@ -130,6 +130,16 @@ NETWORKS=(
            "External"
          )
 
+# External network IP range. This is needed to attach an IP for accessing the
+# nodes externally bypassing some limitations caused from network isolation.
+# There is a pair of ranges, one for internal access and one for external.
+# The number here represent the final (rightmost) notation.
+# '1' is saved for the gateway.
+DHCP_IN_START=2
+DHCP_IN_END=120
+DHCP_OUT_START=121
+DHCP_OUT_END=250
+
 # Node numbers and settings.
 #!!! The base name needs to be the same as the node names in the NODES array.
 # NUM - How many of that node.

@@ -69,6 +69,9 @@ HOST_IP=$(ifconfig $NIC | grep "inet " | awk '{print $2}')
 # Host root password.
 HOST_PASS="12345678"
 
+# virt-customize arguments
+CUST_ARGS="-m 8192 --smp 6 -q"
+
 ###   File server location.   
 ###   This is were the script gets stuff like guest images,
 ###   and also where it keeps modified ones.

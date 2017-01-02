@@ -47,7 +47,7 @@ EOF
     chmod 0755 edit_image
     mv overcloud-full.qcow2 temp.qcow2
     echo "editing the overcloud image"
-    try virt-customize -q -m 8192 --smp 4 -a temp.qcow2 --run edit_image || failure
+    try virt-customize $CUST_ARGS -a temp.qcow2 --run edit_image || failure
     echo "sparsing and compressing free space to make the image smaller"
     try virt-sparsify -q --compress temp.qcow2 overcloud-full.qcow2 || failure
     rm -rf temp.qcow2

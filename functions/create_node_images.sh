@@ -28,7 +28,7 @@ create_node_images ()
                 for num in $(seq 0 $(( TOT - 1 )))
                 do
                     cp ${NODES[$index]}.raw $VIRT_IMG/${NODES[$index]}-${num}.raw
-                    virt-customize -m 4096 --smp 4 -q -a $VIRT_IMG/${NODES[$index]}-${num}.raw
+                    virt-customize $CUST_ARGS -a $VIRT_IMG/${NODES[$index]}-${num}.raw
                 done
                 ;;
             *)

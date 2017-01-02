@@ -8,19 +8,21 @@ undercloud_firstboot ()
 #!/bin/bash
 cp \$0 /root/
 
+LOGFILE=/root/undercloud_boot.log
+set -e
+
 # NIC configuration folder
 NETCFG_DIR="/etc/sysconfig/network-scripts"
 
-# Changing the default hostname to something meaningful.
+echo "Changing the default hostname to something meaningful." >> \$LOGFILE
 echo "${NODE_NAME}.redhat.com" > /etc/hostname
-hostnamectl set-hostname ${NODE_NAME}.redhat.com
+hostnamectl set-hostname ${NODE_NAME}.redhat.com &>> \$LOGFILE
 
-# Creating a condifuration file for each NIC.
+echo "Creating a condifuration file for each NIC." &>> \$LOGFILE
 NICS=${#NETWORKS[@]}
 for nic in \$(seq 0 \$NICS)
 do
     echo "DEVICE=eth\$nic
-DEVICE=eth\$nic
 ONBOOT=yes
 NM_CONTROLLED=no
 USERCTL=yes
@@ -28,32 +30,51 @@ PEERDNS=yes
 TYPE=Ethernet" > \$NETCFG_DIR/ifcfg-eth\$nic
 done
 
-# Adding DHCP to N-1 network which in this case is the External network.
-echo BOOTPROTO=dhcp >> \$NETCFG_DIR/ifcfg-eth$(( NICS - 1))
+echo "Starting DHCP client on the NIC connected to the default network." >> \$LOGFILE
+dhclient eth\$NICS &>> \$LOGFILE
 
-# Creating a specific configuration for the final network which is connected
-# to the default libvirt network with its own DHCP and settings.
-echo "DEVICE=eth$NICS
-BOOTPROTO=dhcp
-BOOTPROTOv6=dhcp
+echo "Setting static data from what dhclient discovered for us." >> \$LOGFILE
+echo "DEVICE=eth\$NICS
+BOOTPROTO=static
+IPADDR=\$(ifconfig eth\$NICS | grep "inet " | awk '{print \$2}')
+DNS1=\$(grep nameserver /etc/resolv.conf | head -n 1 | cut -d " " -f 2)
+GATEWAY=\$(grep nameserver /etc/resolv.conf | head -n 1 | cut -d " " -f 2)
+HWADDR=\$(ifconfig eth\$NICS | grep ether | awk '{print \$2}')
+NETMASK=255.255.255.0
+PEERDNS=no
 ONBOOT=yes
-TYPE=Ethernet
-USERCTL=yes
-PEERDNS=yes
-IPV6INIT=yes
-PERSISTENT_DHCLIENT=1" > /etc/sysconfig/network-scripts/ifcfg-eth$NICS
+USERCTL=yes" > \$NETCFG_DIR/ifcfg-eth\$NICS
 
-# Starting DHCP client on the NIC connected to the default network.
-dhclient eth\$NICS
+echo "No need for dhclient anymore." >> \$LOGFILE
+pkill -9 dhclient &>> \$LOGFILE
 
-# If restoring from a backup, use the backed up repos.
+echo "Starting DHCP client on the NIC connected to the External network." >> \$LOGFILE
+EXT_NET=$(( ${#NETWORKS[@]} - 1 ))
+dhclient eth\$EXT_NET &>> \$LOGFILE
+
+echo "Setting static data from what dhclient discovered for us." >> \$LOGFILE
+echo "DEVICE=eth\$EXT_NET
+BOOTPROTO=static
+IPADDR=\$(ifconfig eth\$EXT_NET | grep "inet " | awk '{print \$2}')
+HWADDR=\$(ifconfig eth\$EXT_NET | grep ether | awk '{print \$2}')
+NETMASK=255.255.255.0
+ONBOOT=yes
+USERCTL=yes" > \$NETCFG_DIR/ifcfg-eth\$EXT_NET
+
+echo "No need for dhclient anymore."
+pkill -9 dhclient &>> \$LOGFILE
+
+echo "Restarting the networking service." >> \$LOGFILE
+systemctl restart network &>> \$LOGFILE
+
+echo "If restoring from a backup, use the backed up repos." >> \$LOGFILE
 if [ -r undercloud-backup.tar ]
 then
     rm -rf /etc/yum.repos.d
     tar -xC / -f undercloud-backup.tar etc/yum.repos.d
 fi
 
-# Gathering facts and saving to a hello file.
+echo "Gathering facts and saving to a hello file." >> \$LOGFILE
 IP=\$(ifconfig eth\$NICS | grep "inet " | awk '{print \$2}')
 MAC=\$(ifconfig eth\$NICS | grep "ether " | awk '{print \$2}')
 SHORT_HOST=\$(hostname | cut -d "." -f 1)
@@ -62,7 +83,7 @@ echo HOST=\${SHORT_HOST} > \$HELLO
 echo IP=\$IP >> \$HELLO
 echo MAC=\$MAC >> \$HELLO
 
-# Sending hello file to the host.
+echo "Sending hello file to the host." >> \$LOGFILE
 sshpass -p $HOST_PASS scp -q \$HELLO root@$HOST_IP:$WORK_DIR/
 EOF
     chmod +x undercloud_boot

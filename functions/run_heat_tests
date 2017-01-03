@@ -78,4 +78,4 @@ set +e
 echo "Running tempest"
 tools/run-tests.sh heat_integrationtests
 
-mv tempest.xml ~
+mv tempest.xml /root/heat_integrationtests.xml

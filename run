@@ -12,8 +12,10 @@ done
 
 # Setting current location and recreating the work folder.
 CWD=$(pwd)
-rm -rf $WORK_DIR
-mkdir -p $WORK_DIR
+if [ ! -d $WORK_DIR ]
+then
+    mkdir -p $WORK_DIR
+fi
 cd $WORK_DIR
 
 START=$(date +%s)
@@ -30,6 +32,7 @@ run ()
 host_preprerations ()
 {
     # Editing the host prior to do anything else.
+    run clean
     run install_host_packages "$LONG"
     run set_host_repos
     run set_puddle_params
@@ -137,7 +140,7 @@ restoring_undercloud ()
 run_automation ()
 {
     # Run automation tests
-    "run_heat_tests ${NODES[0]}-0"
+    run "run_heat_tests ${NODES[0]}-0" "$LONG"
 }
 
 host_preprerations
@@ -149,6 +152,6 @@ predeploy_overcloud
 deploy_overcloud
 # backup_undercloud
 # restoring_undercloud
-# run_automation
+run_automation
 
 echo "ALL DONE in $(time_diff $(( $(date +%s) - $START)))"

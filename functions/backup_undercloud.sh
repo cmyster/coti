@@ -16,6 +16,7 @@ tar -cf /root/undercloud-backup.tar  \
     /srv/node \
     /home/stack \
     /etc/keystone/ssl \
+    /etc/sysconfig/network-scripts/ifcfg-eth* \
     /opt/stack || exit 0
 exit 0
 EOF

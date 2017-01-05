@@ -1,5 +1,3 @@
 #TODO
 * Fix backward competability to rhos 9-.
-* Make undercloud have a static IP.
 * Populate /etc/hosts of each VM with information about every other VM.
-* Find a way to start from a certain region and maybe skip regions.

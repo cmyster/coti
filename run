@@ -17,6 +17,7 @@ then
     mkdir -p $WORK_DIR
 fi
 cd $WORK_DIR
+echo "Work dir: $(pwd)"
 
 START=$(date +%s)
 
@@ -118,8 +119,8 @@ deploy_overcloud ()
 backup_undercloud ()
 {
     # Backup the main Undercloud machine.
-    run "backup_undercloud undercloud-0"
-    run "vm_power undercloud-0 stop"
+    run "backup_undercloud ${NODES[0]}-0"
+    run "vm_power ${NODES[0]}-0 stop"
     echo -e "Undercloud backed up after $(time_diff $(( $(date +%s) - $START)))\n"
 }
 
@@ -140,7 +141,7 @@ restoring_undercloud ()
 run_automation ()
 {
     # Run automation tests
-    run "run_heat_tests ${NODES[0]}-0" "$LONG"
+    run "run_heat_tests $1" "$LONG"
 }
 
 host_preprerations
@@ -150,8 +151,9 @@ create_virtual_environment
 install_main_undercloud
 predeploy_overcloud
 deploy_overcloud
-# backup_undercloud
-# restoring_undercloud
-run_automation
+run_automation ${NODES[0]}-0
+backup_undercloud
+restoring_undercloud
+run_automation ${NODES[0]}-1
 
 echo "ALL DONE in $(time_diff $(( $(date +%s) - $START)))"

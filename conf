@@ -155,11 +155,11 @@ DHCP_OUT_END=250
 # OSD - Ceph specific, this is the size for the Ceph OSD.
 
 # undercloud nodes
-undercloud_NUM=${undercloud_NUM:-2}
+undercloud_NUM=${undercloud_NUM:-1}
 undercloud_RAM=${undercloud_RAM:-16384}
 undercloud_SWP=${undercloud_SWP:-1024}
 undercloud_CPU=${undercloud_CPU:-4}
-undercloud_DUM=${undercloud_DUM:-0}
+undercloud_DUM=${undercloud_DUM:-1}
 undercloud_DSK=${undercloud_DSK:-17}
 undercloud_OS=${undercloud_OS:-"rhel7.3.0"}
 

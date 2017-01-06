@@ -1,6 +1,6 @@
 overcloud_wait ()
 {
-    HOST_NAME=$1
+    HOST=$1
     echo "waiting for the overcloud to finish"
     STACK=overcloud
     cat > wait <<EOF
@@ -57,5 +57,5 @@ else
     exit 1
 fi
 EOF
-    run_script_file wait root $HOST_NAME /root
+    run_script_file wait root $HOST /root
 }

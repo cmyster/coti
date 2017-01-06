@@ -1,6 +1,6 @@
 overcloud_deploy ()
 {
-    HOST_NAME=$1
+    HOST=$1
     echo "running the overcloud deployment"
     if [ -z "$ceph_NUM" ] || [ $ceph_NUM -eq 0 ]
     then
@@ -28,5 +28,5 @@ openstack overcloud deploy \\
     $USE_CEPH \\
     -e ./templates/overrides.yaml > overcloud_deploy.log &
 EOF
-    run_script_file deploy stack $HOST_NAME /home/stack/
+    run_script_file deploy stack $HOST /home/stack/
 }

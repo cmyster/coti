@@ -1,8 +1,8 @@
 undercloud_install ()
 {
-    HOST_NAME=$1
+    HOST=$1
     echo "installing openstack undercloud"
-    scp -q $CWD/undercloud.conf stack@$HOST_NAME:
+    scp -q $CWD/undercloud.conf stack@$HOST:
     cat > install <<EOF
 cd /home/stack/
 if [[ "$UNDER_SEL" != "enforcing" ]]
@@ -15,5 +15,5 @@ tar xf images.tar
 sudo rhos-release $RR_CMD || exit 1
 openstack undercloud install || exit 1
 EOF
-    run_script_file install stack $HOST_NAME /home/stack/
+    run_script_file install stack $HOST /home/stack/
 }

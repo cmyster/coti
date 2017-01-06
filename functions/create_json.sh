@@ -1,6 +1,6 @@
 create_json ()
 {
-    HOST_NAME=$1
+    HOST=$1
     cat > temp.json <<EOF
 {
   "ssh-user": "stack",
@@ -70,12 +70,12 @@ EOF
   ]
 }
 EOF
-    try scp -q temp.json stack@${HOST_NAME}: || failure
+    try scp -q temp.json stack@${HOST}: || failure
 
     cat > add_key <<EOF
 cat /home/stack/.ssh/id_rsa | tr "\n" "%" | sed 's/%/\\\n/g' > /home/stack/sshkey
 gawk 'BEGIN { while (getline < "/home/stack/sshkey") text=text \$0 "" }
             { gsub("PLACE", text); print }' temp.json > instackenv.json
 EOF
-    run_script_file add_key stack ${HOST_NAME} /home/stack
+    run_script_file add_key stack ${HOST} /home/stack
 }

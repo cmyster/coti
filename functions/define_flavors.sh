@@ -1,6 +1,6 @@
 define_flavors ()
 {
-    HOST_NAME=$1
+    HOST=$1
     SCRIPT="define_flavors" 
     echo "source /home/stack/stackrc" > $SCRIPT
     for inv in $(ls *0.inv | grep -v -i under)
@@ -22,5 +22,5 @@ define_flavors ()
         echo "openstack flavor create $f_name --ram $f_ram --disk $f_disk --vcpus $f_cpu" >> $SCRIPT
         echo 'openstack flavor set --property "cpu_arch"="x86_64" --property "capabilities:boot_option"="local" --property "capabilities:profile"="'$f_name'" '$f_name'' >> $SCRIPT
     done
-    run_script_file $SCRIPT stack $HOST_NAME /home/stack/
+    run_script_file $SCRIPT stack $HOST /home/stack/
 }

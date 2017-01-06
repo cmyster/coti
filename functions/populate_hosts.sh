@@ -1,6 +1,6 @@
 populate_hosts ()
 {
-    HOST_NAME=$1
+    HOST=$1
     cat > populate_hosts <<EOF
 #!/bin/bash
 cd /home/stack
@@ -11,5 +11,5 @@ openstack server list -f value \\
   | sed 's/overcloud-//g' \\
   | sort -rk2 >> /etc/hosts
 EOF
-    run_script_file populate_hosts stack $HOST_NAME /home/stack/
+    run_script_file populate_hosts stack $HOST /home/stack/
 }

@@ -1,5 +1,6 @@
 restore_undercloud ()
 {
+    HOST=$1
     cat > restore <<EOF
 cd /root
 
@@ -45,5 +46,5 @@ then
     restorecon -R /etc/keystone/ssl
 fi
 EOF
-    run_script_file restore root $1 /root/
+    run_script_file restore root $HOST /root/
 }

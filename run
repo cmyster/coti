@@ -116,7 +116,7 @@ deploy_overcloud ()
     echo -e "Overcloud deployed after $(time_diff $(( $(date +%s) - $START)))\n"
 }
 
-backup_undercloud ()
+undercloud_backup ()
 {
     # Backup the main Undercloud machine.
     run "backup_undercloud ${NODES[0]}-0"
@@ -124,7 +124,7 @@ backup_undercloud ()
     echo -e "Undercloud backed up after $(time_diff $(( $(date +%s) - $START)))\n"
 }
 
-restoring_undercloud ()
+undercloud_restore ()
 {
     # Restoring the old Undercloud data onto a new Undercloud machine.
     run "upload_backup ${NODES[0]}-1"
@@ -152,8 +152,8 @@ install_main_undercloud
 predeploy_overcloud
 deploy_overcloud
 run_automation ${NODES[0]}-0
-backup_undercloud
-restoring_undercloud
+undercloud_backup
+undercloud_restore
 run_automation ${NODES[0]}-1
 
 echo "ALL DONE in $(time_diff $(( $(date +%s) - $START)))"

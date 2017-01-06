@@ -3,9 +3,11 @@ restore_undercloud ()
     cat > restore <<EOF
 cd /root
 
+BACKUP_FILE=\$(find /root/ -type f -name "*backup.tar")
+
 echo "Unpacking DB backup."
-tar -xC / -f undercloud-backup.tar etc/my.cnf.d/server.cnf
-tar -xC / -f undercloud-backup.tar root/undercloud-all-databases.sql
+tar -xC / -f \$BACKUP_FILE etc/my.cnf.d/server.cnf
+tar -xC / -f \$BACKUP_FILE root/undercloud-all-databases.sql
 sed -e '/bind-address/ s/^#*/#/' -i /etc/my.cnf.d/server.cnf
 
 echo "Editing mysqld configuration to handle large data."
@@ -28,15 +30,15 @@ done
 mysql -e 'flush privileges'
 
 echo "Restoring stack's home directory."
-tar -xC / -f undercloud-backup.tar home/stack
+tar -xC / -f \$BACKUP_FILE home/stack
 
 echo "Restoring glance and swift data."
-tar -xC / -f undercloud-backup.tar srv/node var/lib/glance/images
+tar -xC / -f \$BACKUP_FILE srv/node var/lib/glance/images
 chown -R swift: /srv/node
 chown -R glance: /var/lib/glance/images
 
 echo "Restoring keystone SSL data."
-tar -xC / -f undercloud-backup.tar etc/keystone/ssl
+tar -xC / -f \$BACKUP_FILE etc/keystone/ssl
 if [ -d /etc/keystone/ssl ]
 then
     semanage fcontext -a -t etc_t "/etc/keystone/ssl(/.*)?"

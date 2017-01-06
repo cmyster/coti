@@ -11,32 +11,26 @@ cp \$0 /root/
 LOGFILE=/root/undercloud_boot.log
 set -e
 
-if [ -r undercloud-backup.tar ]
-then
-    RESTORE=true
-else
-    RESTORE=false
-fi
+BACKUP_FILE=\$(find /root/ -type f -name "*backup.tar")
 
-echo "If restoring from a backup, use the backed up repos and networks." >> \$LOGFILE
-if \$RESTORE
+if [ ! -z \$BACKUP_FILE ]
 then
-    echo "Restoring from undercloud-backup.tar" >> >> \$LOGFILE
+    echo "Restoring from \$BACKUP_FILE" >> \$LOGFILE
     rm -rf /etc/yum.repos.d
-    tar -xC / -f undercloud-backup.tar etc/yum.repos.d
-    tar -xC / -f undercloud-backup.tar etc/sysconfig/network-scripts/*
+    tar -xC / -f \$BACKUP_FILE etc/yum.repos.d
+    tar -xC / -f \$BACKUP_FILE etc/sysconfig/network-scripts/*
 else
-    # NIC configuration folder                                                                                                                                                                     |
+    # NIC configuration folder
     NETCFG_DIR="/etc/sysconfig/network-scripts"
-    echo "Creating a configuration file for each NIC." &>> \$LOGFILE                                                                                                                               |
-    NICS=${#NETWORKS[@]}                                                                                                                                                                           |
-    for nic in \$(seq 0 \$NICS)                                                                                                                                                                    |
-    do                                                                                                                                                                                             |
-        echo "DEVICE=eth\$nic                                                                                                                                                                      |
-        ONBOOT=yes                                                                                                                                                                                     |
-        NM_CONTROLLED=no                                                                                                                                                                               |
-        USERCTL=yes                                                                                                                                                                                    |
-        PEERDNS=yes                                                                                                                                                                                    |
+    echo "Creating a configuration file for each NIC." &>> \$LOGFILE
+    NICS=${#NETWORKS[@]}
+    for nic in \$(seq 0 \$NICS)
+    do
+        echo "DEVICE=eth\$nic
+        ONBOOT=yes
+        NM_CONTROLLED=no
+        USERCTL=yes
+        PEERDNS=yes
         TYPE=Ethernet" > \$NETCFG_DIR/ifcfg-eth\$nic
     done
 

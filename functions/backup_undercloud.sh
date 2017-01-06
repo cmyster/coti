@@ -8,7 +8,7 @@ mkdir /root/backup
 cd /root/backup
 mkdir -p etc/my.cnf.d/ 
 mysqldump --opt --all-databases > /root/undercloud-all-databases.sql
-tar -cf /root/undercloud-backup.tar  \
+tar -cf /root/${HOST_NAME}_backup.tar  \
     /etc/yum.repos.d \
     /root/undercloud-all-databases.sql \
     /etc/my.cnf.d/server.cnf \
@@ -22,5 +22,5 @@ exit 0
 EOF
 
     run_script_file backup_undercloud root $HOST_NAME /root/
-    try scp -q root@${HOST_NAME}:/root/undercloud-backup.tar .
+    try scp -q root@${HOST_NAME}:/root/${HOST_NAME}_backup.tar .
 }

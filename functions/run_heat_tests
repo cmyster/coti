@@ -66,16 +66,19 @@ crudini --set etc/tempest.conf heat_plugin tenant_name $OS_TENANT_NAME
 crudini --set etc/tempest.conf heat_plugin region $DEFAULT_REGION
 crudini --set etc/tempest.conf heat_plugin instance_type $DEFAULT_INSTANCE
 crudini --set etc/tempest.conf heat_plugin minimal_instance_type $MINIMAL_INSTANCE
-crudini --set etc/tempest.conf heat_plugin image_ref $DEFAULT_IMAGE
+crudini --set etc/tempest.conf heat_plugin image_ref $MINIMAL_IMAGE
+#crudini --set etc/tempest.conf heat_plugin image_ref $DEFAULT_IMAGE
 crudini --set etc/tempest.conf heat_plugin minimal_image_ref $MINIMAL_IMAGE
 crudini --set etc/tempest.conf heat_plugin keypair_name $DEFAULT_KEYPAIR
 crudini --set etc/tempest.conf heat_plugin boot_config_env $(locate test_image_env.yaml | head -n 1)
 crudini --set etc/tempest.conf heat_plugin heat_config_notify_script $(locate heat-config-notify | head -n 1)
-crudini --set etc/tempest.conf heat_plugin skip_functional_test_list "AwsStackTest, CancelUpdateTest, RoleBasedExposureTest, OSWaitCondition, PurgeTest, NotificationTest, ResourceGroupAdoptTest, TemplateResourceAdoptTest, ParallelDeploymentsTest, StackTagTest, ZaqarSignalTransportTest, ZaqarWaitConditionTest, ZaqarEventSinkTest, ReloadOnSighupTest.test_api_cloudwatch_on_sighup"
-crudini --set etc/tempest.conf heat_plugin skip_scenario_test_list "ServerSignalIntegrationTest, AodhAlarmTest, SoftwareConfigIntegrationTest, CfnInitIntegrationTest, VolumeBackupRestoreIntegrationTest"
+#crudini --set etc/tempest.conf heat_plugin skip_functional_test_list "AwsStackTest, CancelUpdateTest, RoleBasedExposureTest, OSWaitCondition, PurgeTest, NotificationTest, ResourceGroupAdoptTest, TemplateResourceAdoptTest, ParallelDeploymentsTest, StackTagTest, ZaqarSignalTransportTest, ZaqarWaitConditionTest, ZaqarEventSinkTest, ReloadOnSighupTest.test_api_cloudwatch_on_sighup"
+#crudini --set etc/tempest.conf heat_plugin skip_scenario_test_list "ServerSignalIntegrationTest, AodhAlarmTest, SoftwareConfigIntegrationTest, CfnInitIntegrationTest, VolumeBackupRestoreIntegrationTest"
 
 set +e
 echo "Running tempest"
 tools/run-tests.sh heat_integrationtests
 
-mv tempest.xml /root/heat_integrationtests.xml
+RES_FILE="$(hostname | cut -d "." -f 1)_heat_integrationtests.xml"
+
+mv tempest.xml /root/$RES_FILE

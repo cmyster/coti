@@ -3,7 +3,6 @@ backup_undercloud ()
     HOST=$1
     cat > backup_undercloud <<EOF
 ### because of https://bugzilla.redhat.com/show_bug.cgi?id=1058526 I need to exit cleanly
-rm -rf /root/backup /root/undercloud-backup.tar /root/undercloud-all-databases.sql
 mkdir /root/backup
 cd /root/backup
 mkdir -p etc/my.cnf.d/ 

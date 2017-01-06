@@ -4,6 +4,5 @@ failure ()
     echo "error output:" | tee -a $LOG_FILE
     cat tmpcmd-err | tee -a $LOG_FILE
     echo failed after $(time_diff $(( $(date +%s) - $START ))) | tee -a $LOG_FILE
-    clean
     exit 1
 }

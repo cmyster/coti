@@ -151,9 +151,9 @@ create_virtual_environment
 install_main_undercloud
 predeploy_overcloud
 deploy_overcloud
-run_automation ${NODES[0]}-0
-undercloud_backup
-undercloud_restore
-run_automation ${NODES[0]}-1
+#run_automation ${NODES[0]}-0
+#undercloud_backup
+#undercloud_restore
+#run_automation ${NODES[0]}-1
 
 echo "ALL DONE in $(time_diff $(( $(date +%s) - $START)))"

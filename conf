@@ -44,8 +44,11 @@ LONG=${LONG:-"(this step takes time)"}
 # RPM location of latest rhos-release
 LATEST_RR=${LATEST_RR:-"http://rhos-release.virt.bos.redhat.com/repos/rhos-release/rhos-release-latest.noarch.rpm"}
 
-# Director version to install.
-OSPD_VER=${OSPD_VER:-"10"}
+# Undercloud version to install.
+UC_VER=${UC_VER:-"11"}
+
+# Overcloud version to install.
+OC_VER=${OC_VER:-"11"}
 
 # Puddle version to install.
 PUDDLE_VER=${PUDDLE_VER:-"latest"}
@@ -54,7 +57,7 @@ PUDDLE_VER=${PUDDLE_VER:-"latest"}
 REPO_PATH=${REPO_PATH:-"http://download-node-02.eng.bos.redhat.com/rcm-guest/puddles/OpenStack"}
 
 # Argument to pass to rhos-release.
-RR_CMD=${RR_CMD:-"$OSPD_VER"}
+RR_CMD=${RR_CMD:-"$UC_VER"}
 
 # DNS to be used.
 # The default here is to use the host's configuration.
@@ -87,8 +90,8 @@ RHEL_GUEST=${GUEST_DIR:-"$FILE_SERVER/gen_images/cloud/rhel-guest-image-latest.q
 GUEST_FILE=$(basename $RHEL_GUEST)
 
 # Director image RPMs path.
-OC_IMAGES=${OC_IMAGES:-"$FILE_SERVER/rpms/rhos$OSPD_VER/rhosp-director-images-$OSPD_VER-latest.rpm"}
-OC_IPA=${OC_IPA:-"$FILE_SERVER/rpms/rhos$OSPD_VER/rhosp-director-images-$OSPD_VER-ipa-latest.rpm"}
+OC_IMAGES=${OC_IMAGES:-"$FILE_SERVER/rpms/rhos$UC_VER/rhosp-director-images-$UC_VER-latest.rpm"}
+OC_IPA=${OC_IPA:-"$FILE_SERVER/rpms/rhos$UC_VER/rhosp-director-images-$UC_VER-ipa-latest.rpm"}
 
 # Path to the folder that contains all the repos
 AUTO_PATH=${AUTO_PATH:-"$FILE_SERVER/auto"}

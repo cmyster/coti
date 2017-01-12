@@ -1,6 +1,6 @@
 run_script_file ()
 {
-    # since runnnig the script file is inside a try|failur, no need to run
+    # Since runnnig the script file is inside a try|failur, no need to run
     # try run_script_file, just call it directly.
     # 1 - file name
     # 2 - username

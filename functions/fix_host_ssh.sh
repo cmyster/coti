@@ -1,6 +1,6 @@
 fix_host_ssh ()
 {
-    echo "creating a fresh SSH key and fixing SSH configurations"
+    echo "Creating a fresh SSH key and fixing SSH configurations."
     rm -rf /root/.ssh/id* /root/.ssh/known_hosts
     ssh-keygen -N ""<<EOF
 

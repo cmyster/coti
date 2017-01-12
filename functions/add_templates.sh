@@ -9,7 +9,7 @@ add_templates ()
         sed -i "s/FINDSWP/$SWP/g" templates/${NODES[$index]}_swap.yaml
     done
 
-    # The external network is usually the last one
+    # The external network is usually the last one.
     nets=${#NETWORKS[@]}
     ext_net=${NETWORKS[$(( nets - 1  ))]}
     ext_gw=$(virsh net-dumpxml $ext_net | grep "ip address" | tr "'" " " | awk '{print $3}')

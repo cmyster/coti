@@ -6,7 +6,7 @@ clean_vms ()
     remove_vm ()
     {
         IMG=$(virsh dumpxml $1 | grep "source file" | tr "'" " " | awk '{print $3}')
-        echo removing $1
+        echo Removing $1
         virsh destroy $1 &> /dev/null
         try virsh undefine $1 &> /dev/null || failure
         rm -rf $IMG
@@ -18,8 +18,8 @@ clean_vms ()
         do
             remove_vm $vm
         done
-    else
-        echo "stopping and removing all currently defined VMs" 
+    els.e
+        echo "Stopping and removing all currently defined VMs." 
         for vm in $(virsh list --all | awk '{print $2}' | grep -v "^$\|Name")
         do
             remove_vm $vm

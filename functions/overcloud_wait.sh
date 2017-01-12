@@ -1,7 +1,7 @@
 overcloud_wait ()
 {
     HOST=$1
-    echo "waiting for the overcloud to finish"
+    echo "Waiting for the overcloud to finish."
     STACK=overcloud
     cat > wait <<EOF
 #!/bin/bash

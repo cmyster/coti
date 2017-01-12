@@ -1,8 +1,5 @@
 undercloud_firstboot ()
 {
-    # since I use a lot of firstboot scripts and I can't run more then one in
-    # a specific order, I split it to this script and the nodes firstboot is
-    # configures elsewhere. This script is reserved for undecloud stuff only.
     NODE_NAME="$1"
     cat > undercloud_boot <<EOF
 #!/bin/bash

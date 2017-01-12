@@ -2,7 +2,7 @@ clean_vnets ()
 {
     remove_vnet ()
     {
-        echo "clearing virtual network: $1"
+        echo "Clearing virtual network: $1"
         if $(virsh net-list --all | grep $1 | grep " active" &> /dev/null)
         then
             try virsh net-destroy $1 &> /dev/null || failure
@@ -26,14 +26,14 @@ clean_vnets ()
 
         for br in $(brctl show | sed 1d | awk '{print $1}')
         do
-            echo "clearing virtual bridge: $br"
+            echo "Clearing virtual bridge: $br"
             try ifconfig $br down || failure
             try brctl delbr $br &> /dev/null || failure
         done
 
         for br in $(ovs-vsctl list-br 2> /dev/null)
         do
-            echo "clearing ovs bridge: $br"
+            echo "Clearing ovs bridge: $br"
             try ovs-vsctl del-br $br &> /dev/null || failure
         done
     fi

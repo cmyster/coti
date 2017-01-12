@@ -1,6 +1,6 @@
 undercloud_wait ()
 {
-    echo "waiting for the undercloud machine to contact"
+    echo "Waiting for the undercloud machine to contact."
     # I expect that the name is defined at NODES[0]. The first of those is
     # something like undercloud-0
     NODE_NAME="$1"
@@ -17,10 +17,10 @@ undercloud_wait ()
             source ${NODE_NAME}.hello
             if [ -z "$IP" ] || [ -z "$HOST" ]
             then
-                echo "an undercloud called $HOST sent an empty hello"
+                echo "An undercloud called $HOST sent an empty hello."
                 raise ${FUNCNAME[0]}
             else
-                echo "an undercloud called $HOST sent hello from $IP"
+                echo "An undercloud called $HOST sent hello from $IP"
                 try set_hosts $HOST $IP || failure
             fi
             break

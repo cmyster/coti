@@ -23,9 +23,9 @@ set_host_repos ()
         RR_CMD="$UC_VER -p $PUDDLE"
     fi
 
-    echo "Running rhos-release $RR_CMD."
+    echo "Running rhos-release ${RR_CMD}."
     rhos-release $RR_CMD &> rr.log
     grep "#" rr.log | grep -v director | awk '{print $NF}' > puddle
     PUDDLE=$(cat puddle)
-    echo "Using puddle: $PUDDLE."
+    echo "Using puddle: ${PUDDLE}."
 }

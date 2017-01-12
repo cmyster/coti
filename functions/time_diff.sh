@@ -1,6 +1,6 @@
 time_diff ()
 {
-    # return time delta in HH:mm:ss
+    # Return time delta in HH:mm:ss
     H=$(( $1 / 3600 ))
     M=$(( $1 % 3600 / 60 ))
     S=$(( $1 % 60 ))

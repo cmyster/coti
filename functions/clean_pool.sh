@@ -1,6 +1,6 @@
 clean_pool ()
 {
-    echo "stoping and undefining all pools"
+    echo "Stoping and undefining all pools."
     for pool in $(virsh pool-list | grep -v -e "Name.*State\|---\|^$" | awk '{print $1}')
     do
         echo "cleaning $pool"

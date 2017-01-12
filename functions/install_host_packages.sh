@@ -1,6 +1,6 @@
 install_host_packages ()
 {
-    echo "adding needed | wanted packages to the hostmachine"
+    echo "Adding needed | wanted packages to the host."
     PACKAGES=( 
               elinks
               facter

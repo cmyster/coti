@@ -1,6 +1,6 @@
 define_nodes ()
 {
-    echo "creating a definition file for each node"
+    echo "Creating a definition file for each node."
     cp $CWD/vm-body $WORK_DIR
 
     VM_ID=1
@@ -21,7 +21,7 @@ define_nodes ()
             for (( i=0; i<$TOT; i++ ))
             do
                 INV=${NODES[$index]}-$i.inv
-                echo "defining ${NODES[$index]}-$i"
+                echo "Defining ${NODES[$index]}-$i"
                 echo "name=${NODES[$index]}-$i" >> $INV
                 echo "cpu=$CPU" >> $INV
                 echo "memory=$RAM" >> $INV

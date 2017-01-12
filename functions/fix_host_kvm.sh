@@ -1,6 +1,6 @@
 fix_host_kvm ()
 {
-    echo "making sure KVM (intel or amd) is loaded"
+    echo "Making sure KVM (intel or amd) is loaded."
     if grep Intel /proc/cpuinfo &> /dev/null
     then
         KVM="kvm-intel"

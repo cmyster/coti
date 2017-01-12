@@ -1,7 +1,7 @@
 undercloud_install ()
 {
     HOST=$1
-    echo "installing openstack undercloud"
+    echo "Installing openstack undercloud."
     scp -q $CWD/undercloud.conf stack@$HOST:
     cat > install <<EOF
 cd /home/stack/

@@ -1,7 +1,7 @@
 overcloud_deploy ()
 {
     HOST=$1
-    echo "running the overcloud deployment"
+    echo "Running the overcloud deployment."
     if [ -z "$ceph_NUM" ] || [ $ceph_NUM -eq 0 ]
     then
         USE_CEPH=""

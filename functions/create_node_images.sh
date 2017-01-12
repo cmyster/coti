@@ -1,6 +1,6 @@
 create_node_images ()
 {
-    echo "creating images for each node"
+    echo "Creating images for each node."
     for (( index=0; index<${#NODES[@]}; index++ ))
     do
         eval DSK=\$${NODES[$index]}_DSK
@@ -11,7 +11,7 @@ create_node_images ()
 
         if [ $TOT -gt 0 ]
         then
-            echo "creating an image disk for ${NODES[$index]}"
+            echo "Creating an image disk for ${NODES[$index]}"
             case "${NODES[$index]}" in
             ceph)
                 try qemu-img create -f raw ${NODES[$index]}.raw ${DSK}G || failure

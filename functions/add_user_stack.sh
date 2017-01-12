@@ -1,6 +1,6 @@
 add_user_stack ()
 {
-    # if missing, add the stack user and give it sudo rights
+    # If missing, add the stack user and give it sudo rights.
     grep ^stack /etc/passwd &> /dev/null
     if [ $? -ne 0 ]
     then

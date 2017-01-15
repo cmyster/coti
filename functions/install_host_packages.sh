@@ -5,6 +5,7 @@ install_host_packages ()
               createrepo
               elinks
               facter
+              httpd
               libguestfs-tools-c
               libguestfs-xfs
               libvirt

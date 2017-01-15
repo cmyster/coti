@@ -2,6 +2,7 @@ install_host_packages ()
 {
     echo "Adding needed | wanted packages to the host."
     PACKAGES=( 
+              createrepo
               elinks
               facter
               libguestfs-tools-c

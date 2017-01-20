@@ -45,6 +45,8 @@ then
     echo "Restoring from \$BACKUP_FILE" >> \$LOGFILE
     rm -rf /etc/yum.repos.d
     tar -xC / -f \$BACKUP_FILE etc/yum.repos.d
+else
+    rhos-release $RR_CMD || exit 1
 fi
 
 echo "Creating a configuration file for each NIC." &>> \$LOGFILE

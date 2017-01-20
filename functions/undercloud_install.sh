@@ -12,7 +12,6 @@ then
 fi
 wget -q -nv -nd -np -r -A tar ${TAR_PATH}/ || exit 1
 tar xf images.tar
-sudo rhos-release $RR_CMD || exit 1
 openstack undercloud install || exit 1
 EOF
     run_script_file install stack $HOST /home/stack/

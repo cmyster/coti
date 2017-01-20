@@ -1,0 +1,6 @@
+disk_images:
+  -
+    imagename: overcloud-full
+    packages:
+      - redhat-access-insights
+      - rhosp-release

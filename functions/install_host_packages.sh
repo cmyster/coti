@@ -2,14 +2,12 @@ install_host_packages ()
 {
     echo "Adding needed | wanted packages to the host."
     PACKAGES=( 
-              createrepo
-              elinks
               facter
-              httpd
               libguestfs-tools-c
               libguestfs-xfs
               libvirt
               mc
+              openstack-tripleo-common
               openvswitch
               qemu-kvm
               sshpass

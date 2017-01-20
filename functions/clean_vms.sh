@@ -18,7 +18,7 @@ clean_vms ()
         do
             remove_vm $vm
         done
-    els.e
+    else
         echo "Stopping and removing all currently defined VMs." 
         for vm in $(virsh list --all | awk '{print $2}' | grep -v "^$\|Name")
         do

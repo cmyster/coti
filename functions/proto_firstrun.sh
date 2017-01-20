@@ -22,12 +22,18 @@ rm -rf /etc/yum.repos.d/* /var/cache/yum/*
 rhos-release $RR_CMD || exit 1
 yum update -y || exit 1
 yum groups mark convert
-yum install -y acpid ahc-tools gdb git gpm iscsi-initiator-utils keepalived \
-libvirt mariadb-server mc mlocate net-tools ntp openstack-glance \
-openstack-puppet-modules openstack-swift openstack-utils psmisc puppet \
-pystache python-psutil python-rdomanager-oscplugin python-setuptools \
-python-tripleoclient screen setroubleshoot sshpass sysstat telnet tmux tree \
-vim virt-manager wget crudini
+yum install -y acpid ahc-tools createproto crudini device-mapper-multipath \
+dosfstools elinks gdb gdisk genisoimage git gpm hdparm ipmitool \
+iscsi-initiator-utils keepalived libvirt lsof mc mlocate net-tools ntp \
+openstack-glance openstack-ironic-python-agent openstack-neutron-bigswitch-agent \
+openstack-neutron-bigswitch-lldp openstack-puppet-modules openstack-selinux \
+openstack-swift openstack-utils plotnetcfg psmisc puppet pystache \
+python-debtcollector python-hardware-detect python-heat-agent-ansible \
+python-heat-agent-apply-config python-heat-agent-hiera python-heat-agent-puppet \
+python-networking-bigswitch python-networking-cisco python-psutil \
+python-rdomanager-oscplugin python-setuptools python-tripleoclient python-UcsSdk \
+redhat-access-insights rhosp-release screen setroubleshoot sos sshpass sysstat \
+telnet tmux traceroute tree vim virt-manager wget 
 yum group install -y "Development Tools" || exit 1
 
 rpm -Uvh /root/*.rpm || exit 1

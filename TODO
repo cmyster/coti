@@ -1,3 +1,4 @@
 #TODO
+* Generate undercloud.conf per version as there are diffs between majors.
 * Fix backward competability to rhos 9-.
 * Populate /etc/hosts of each VM with information about every other VM.

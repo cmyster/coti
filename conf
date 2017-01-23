@@ -45,10 +45,10 @@ LONG=${LONG:-"(this step takes time)"}
 LATEST_RR=${LATEST_RR:-"http://rhos-release.virt.bos.redhat.com/repos/rhos-release/rhos-release-latest.noarch.rpm"}
 
 # Undercloud version to install.
-UC_VER=${UC_VER:-"11"}
+UC_VER=${UC_VER:-"10"}
 
 # Overcloud version to install.
-OC_VER=${OC_VER:-"11"}
+OC_VER=${OC_VER:-"10"}
 
 # Puddle version to install.
 PUDDLE_VER=${PUDDLE_VER:-"latest"}
@@ -175,7 +175,7 @@ controller_RAM=${controller_RAM:-16384}
 controller_SWP=${controller_SWP:-1024}
 controller_CPU=${controller_CPU:-3}
 controller_DUM=${controller_DUM:-0}
-controller_DSK=${controller_DSK:-9}
+controller_DSK=${controller_DSK:-10}
 controller_OS=${controller_OS:-"rhel7.3.0"}
 
 # compute nodes
@@ -184,15 +184,15 @@ compute_RAM=${compute_RAM:-16384}
 compute_SWP=${compute_SWP:-1024}
 compute_CPU=${compute_CPU:-4}
 compute_DUM=${compute_DUM:-0}
-compute_DSK=${compute_DSK:-9}
+compute_DSK=${compute_DSK:-10}
 compute_OS=${compute_OS:-"rhel7.3.0"}
 
 # ceph nodes
-ceph_NUM=${ceph_NUM:-3}
+ceph_NUM=${ceph_NUM:-0}
 ceph_RAM=${ceph_RAM:-4096}
 ceph_SWP=${ceph_SWP:-1024}
 ceph_CPU=${ceph_CPU:-2}
 ceph_DUM=${ceph_DUM:-0}
-ceph_DSK=${ceph_DSK:-9}
-ceph_OSD=${ceph_OSD:-8}
+ceph_DSK=${ceph_DSK:-10}
+ceph_OSD=${ceph_OSD:-10}
 ceph_OS=${ceph_OS:-"rhel7.3.0"}

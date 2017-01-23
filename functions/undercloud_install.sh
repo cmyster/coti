@@ -13,6 +13,10 @@ fi
 wget -q -nv -nd -np -r -A tar ${TAR_PATH}/ || exit 1
 tar xf images.tar
 openstack undercloud install || exit 1
+if ! -r /home/stack/stackrc
+then
+    exit 1
+fi
 EOF
     run_script_file install stack $HOST /home/stack/
 }

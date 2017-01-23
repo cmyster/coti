@@ -36,6 +36,14 @@ static_ip ()
     echo "No more need for dhclient." >> \$LOGFILE
     for dhc_pid in \$(ps -ef | grep dhclient | grep -v grep | awk '{print \$2}')
     do
+        echo "Killing \$dhc_pid" &>> \$LOGFILE
+        kill -9 \$dhc_pid &>> \$LOGFILE
+    done
+    # Running it twice because even with -9 it might need a 2nd attempt.
+    sleep 1
+    for dhc_pid in \$(ps -ef | grep dhclient | grep -v grep | awk '{print \$2}')
+    do
+        echo "Killing \$dhc_pid" &>> \$LOGFILE
         kill -9 \$dhc_pid &>> \$LOGFILE
     done
 }

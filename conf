@@ -45,10 +45,10 @@ LONG=${LONG:-"(this step takes time)"}
 LATEST_RR=${LATEST_RR:-"http://rhos-release.virt.bos.redhat.com/repos/rhos-release/rhos-release-latest.noarch.rpm"}
 
 # Undercloud version to install.
-UC_VER=${UC_VER:-"10"}
+UC_VER=${UC_VER:-"11"}
 
 # Overcloud version to install.
-OC_VER=${OC_VER:-"10"}
+OC_VER=${OC_VER:-"11"}
 
 # Puddle version to install.
 PUDDLE_VER=${PUDDLE_VER:-"latest"}
@@ -60,7 +60,7 @@ REPO_PATH=${REPO_PATH:-"http://download-node-02.eng.bos.redhat.com/rcm-guest/pud
 RR_CMD=${RR_CMD:-"$UC_VER"}
 
 # Do we obtain images from predefined images or do we create our own.
-OBTAIN_IMAGES=${OBTAIN_IMAGES:-"prepare_puddle_images"}
+OBTAIN_IMAGES=${OBTAIN_IMAGES:-"get_predefined_images"}
 
 # DNS to be used.
 # The default here is to use the host's configuration.
@@ -188,7 +188,7 @@ compute_DSK=${compute_DSK:-10}
 compute_OS=${compute_OS:-"rhel7.3.0"}
 
 # ceph nodes
-ceph_NUM=${ceph_NUM:-0}
+ceph_NUM=${ceph_NUM:-3}
 ceph_RAM=${ceph_RAM:-4096}
 ceph_SWP=${ceph_SWP:-1024}
 ceph_CPU=${ceph_CPU:-2}

@@ -1,20 +1,20 @@
 host_tweaks ()
 {
     echo "Adding configurations and other tweaks for easier life."
-    # adding Xauth for simpler ssh tunneling
+    # Adding Xauth for simpler ssh tunneling.
     if [ ! -f ~/.Xauthority ]
     then
         touch ~/.Xauthority
         mcookie | sed -e 's/^/add :0 . /' | xauth -q &> /dev/null
     fi
 
-    # removing requiredtty so sudo can work from a remote script
+    # Removing requiredtty so sudo can work from a remote script.
     if grep requiretty /etc/sudoers &> /dev/null
     then 
         sed -i '/requiretty/d' /etc/sudoers
     fi
     
-    # setting vim the way I like it.
+    # Setting vim the way I like it.
     if ! grep augol /etc/vimrc &> /dev/null
     then
         cat > /etc/vimrc <<EOF
@@ -52,5 +52,11 @@ highlight Pmenu ctermfg=cyan ctermbg=blue
 highlight PmenuSel ctermfg=black ctermbg=cyan
 highlight ColorColumn ctermbg=0
 EOF
+    fi
+
+    # Removing rm -i from bashrc.
+    if grep rm /root/.bashrc
+    then
+        sed -i '/rm/d' /root/.bashrc
     fi
 }

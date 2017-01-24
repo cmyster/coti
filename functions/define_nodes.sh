@@ -46,7 +46,7 @@ EOF
                 cat vm-body >> ${NODES[$index]}-${i}.xml
 
                 # in case of ceph there are two disks
-                if [[ ${NODES[$index]} == "ceph" ]]
+                if [[ "${NODES[$index]}" == "ceph" ]]
                 then
                     cat >> ${NODES[$index]}-${i}.xml <<EOF
     <disk type='file' device='disk'>
@@ -56,7 +56,7 @@ EOF
       <address type='pci' domain='0x0000' bus='0x01' slot='0x01' function='0x0'/>
     </disk>
 EOF
-                    cat >> ${NODES[$index]}-${i}_osd.xml <<EOF
+                    cat >> ${NODES[$index]}-${i}.xml <<EOF
     <disk type='file' device='disk'>
       <driver name='qemu' type='raw' cache='none' io='native'/>
       <source file='/var/lib/libvirt/images/${NODES[$index]}-${i}_osd.raw'/>

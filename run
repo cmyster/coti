@@ -38,6 +38,7 @@ host_preprerations ()
     run set_host_repos
     run set_puddle_params
     run update_os "$LONG"
+    run install_host_packages "$LONG"
     run host_tweaks
     run fix_host_ssh
     run fix_virt_access
@@ -114,6 +115,7 @@ deploy_overcloud ()
     # Running overcloud deploy and waiting for deployment to finish.
     run "overcloud_deploy ${NODES[0]}-0"
     run "overcloud_wait ${NODES[0]}-0" "$LONG"
+    run "populate_hosts ${NODES[0]}-0"
     echo -e "Overcloud deployed after $(time_diff $(( $(date +%s) - $START)))\n"
 }
 
@@ -136,6 +138,7 @@ undercloud_restore ()
     run "undercloud_ssh_access ${NODES[0]}-1 stack stack"
     run "restore_undercloud ${NODES[0]}-1"
     run "undercloud_install ${NODES[0]}-1" "$LONG"
+    run "populate_hosts ${NODES[0]}-1"
     echo -e "Undercloud restored after $(time_diff $(( $(date +%s) - $START)))\n"
 }
 

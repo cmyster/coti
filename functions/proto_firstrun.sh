@@ -6,7 +6,7 @@ cp $0 /root
 echo "clean_requirements_on_remove=1" >> /etc/yum.conf
 systemctl stop NetowrkManager
 systemctl disable NetworkManager
-yum remove -y cloud-init* NetworkManager*
+yum remove -y cloud-init* NetworkManager* python-networking-bigswitch
 
 dhclient eth0
 

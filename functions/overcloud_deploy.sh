@@ -21,6 +21,7 @@ openstack overcloud deploy \\
     --ntp-server $NTP \\
     -e ./templates/swap_env.yaml \\
     -e $THT/environments/services/sahara.yaml \\
+    -e $THT/environments/services/panko.yaml \\
     -e $THT/environments/cinder-backup.yaml \\
     -e $THT/environments/network-environment.yaml \\
     -e $THT/environments/net-multiple-nics.yaml \\

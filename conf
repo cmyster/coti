@@ -47,8 +47,8 @@ LATEST_RR=${LATEST_RR:-"http://rhos-release.virt.bos.redhat.com/repos/rhos-relea
 # Version to install deploy.
 # UC = UnderCloud
 # OC = OverCloud
-UC_VER=${UC_VER:-"10"}
-OC_VER=${OC_VER:-"10"}
+UC_VER=${UC_VER:-"11"}
+OC_VER=${OC_VER:-"11"}
 PUDDLE_VER=${PUDDLE_VER:-"latest"}
 
 # Upgrade the environment to this version.
@@ -168,12 +168,12 @@ undercloud_NUM=${undercloud_NUM:-1}
 undercloud_RAM=${undercloud_RAM:-16384}
 undercloud_SWP=${undercloud_SWP:-1024}
 undercloud_CPU=${undercloud_CPU:-4}
-undercloud_DUM=${undercloud_DUM:-0}
+undercloud_DUM=${undercloud_DUM:-1}
 undercloud_DSK=${undercloud_DSK:-17}
 undercloud_OS=${undercloud_OS:-"rhel7.3.0"}
 
 # controller nodes
-controller_NUM=${controller_NUM:-1}
+controller_NUM=${controller_NUM:-3}
 controller_RAM=${controller_RAM:-16384}
 controller_SWP=${controller_SWP:-1024}
 controller_CPU=${controller_CPU:-3}
@@ -182,7 +182,7 @@ controller_DSK=${controller_DSK:-10}
 controller_OS=${controller_OS:-"rhel7.3.0"}
 
 # compute nodes
-compute_NUM=${compute_NUM:-1}
+compute_NUM=${compute_NUM:-2}
 compute_RAM=${compute_RAM:-16384}
 compute_SWP=${compute_SWP:-1024}
 compute_CPU=${compute_CPU:-4}
@@ -191,7 +191,7 @@ compute_DSK=${compute_DSK:-10}
 compute_OS=${compute_OS:-"rhel7.3.0"}
 
 # ceph nodes
-ceph_NUM=${ceph_NUM:-1}
+ceph_NUM=${ceph_NUM:-3}
 ceph_RAM=${ceph_RAM:-4096}
 ceph_SWP=${ceph_SWP:-1024}
 ceph_CPU=${ceph_CPU:-2}

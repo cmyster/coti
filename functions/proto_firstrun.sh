@@ -6,7 +6,7 @@ cp $0 /root
 echo "clean_requirements_on_remove=1" >> /etc/yum.conf
 systemctl stop NetowrkManager
 systemctl disable NetworkManager
-yum remove -y cloud-init* NetworkManager* python-networking-bigswitch
+yum remove -y cloud-init* NetworkManager* *bigswitch*
 
 dhclient eth0
 
@@ -25,12 +25,12 @@ yum groups mark convert
 yum install -y acpid ahc-tools createproto crudini device-mapper-multipath \
 dosfstools elinks gdb gdisk genisoimage git gpm hdparm ipmitool \
 iscsi-initiator-utils keepalived libvirt lsof mc mlocate net-tools ntp \
-openstack-glance openstack-ironic-python-agent openstack-neutron-bigswitch-agent \
-openstack-neutron-bigswitch-lldp openstack-puppet-modules openstack-selinux \
+openstack-glance openstack-ironic-python-agent \
+openstack-puppet-modules openstack-selinux \
 openstack-swift openstack-utils plotnetcfg psmisc puppet pystache \
 python-debtcollector python-hardware-detect python-heat-agent-ansible \
 python-heat-agent-apply-config python-heat-agent-hiera python-heat-agent-puppet \
-python-networking-bigswitch python-networking-cisco python-psutil \
+python-networking-cisco python-psutil \
 python-rdomanager-oscplugin python-setuptools python-tripleoclient python-UcsSdk \
 redhat-access-insights rhosp-release screen setroubleshoot sos sshpass sysstat \
 telnet tmux traceroute tree vim virt-manager wget 

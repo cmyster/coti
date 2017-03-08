@@ -182,7 +182,7 @@ controller_DSK=${controller_DSK:-10}
 controller_OS=${controller_OS:-"rhel7.3.0"}
 
 # compute nodes
-compute_NUM=${compute_NUM:-2}
+compute_NUM=${compute_NUM:-3}
 compute_RAM=${compute_RAM:-16384}
 compute_SWP=${compute_SWP:-1024}
 compute_CPU=${compute_CPU:-4}

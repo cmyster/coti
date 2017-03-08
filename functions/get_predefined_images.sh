@@ -34,7 +34,7 @@ rm -rf rhos-release-latest.noarch.rpm | tee -a \$LOG
 rhos-release $RR_CMD | tee -a \$LOG
 yum update -y | tee -a \$LOG
 yum install -y vim mc git python-psutil | tee -a \$LOG
-yum remove -y python-networking-bigswitch
+yum remove -y *bigswitch*
 for rpm in \$(ls *.rpm)
 do
     rpm -Uvh \$rpm | tee -a \$LOG

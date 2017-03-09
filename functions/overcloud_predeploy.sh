@@ -7,8 +7,8 @@ cd /home/stack/
 source stackrc
 
 # Setting the EC2Meta property.
-BR_NAME=\$(grep inspection_interface undercloud.conf | awk '{print \$NF}' | tr -d "\"")
-if [ -z $BR_NAME ]
+BR_NAME=\$(grep local_interface undercloud.conf | awk '{print \$NF}' | tr -d "\"")
+if [ -z "$BR_NAME" ]
 then
     BR_NAME="br-ctlplane"
 fi
@@ -18,8 +18,12 @@ sed -i "s/FINDEC2/\$BR_IP/g" ./templates/overrides.yaml
 # Copying ssh id to the default gateway.
 sshpass -p stack ssh-copy-id $DEFAULT_GATEWAY
 
+# Copying ssh id to EC2Meta.
+sshpass -p stack ssh-copy-id \$BR_IP
+
 # Testing passwordless ssh.
 ssh $DEFAULT_GATEWAY "echo hello"
+ssh \$BR_IP "echo hello"
 
 # Adding the default DNS to the default subnet.
 SUBNET=\$(neutron subnet-list | grep start | cut -d" " -f 2)

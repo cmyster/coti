@@ -8,6 +8,10 @@ source stackrc
 
 # Setting the EC2Meta property.
 BR_NAME=\$(grep inspection_interface undercloud.conf | awk '{print \$NF}' | tr -d "\"")
+if [ -z $BR_NAME ]
+then
+    BR_NAME="eth0"
+fi
 BR_IP=\$(/usr/sbin/ifconfig \$BR_NAME | grep "inet " | awk '{print \$2}')
 sed -i "s/FINDEC2/\$BR_IP/g" ./templates/overrides.yaml
 

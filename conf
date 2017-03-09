@@ -117,7 +117,7 @@ ROOT_PASS=${ROOT_PASS:-"12345678"}
 
 # NTP server to be used.
 # Default is taken from the host.
-NTP="${NTP:-$(grep "'^server'\|iburst" /etc/ntp.conf | cut -d " " -f 2)}"
+NTP="${NTP:-$(grep "'^server'\|iburst" /etc/ntp.conf | cut -d " " -f 2 | head -n 1)}"
 
 ###   Nodes and per node settings.
 

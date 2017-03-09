@@ -29,9 +29,6 @@ UNDER_SEL=${UNDER_SEL:-"permissive"}
 # Selinux state on the overcloud.
 OVER_SEL=${OVER_SEL:-"permissive"}
 
-# Network type for undecloud nodes
-NET_TYPE=${NET_TYPE:-"vxlan"}
-
 # How images are accessed with virt-commands.
 LIBGUESTFS_BACKEND=direct
 

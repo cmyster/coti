@@ -16,8 +16,6 @@ openstack overcloud deploy \\
     --libvirt-type kvm \\
     --control-scale $controller_NUM --control-flavor control \\
     --compute-scale $compute_NUM --compute-flavor compute \\
-    --neutron-network-type $NET_TYPE \\
-    --neutron-tunnel-types $NET_TYPE \\
     --ntp-server $NTP \\
     -e ./templates/swap_env.yaml \\
     -e $THT/environments/services/sahara.yaml \\

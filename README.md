@@ -19,7 +19,7 @@ strong hardware to pull it off on a single server. I use one with 256 RAM and
 40 threads to install an HA (High Availability) environment.
 
 ## Requirements:
-This script uses internal links to internal Redhat resources. *It will not
+This script uses links to internal Redhat resources. *It will not
 work outside of Redhat's internal network.*
 
 A pretty strong server. At a bare minimum:
@@ -33,15 +33,14 @@ of each resource is needed for launching VMs_
 
 ## Where to start?
 
-[This is the first place to read about TripleO installations.]
-(http://docs.openstack.org/developer/tripleo-docs/)
+[This is the first place to read about TripleO installations.](http://docs.openstack.org/developer/tripleo-docs/)
 
 Then there is the `conf` file where all the configurations are kept with a
 short explanation on each option.
 
 ## How to run?
 
-Change to the folder, go over the `conf` file as installing will not work 
+Change to the folder, go over the `conf` file as installation will not work 
 OOB, and change what you need.
 
 Go over `run` and see the order in which things are executed. You can play

@@ -29,7 +29,7 @@ A pretty strong server. At a bare minimum:
 1 Controller node - 12GB RAM, 2 vCPUs, 12GB disk space.
 
 1 Compute node     -  8GB RAM, 2 vCPUs, 12GB disk space.  _installation only,
-more of each resource is needed for launching VMs_
+more of each resource is needed for launching VMs._
 
 ## Where to start?
 

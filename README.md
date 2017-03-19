@@ -24,12 +24,12 @@ work outside of Redhat's internal network.*
 
 A pretty strong server. At a bare minimum:
 
-1 Undercloud VM    - 16GB RAM, 4 vCPUs, 22GB disk
+1 Undercloud VM    - 16GB RAM, 4 vCPUs, 22GB disk space.
 
-1 Controller node - 12GB RAM, 2 vCPUs, 12GB disk
+1 Controller node - 12GB RAM, 2 vCPUs, 12GB disk space.
 
-1 Compute node     -  8GB RAM, 2 vCPUs, 12GB disk  _installation only, more
-of each resource is needed for launching VMs_
+1 Compute node     -  8GB RAM, 2 vCPUs, 12GB disk space.  _installation only,
+more of each resource is needed for launching VMs_
 
 ## Where to start?
 

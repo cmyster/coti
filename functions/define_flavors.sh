@@ -16,7 +16,7 @@ define_flavors ()
                 f_name="compute" ;;
         esac
         f_ram=$memory
-        f_disk=$(( disk - 1 )) # Removing 1GB due to ironic bug.
+        f_disk=$(( disk - 3 )) # Removing GB due to ironic bug.
         f_cpu=$cpu
         echo "openstack flavor delete $f_name" >> $SCRIPT
         echo "openstack flavor create $f_name --ram $f_ram --disk $f_disk --vcpus $f_cpu" >> $SCRIPT

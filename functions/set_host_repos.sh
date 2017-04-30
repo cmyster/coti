@@ -1,6 +1,5 @@
 set_host_repos ()
 {
-set -x
     # set the repo files and get core puddle version
     echo "Removing old rhos-release."
     try yum -y -q -e 0 remove rhos-release || failure
@@ -30,5 +29,4 @@ set -x
     echo "Running rhos-release ${RR_CMD}."
     rhos-release $RR_CMD &> rr.log
     echo "Using puddle: ${PUDDLE}."
-exit
 }

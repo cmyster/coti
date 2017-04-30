@@ -41,8 +41,8 @@ LATEST_RR=${LATEST_RR:-"http://rhos-release.virt.bos.redhat.com/repos/rhos-relea
 # Version to install deploy.
 # UC = UnderCloud
 # OC = OverCloud
-UC_VER=${UC_VER:-10}
-OC_VER=${OC_VER:-10}
+UC_VER=${UC_VER:-8}
+OC_VER=${OC_VER:-8}
 PUDDLE_VER=${PUDDLE_VER:-"latest"}
 
 # Puddles repository parent directory for RHOS 10+

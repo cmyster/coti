@@ -1,5 +1,6 @@
 set_host_repos ()
 {
+set -x
     # set the repo files and get core puddle version
     echo "Removing old rhos-release."
     try yum -y -q -e 0 remove rhos-release || failure
@@ -11,21 +12,23 @@ set_host_repos ()
     rm -rf /etc/yum.repos.d/* /var/cache/yum/*
 
     echo "Setting repos with rhos-release."
-    case "$PUDDLE_VER" in
-        latest)
-            VERS_URL=$(elinks --dump $REPO_PATH | grep "/$UC_VER" | grep -v Opt | awk '{print $NF}')
-            PUDDLE=$(elinks --dump $VERS_URL| grep /20 | rev | cut -d "/" -f 2 | rev | sort | tail -n 1)
-            ;;
-    esac
+    if [ $UC_VER -lt 10 ]
+    then
+        URL=$REPO_PATH_OLD
+        DIRECTOR="-director"
+    else
+        URL=$REPO_PATH
+    fi
+
+    PUDDLE=$(elinks --dump $URL | grep -e http.*201 | awk '{print $NF}' | sort | tail -n 1 | rev | cut -d "/" -f 2 | rev)
 
     if [ ! -z "$PUDDLE" ]
     then
-        RR_CMD="$UC_VER -p $PUDDLE"
+        RR_CMD="${UC_VER}${DIRECTOR} -p $PUDDLE"
     fi
 
     echo "Running rhos-release ${RR_CMD}."
     rhos-release $RR_CMD &> rr.log
-    grep "#" rr.log | grep -v director | awk '{print $NF}' > puddle
-    PUDDLE=$(cat puddle)
     echo "Using puddle: ${PUDDLE}."
+exit
 }

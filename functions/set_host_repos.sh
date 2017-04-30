@@ -20,6 +20,7 @@ set_host_repos ()
     fi
 
     PUDDLE=$(elinks --dump $URL | grep -e http.*201 | awk '{print $NF}' | sort | tail -n 1 | rev | cut -d "/" -f 2 | rev)
+    echo $PUDDLE > puddle
 
     if [ ! -z "$PUDDLE" ]
     then

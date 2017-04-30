@@ -1,4 +1,4 @@
-get_predefined_images ()
+edit_predefined_images ()
 {
     LIBGUESTFS_BACKEND=direct
 

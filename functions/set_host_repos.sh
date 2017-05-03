@@ -30,4 +30,9 @@ set_host_repos ()
     echo "Running rhos-release ${RR_CMD}."
     rhos-release $RR_CMD &> rr.log
     echo "Using puddle: ${PUDDLE}."
+
+    if [ $UC_VER -lt 10 ]
+    then
+        sed -i "s|$PUDDLE|latest|g" /etc/yum.repos.d/rhos-release-${UC_VER}.repo
+    fi
 }

@@ -56,7 +56,7 @@ RR_CMD=${RR_CMD:-"$UC_VER"}
 # prepare_puddle_images - create our own.
 # edit_predefined_images - edit images from RPM.
 # predefined_images - use untouched images from RPM.
-OBTAIN_IMAGES=${OBTAIN_IMAGES:-"predefined_images"}
+OBTAIN_IMAGES=${OBTAIN_IMAGES:-"edit_predefined_images"}
 
 # DNS to be used.
 # The default here is to use the host's configuration.
@@ -112,6 +112,12 @@ ROOT_PASS=${ROOT_PASS:-"12345678"}
 # Default is taken from the host.
 NTP="${NTP:-$(grep "'^server'\|iburst" /etc/ntp.conf | cut -d " " -f 2 | head -n 1)}"
 
+# Backup and restore. Starting Liberty, a backing up and restore mechanism for the
+# Undercloud node was created. If set to true here, undercloud-0 will be backed-up,
+# destroyed and undercloud-1 will be installed with all the settings and data.
+
+BCK_RES=${$BCK_RES:-false}
+
 ###   Nodes and per node settings.
 
 # Node names.
@@ -166,7 +172,7 @@ undercloud_DSK=${undercloud_DSK:-22}
 undercloud_OS=${undercloud_OS:-"rhel7.3.0"}
 
 # controller nodes
-controller_NUM=${controller_NUM:-1}
+controller_NUM=${controller_NUM:-3}
 controller_RAM=${controller_RAM:-16384}
 controller_SWP=${controller_SWP:-1024}
 controller_CPU=${controller_CPU:-4}
@@ -175,7 +181,7 @@ controller_DSK=${controller_DSK:-17}
 controller_OS=${controller_OS:-"rhel7.3.0"}
 
 # compute nodes
-compute_NUM=${compute_NUM:-1}
+compute_NUM=${compute_NUM:-3}
 compute_RAM=${compute_RAM:-16384}
 compute_SWP=${compute_SWP:-1024}
 compute_CPU=${compute_CPU:-4}

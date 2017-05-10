@@ -116,7 +116,7 @@ NTP="${NTP:-$(grep "'^server'\|iburst" /etc/ntp.conf | cut -d " " -f 2 | head -n
 # Undercloud node was created. If set to true here, undercloud-0 will be backed-up,
 # destroyed and undercloud-1 will be installed with all the settings and data.
 
-BCK_RES=${$BCK_RES:-false}
+BCK_RES=${BCK_RES:-true}
 
 ###   Nodes and per node settings.
 

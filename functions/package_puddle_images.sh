@@ -1,5 +1,7 @@
 package_puddle_images ()
 {
+    PUDDLE=$(cat puddle)
+    RR_CMD=$(cat rr_cmd)
     try tar cf images.tar ironic-python-agent.initramfs ironic-python-agent.kernel overcloud-full.qcow2 overcloud-full.initrd overcloud-full.vmlinuz || failure
     rm -rf overcloud-full* ironic-python-agent* usr
     mkdir $PUDDLE

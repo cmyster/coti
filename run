@@ -34,17 +34,17 @@ host_preprerations ()
 {
     # Editing the host prior to do anything else.
     run clean
-    run install_host_minimal_packages
+    run install_host_packages "$LONG"
     #run set_host_repos
+    run "discover_puddle_version $UC_VER"
     run set_puddle_params
     run update_os "$LONG"
-    run install_host_packages "$LONG"
     run host_tweaks
     run fix_host_ssh
     run fix_virt_access
     run fix_host_kvm
     run add_user_stack
-    echo -e "Prepared new resources after $(time_diff $(( $(date +%s) - $START)))\n"
+    echo -e "Prepared host after $(time_diff $(( $(date +%s) - $START)))\n"
 }
 
 virt_setup ()

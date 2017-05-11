@@ -1,26 +1,27 @@
 undercloud_firstboot ()
 {
     NODE_NAME="$1"
+    RR_CMD=$(cat rr_cmd)
     cat > undercloud_boot <<EOF
 #!/bin/bash
 cp \$0 /root/
 BACKUP_FILE=\$(find /root/ -type f -name "*backup.tar")
-LOGFILE=/root/undercloud_boot.log
+LOG_FILE=/root/undercloud_boot.log
 NETCFG_DIR="/etc/sysconfig/network-scripts"
 
 set -e
 
 static_ip ()
 {
-    echo "Creating static ip for nic eth\${1}." >> \$LOGFILE
-    echo "Starting dchclient on eth\$1 to discover network settings." >> \$LOGFILE
-    dhclient eth\$1 &>> \$LOGFILE
+    echo "Creating static ip for nic eth\${1}." >> \$LOG_FILE
+    echo "Starting dchclient on eth\$1 to discover network settings." >> \$LOG_FILE
+    dhclient eth\$1 &>> \$LOG_FILE
 
     IP=\$(ifconfig eth\$1 | grep "inet " | awk '{print \$2}')
     NAMESRV=\$(grep nameserver /etc/resolv.conf | head -n 1 | cut -d " " -f 2)
     MAC=\$(ifconfig eth\$1 | grep ether | awk '{print \$2}')
 
-    echo "NIC eth\$1 has this IP: \$IP and this MAC: \$MAC." >> \$LOGFILE
+    echo "NIC eth\$1 has this IP: \$IP and this MAC: \$MAC." >> \$LOG_FILE
 
     echo "DEVICE=eth\$1
     BOOTPROTO=static
@@ -33,31 +34,31 @@ static_ip ()
     ONBOOT=yes
     USERCTL=yes" > \$NETCFG_DIR/ifcfg-eth\$1
 
-    echo "No more need for dhclient." >> \$LOGFILE
+    echo "No more need for dhclient." >> \$LOG_FILE
     for dhc_pid in \$(ps -ef | grep dhclient | grep -v grep | awk '{print \$2}')
     do
-        echo "Killing \$dhc_pid" &>> \$LOGFILE
-        kill -9 \$dhc_pid &>> \$LOGFILE
+        echo "Killing \$dhc_pid" &>> \$LOG_FILE
+        kill -9 \$dhc_pid &>> \$LOG_FILE
     done
     # Running it twice because even with -9 it might need a 2nd attempt.
     sleep 1
     for dhc_pid in \$(ps -ef | grep dhclient | grep -v grep | awk '{print \$2}')
     do
-        echo "Killing \$dhc_pid" &>> \$LOGFILE
-        kill -9 \$dhc_pid &>> \$LOGFILE
+        echo "Killing \$dhc_pid" &>> \$LOG_FILE
+        kill -9 \$dhc_pid &>> \$LOG_FILE
     done
 }
 
 if [ ! -z \$BACKUP_FILE ]
 then
-    echo "Restoring from \$BACKUP_FILE" >> \$LOGFILE
+    echo "Restoring from \$BACKUP_FILE" >> \$LOG_FILE
     rm -rf /etc/yum.repos.d
     tar -xC / -f \$BACKUP_FILE etc/yum.repos.d
 else
     rhos-release $RR_CMD || exit 1
 fi
 
-echo "Creating a configuration file for each NIC." &>> \$LOGFILE
+echo "Creating a configuration file for each NIC." &>> \$LOG_FILE
 NICS=${#NETWORKS[@]}
 for nic in \$(seq 0 \$NICS)
 do
@@ -72,14 +73,14 @@ done
 static_ip \$NICS
 static_ip \$(( \$NICS - 1 ))
 
-echo "Changing the default hostname to something meaningful." >> \$LOGFILE
+echo "Changing the default hostname to something meaningful." >> \$LOG_FILE
 echo "${NODE_NAME}.redhat.com" > /etc/hostname
-hostnamectl set-hostname ${NODE_NAME}.redhat.com &>> \$LOGFILE
+hostnamectl set-hostname ${NODE_NAME}.redhat.com &>> \$LOG_FILE
 
-echo "Restarting the networking service." >> \$LOGFILE
-systemctl restart network &>> \$LOGFILE
+echo "Restarting the networking service." >> \$LOG_FILE
+systemctl restart network &>> \$LOG_FILE
 
-echo "Gathering facts and saving to a hello file." >> \$LOGFILE
+echo "Gathering facts and saving to a hello file." >> \$LOG_FILE
 IP=\$(ifconfig eth\$NICS | grep "inet " | awk '{print \$2}')
 MAC=\$(ifconfig eth\$NICS | grep "ether " | awk '{print \$2}')
 SHORT_HOST=\$(hostname | cut -d "." -f 1)
@@ -88,7 +89,7 @@ echo HOST=\${SHORT_HOST} > \$HELLO
 echo IP=\$IP >> \$HELLO
 echo MAC=\$MAC >> \$HELLO
 
-echo "Sending hello file to the host." >> \$LOGFILE
+echo "Sending hello file to the host." >> \$LOG_FILE
 sshpass -p $HOST_PASS scp -q \$HELLO root@$HOST_IP:$WORK_DIR/
 EOF
     chmod +x undercloud_boot

@@ -1,5 +1,7 @@
 add_templates ()
 {
+    RR_CMD=$(cat rr_cmd)
+    HOST=$1
     try cp -af $CWD/templates $WORK_DIR/ || failure
 
     # Add the wanted size of SWAP area per node.
@@ -19,11 +21,11 @@ add_templates ()
     sed -i "s|FINDCIDR|${ext_base}.0/24|g" ./templates/overrides.yaml
     sed -i "s|FINDSTRT|${ext_base}.${DHCP_IN_START}|g" ./templates/overrides.yaml
     sed -i "s|FINDEND|${ext_base}.${DHCP_IN_END}|g" ./templates/overrides.yaml
-    sed -i "s|FINDVER|${RR_CMD}|g" ./templates/node_tweaks.yaml
+    sed -i "s|FINDVER|$RR_CMD|g" ./templates/node_tweaks.yaml
     sed -i "s|FINDNSRV|${namesrv}|g" ./templates/node_tweaks.yaml
     sed -i "s|FINDDNS|${DNS}|g" ./templates/overrides.yaml
     tar cf templates.tar templates
 
-    try scp -q templates.tar stack@${NODES[0]}-0: || failure
+    try scp -q templates.tar stack@$HOST: || failure
     try ssh stack@${NODES[0]}-0 "tar xf templates.tar" || failure
 }

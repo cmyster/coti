@@ -1,5 +1,6 @@
 proto_firstrun ()
 {
+    RR_CMD=$(cat rr_cmd)
     cat > firstboot <<EOF
 set -e
 cd /root

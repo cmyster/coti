@@ -1,6 +1,6 @@
 set_puddle_params ()
 {
-    export PUDDLE=$(cat puddle)
+    PUDDLE=$(cat puddle)
     echo "Looking if $PUDDLE has an image package."
     try curl -sL $AUTO_PATH/$UC_VER &> puddles.html || failure
     if grep $PUDDLE puddles.html &> /dev/null

@@ -1,6 +1,7 @@
 edit_predefined_images ()
 {
     LIBGUESTFS_BACKEND=direct
+    RR_CMD=$(cat rr_cmd)
 
     # getting the premade director RPMs
     try wget -q $OC_IMAGES || failure

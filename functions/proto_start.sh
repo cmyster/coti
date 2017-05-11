@@ -23,7 +23,7 @@ proto_start ()
         counter=$(( counter + 1 ))
     done
 
-    if [ $counter -lt 359 ]
+    if [ $counter -lt 360 ]
     then
         echo "Proto went down on its own."
     else

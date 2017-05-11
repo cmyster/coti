@@ -17,10 +17,10 @@ undercloud_wait ()
             source ${NODE_NAME}.hello
             if [ -z "$IP" ] || [ -z "$HOST" ]
             then
-                echo "An undercloud called $HOST sent an empty hello."
+                echo "An undercloud called $HOST sent a bad hello file."
                 raise ${FUNCNAME[0]}
             else
-                echo "An undercloud called $HOST sent hello from $IP"
+                echo "An undercloud called $HOST sent hello from ${IP}."
                 try set_hosts $HOST $IP || failure
             fi
             break

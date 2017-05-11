@@ -4,7 +4,6 @@ undercloud_firstboot ()
     RR_CMD=$(cat rr_cmd)
     cat > undercloud_boot <<EOF
 #!/bin/bash
-cp \$0 /root/
 BACKUP_FILE=\$(find /root/ -type f -name "*backup.tar")
 LOG_FILE=/root/undercloud_boot.log
 NETCFG_DIR="/etc/sysconfig/network-scripts"

@@ -5,7 +5,6 @@ proto_firstrun ()
 set -e
 cd /root
 LOG_FILE=/root/proto_firstboot.log
-cp $0 /root
 echo "clean_requirements_on_remove=1" >> /etc/yum.conf
 systemctl stop NetowrkManager | tee -a \$LOG_FILE
 systemctl disable NetworkManager | tee -a \$LOG_FILE

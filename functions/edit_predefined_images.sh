@@ -20,25 +20,24 @@ edit_predefined_images ()
     # adding repos and selinux stuff
     cat > edit_image << EOF
 #!/bin/bash
-LOG=/root/edit_image.log
-cp \$0 /root/edit_image
-/usr/sbin/setenforce 0 | tee -a \$LOG
+LOG_FILE=/root/edit_image.log
+/usr/sbin/setenforce 0 | tee -a \$LOG_FILE
 cd /root/
-yum remove -y rhos-release | tee -a \$LOG
+yum remove -y rhos-release | tee -a \$LOG_FILE
 if [ -r files.tar ]
 then
-    tar xf files.tar | tee -a \$LOG
+    tar xf files.tar | tee -a \$LOG_FILE
     rm -rf files.tar
 fi
-rpm -Uvh rhos-release-latest.noarch.rpm | tee -a \$LOG
-rm -rf rhos-release*.rpm | tee -a \$LOG
-rhos-release $RR_CMD | tee -a \$LOG
+rpm -Uvh rhos-release-latest.noarch.rpm | tee -a \$LOG_FILE
+rm -rf rhos-release*.rpm | tee -a \$LOG_FILE
+rhos-release $RR_CMD | tee -a \$LOG_FILE
 yum remove -y *bigswitch*
-yum update -y | tee -a \$LOG
-yum install -y vim mc git wget python-psutil | tee -a \$LOG
+yum update -y | tee -a \$LOG_FILE
+yum install -y vim mc git wget python-psutil | tee -a \$LOG_FILE
 for rpm in \$(ls *.rpm)
 do
-    rpm -Uvh \$rpm | tee -a \$LOG
+    rpm -Uvh \$rpm | tee -a \$LOG_FILE
     rm -rf \$rpm
 done
 /usr/bin/sed -i "s/SELINUX=.*/SELINUX=$OVER_SEL/" /etc/selinux/config

@@ -24,11 +24,11 @@ rm -rf /etc/yum.repos.d/* /var/cache/yum/*
 rhos-release $RR_CMD
 yum update -y | tee -a \$LOG_FILE
 yum groups mark convert | tee -a \$LOG_FILE
-yum acpid ahc-tools createproto crudini device-mapper-multipath dosfstools \
-elinks gdb gdisk genisoimage git gpm hdparm ipmitool iscsi-initiator-utils \
-keepalived libvirt lsof mc mlocate net-tools ntp plotnetcfg psmisc \
-python-setuptools screen setroubleshoot sos sshpass sysstat telnet tmux \
-traceroute tree vim wget | tee -a \$LOG_FILE
+yum install -y acpid ahc-tools createproto crudini device-mapper-multipath \
+dosfstools elinks gdb gdisk genisoimage git gpm hdparm ipmitool \
+iscsi-initiator-utils keepalived libvirt lsof mc mlocate net-tools ntp \
+plotnetcfg psmisc python-setuptools screen setroubleshoot sos sshpass \
+sysstat telnet tmux traceroute tree vim wget | tee -a \$LOG_FILE
 yum group install -y "Development Tools" | tee -a \$LOG_FILE
 
 rpm -Uvh /root/*.rpm | tee -a \$LOG_FILE
@@ -100,7 +100,7 @@ then
     chmod 0700 /root/.ssh
 fi
 
-ehco "Setting prompt." | tee -a \$LOG_FILE
+echo "Setting prompt." | tee -a \$LOG_FILE
 echo "PS1='\[\033[01;31m\]\u@\h\] \w \$\[\033[00m\] '" >> /root/.bashrc
 
 echo "Updating loacte db and adding it to cron." | tee -a \$LOG_FILE

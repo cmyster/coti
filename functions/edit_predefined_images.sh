@@ -35,10 +35,10 @@ rhos-release $RR_CMD | tee -a \$LOG_FILE
 yum remove -y *bigswitch*
 yum update -y | tee -a \$LOG_FILE
 yum install -y vim mc git wget python-psutil | tee -a \$LOG_FILE
-for rpm in \$(ls *.rpm)
+for package in \$(ls *.rpm)
 do
-    rpm -Uvh \$rpm | tee -a \$LOG_FILE
-    rm -rf \$rpm
+    rpm -Uvh \$package | tee -a \$LOG_FILE
+    rm -rf \$package
 done
 /usr/bin/sed -i "s/SELINUX=.*/SELINUX=$OVER_SEL/" /etc/selinux/config
 echo $ROOT_PASS | passwd root --stdin

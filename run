@@ -35,7 +35,7 @@ host_preprerations ()
     # Editing the host prior to do anything else.
     run clean
     run install_host_packages "$LONG"
-    #run set_host_repos
+    run install_extra_packages
     run "discover_puddle_version $UC_VER"
     run set_puddle_params
     run update_os "$LONG"
@@ -65,7 +65,6 @@ create_installation_images ()
     if $CREATE_IMAGES
     then
         run get_ntpd_settings
-        run proto_extra_files
         run proto_create
         run proto_prerun
         run proto_firstrun

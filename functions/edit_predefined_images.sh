@@ -19,7 +19,7 @@ edit_predefined_images ()
     # adding repos and selinux stuff
     cat > edit_image << EOF
 #!/bin/bash
-LOG=edit_image.log
+LOG=/root/edit_image.log
 cp \$0 /root/edit_image
 /usr/sbin/setenforce 0 | tee -a \$LOG
 cd /root/
@@ -30,11 +30,11 @@ then
     rm -rf files.tar
 fi
 rpm -Uvh rhos-release-latest.noarch.rpm | tee -a \$LOG
-rm -rf rhos-release-latest.noarch.rpm | tee -a \$LOG
+rm -rf rhos-release*.rpm | tee -a \$LOG
 rhos-release $RR_CMD | tee -a \$LOG
-yum update -y | tee -a \$LOG
-yum install -y vim mc git python-psutil | tee -a \$LOG
 yum remove -y *bigswitch*
+yum update -y | tee -a \$LOG
+yum install -y vim mc git wget python-psutil | tee -a \$LOG
 for rpm in \$(ls *.rpm)
 do
     rpm -Uvh \$rpm | tee -a \$LOG

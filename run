@@ -35,7 +35,7 @@ host_preprerations ()
     # Editing the host prior to do anything else.
     run clean
     run install_host_minimal_packages
-    run set_host_repos
+    #run set_host_repos
     run set_puddle_params
     run update_os "$LONG"
     run install_host_packages "$LONG"

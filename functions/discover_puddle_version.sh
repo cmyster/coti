@@ -9,14 +9,18 @@ discover_puddle_version ()
     try rpm -ivh $LATEST_RR &> /dev/null || failure
 
     echo "Getting repo URL from rhos-release."
-    URL=$(grep -A2 rhelosp-${VERSION}.0-puddle /var/lib/rhos-release/repos/rhos-release-${VERSION}.repo | grep baseurl | cut -d "=" -f 2)
+    URL=$(grep -A2 rhelosp-11.0-puddle /var/lib/rhos-release/repos/rhos-release-11.repo | grep baseurl | cut -d = -f 2 | rev | cut -d "/" -f 5- | rev)
+    echo "Using repo URL: $URL"
     
     PUDDLE=$(elinks --dump $URL | grep -e http.*201 | awk '{print $NF}' | sort | tail -n 1 | rev | cut -d "/" -f 2 | rev)
     echo $PUDDLE > puddle
 
-    if [ ! -z "$PUDDLE" ]
+    if [ -z "$PUDDLE" ]
     then
-        RR_CMD="${UC_VER}${DIRECTOR} -p $PUDDLE"
+        echo "Failed to set puddle."
+        raise ${FUNCNAME[0]}
+    else
+        RR_CMD="${UC_VER} -p $PUDDLE"
         echo $RR_CMD > rr_cmd
     fi
 

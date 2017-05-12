@@ -28,6 +28,7 @@ iscsi-initiator-utils keepalived libvirt lsof mc mlocate net-tools ntp \
 plotnetcfg psmisc python-setuptools screen setroubleshoot sos sshpass \
 sysstat telnet tmux traceroute tree vim wget | tee -a \$LOG_FILE
 yum group install -y "Development Tools" | tee -a \$LOG_FILE
+yum install -y python-tripleoclient | tee -a \$LOG_FILE
 
 if ls *.conf 2> /dev/null
 then

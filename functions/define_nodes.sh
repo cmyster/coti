@@ -14,7 +14,6 @@ define_nodes ()
         eval CPU=\$${NODES[$index]}_CPU
         eval DSK=\$${NODES[$index]}_DSK
         eval OSD=\$${NODES[$index]}_OSD
-        eval OS=\$${NODES[$index]}_OS
 
         if [ $TOT -gt 0 ]
         then
@@ -38,7 +37,7 @@ define_nodes ()
   <memory unit='KiB'>$(( $RAM * 1024 ))</memory>
   <vcpu placement='static'>$CPU</vcpu>
   <os>
-    <type arch='x86_64' machine='pc-i440fx-$OS'>hvm</type>
+    <type arch='x86_64'>hvm</type>
     <boot dev='hd'/>
   </os>
 EOF

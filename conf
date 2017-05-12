@@ -159,7 +159,6 @@ DHCP_OUT_END=250
 # CPU - How many vCPU.
 # DUM - Extra (Dummy) nodes of the same type.
 # DSK - Size of disk in GB. Nodes can work with 12, Undercloud might need 22. 
-# OS  - Corresponds to <os> in libvirt.
 # OSD - Ceph specific, this is the size for the Ceph OSD.
 
 # undercloud nodes
@@ -169,7 +168,6 @@ undercloud_SWP=${undercloud_SWP:-1024}
 undercloud_CPU=${undercloud_CPU:-4}
 undercloud_DUM=${undercloud_DUM:-1}
 undercloud_DSK=${undercloud_DSK:-22}
-undercloud_OS=${undercloud_OS:-"rhel7.3.0"}
 
 # controller nodes
 controller_NUM=${controller_NUM:-1}
@@ -178,7 +176,6 @@ controller_SWP=${controller_SWP:-1024}
 controller_CPU=${controller_CPU:-4}
 controller_DUM=${controller_DUM:-0}
 controller_DSK=${controller_DSK:-17}
-controller_OS=${controller_OS:-"rhel7.3.0"}
 
 # compute nodes
 compute_NUM=${compute_NUM:-1}
@@ -187,7 +184,6 @@ compute_SWP=${compute_SWP:-1024}
 compute_CPU=${compute_CPU:-4}
 compute_DUM=${compute_DUM:-0}
 compute_DSK=${compute_DSK:-17}
-compute_OS=${compute_OS:-"rhel7.3.0"}
 
 # ceph nodes
 ceph_NUM=${ceph_NUM:-0}
@@ -197,4 +193,3 @@ ceph_CPU=${ceph_CPU:-2}
 ceph_DUM=${ceph_DUM:-0}
 ceph_DSK=${ceph_DSK:-17}
 ceph_OSD=${ceph_OSD:-10}
-ceph_OS=${ceph_OS:-"rhel7.3.0"}

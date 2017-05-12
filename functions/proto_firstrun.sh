@@ -15,9 +15,7 @@ dhclient eth0 | tee -a \$LOG_FILE
 if [ -r files.tar ]
 then
     tar xf files.tar
-    rpm -Uvh rhos-release*rpm | tee -a \$LOG_FILE
-
-    rm -rf rhos-release*rpm
+    rpm -Uvh *rpm --nodeps | tee -a \$LOG_FILE
 fi
 
 rm -rf /etc/yum.repos.d/* /var/cache/yum/*
@@ -31,12 +29,16 @@ plotnetcfg psmisc python-setuptools screen setroubleshoot sos sshpass \
 sysstat telnet tmux traceroute tree vim wget | tee -a \$LOG_FILE
 yum group install -y "Development Tools" | tee -a \$LOG_FILE
 
-rpm -Uvh /root/*.rpm | tee -a \$LOG_FILE
-cp *.conf /etc
-rm -rf /root/*.tar /root/*.rpm /root/*.conf
+if ls *.conf 2> /dev/null
+then
+    for conf in $(ls *.conf)
+    do
+        cp $conf /etc
+    done
+fi
 
 # creating a SWAP file and compresssing it.
-if [ $undercloud_SWP -gt 0 ]
+if [ $undercloud_SWP -gt 100 ]
 then
     dd if=/dev/zero of=/swap bs=1M count=$undercloud_SWP | tee -a \$LOG_FILE
     chmod 600 /swap | tee -a \$LOG_FILE
@@ -103,7 +105,7 @@ fi
 echo "Setting prompt." | tee -a \$LOG_FILE
 echo "PS1='\[\033[01;31m\]\u@\h\] \w \$\[\033[00m\] '" >> /root/.bashrc
 
-echo "Updating loacte db and adding it to cron." | tee -a \$LOG_FILE
+echo "Updating locate db and adding it to cron." | tee -a \$LOG_FILE
 updatedb
 ln -s /usr/bin/updatedb /etc/cron.hourly
 

@@ -20,15 +20,26 @@ fi
 
 rm -rf /etc/yum.repos.d/* /var/cache/yum/*
 rhos-release $RR_CMD
+
+# Updating the system.
 yum update -y | tee -a \$LOG_FILE
 yum groups mark convert | tee -a \$LOG_FILE
+
+# Installing packagaes I like having.
 yum install -y acpid ahc-tools createproto crudini device-mapper-multipath \
 dosfstools elinks gdb gdisk genisoimage git gpm hdparm ipmitool \
 iscsi-initiator-utils keepalived libvirt lsof mc mlocate net-tools ntp \
 plotnetcfg psmisc python-setuptools screen setroubleshoot sos sshpass \
 sysstat telnet tmux traceroute tree vim wget | tee -a \$LOG_FILE
+
+# Installing development packages.
 yum group install -y "Development Tools" | tee -a \$LOG_FILE
-yum install -y python-tripleoclient | tee -a \$LOG_FILE
+
+# Installing OpenStack stuff.
+yum install -y python-tripleoclient openstack-aodh-common \
+openstack-ceilometer-common openstack-gnocchi-common openstack-heat-common \
+openstack-ironic-common openstack-mistral-common openstack-neutron-common \
+openstack-nova-common openstack-panko-common | tee -a \$LOG_FILE
 
 if ls *.conf 2> /dev/null
 then

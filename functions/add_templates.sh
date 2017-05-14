@@ -27,5 +27,5 @@ add_templates ()
     tar cf templates.tar templates
 
     try scp -q templates.tar stack@$HOST: || failure
-    try ssh stack@${NODES[0]}-0 "tar xf templates.tar" || failure
+    try $SSH stack@${NODES[0]}-0 "tar xf templates.tar" || failure
 }

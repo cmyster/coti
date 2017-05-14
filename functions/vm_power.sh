@@ -26,7 +26,7 @@ vm_power ()
 
     wait_off ()
     {
-        ssh root@$1 "shutdown -hP -t 0 now" &> /dev/null &
+        $SSH root@$1 "shutdown -hP -t 0 now" &> /dev/null &
         # skipping connection testing till I can fix it
 #        ITR=50
 #        for i in $(seq 0 $ITR)

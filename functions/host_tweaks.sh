@@ -1,7 +1,7 @@
 host_tweaks ()
 {
     echo "Adding configurations and other tweaks for easier life."
-    # Adding Xauth for simpler ssh tunneling.
+    # Adding Xauth for simpler SSH tunneling.
     if [ ! -f ~/.Xauthority ]
     then
         touch ~/.Xauthority

@@ -71,8 +71,11 @@ HOST_IP=$(ifconfig $NIC | grep "inet " | awk '{print $2}')
 # Host root password.
 HOST_PASS="12345678"
 
-# virt-customize arguments
+# virt-customize arguments.
 CUST_ARGS="-m 8192 --smp 6 -q"
+
+# SSH arguments.
+SSH="/usr/bin/ssh -qtt -o StrictHostKeyChecking=no"
 
 ###   File server location.   
 ###   This is were the script gets stuff like guest images,
@@ -186,7 +189,7 @@ compute_DUM=${compute_DUM:-0}
 compute_DSK=${compute_DSK:-17}
 
 # ceph nodes
-ceph_NUM=${ceph_NUM:-0}
+ceph_NUM=${ceph_NUM:-1}
 ceph_RAM=${ceph_RAM:-8192}
 ceph_SWP=${ceph_SWP:-1024}
 ceph_CPU=${ceph_CPU:-2}

@@ -15,15 +15,15 @@ fi
 BR_IP=\$(/usr/sbin/ifconfig \$BR_NAME | grep "inet " | awk '{print \$2}')
 sed -i "s/FINDEC2/\$BR_IP/g" ./templates/overrides.yaml
 
-# Copying ssh id to the default gateway.
+# Copying SSH id to the default gateway.
 sshpass -p stack ssh-copy-id $DEFAULT_GATEWAY
 
 # Copying ssh id to EC2Meta.
 sshpass -p stack ssh-copy-id \$BR_IP
 
-# Testing passwordless ssh.
-ssh $DEFAULT_GATEWAY "echo hello"
-ssh \$BR_IP "echo hello"
+# Testing passwordless SSH.
+$SSH $DEFAULT_GATEWAY "echo hello"
+$SSH \$BR_IP "echo hello"
 
 # Adding the default DNS to the default subnet.
 SUBNET=\$(neutron subnet-list | grep start | cut -d" " -f 2)
@@ -38,19 +38,27 @@ openstack overcloud image upload
 # Importing json file.
 openstack baremetal import --json instackenv.json
 
-for node in \$(ironic node-list | grep -i control | cut -d " " -f 2)
+# Updating capabilities to each node.
+for node in \$(openstack baremetal node list -f value -c UUID -c Name | grep -i control | cut -d " " -f 1)
 do
-    ironic node-update \$node add properties/capabilities=profile:control,boot_option:local
+    openstack baremetal node set \$node --property capabilities='profile:control,boot_option:local'
 done
 
-for node in \$(ironic node-list | grep -i compute | cut -d " " -f 2)
+for node in \$(openstack baremetal node list -f value -c UUID -c Name | grep -i compute | cut -d " " -f 1)
 do
-    ironic node-update \$node add properties/capabilities=profile:compute,boot_option:local
+    openstack baremetal node set \$node --property capabilities='profile:compute,boot_option:local'
 done
 
-for node in \$(ironic node-list | grep -i ceph | cut -d " " -f 2)
+for node in \$(openstack baremetal node list -f value -c UUID -c Name | grep -i ceph | cut -d " " -f 1)
 do
-    ironic node-update \$node add properties/capabilities=profile:ceph-storage,boot_option:local
+    openstack baremetal node set \$node --property capabilities='profile:ceph-storage,boot_option:local'
+done
+
+# Setting the boot drive (in libvirt there is only 'name' and its /dev/vda).
+
+for node in \$(openstack baremetal node list -f value -c UUID)
+do
+    openstack baremetal node set \$node --property root_device='{"name": "/dev/vda"}'
 done
 
 # Running introspection.

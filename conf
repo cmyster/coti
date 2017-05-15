@@ -39,18 +39,11 @@ LONG=${LONG:-"(This step takes time.)"}
 LATEST_RR=${LATEST_RR:-"http://rhos-release.virt.bos.redhat.com/repos/rhos-release/rhos-release-latest.noarch.rpm"}
 
 # Version to install deploy.
-# UC = UnderCloud
-# OC = OverCloud
-UC_VER=${UC_VER:-11}
-OC_VER=${OC_VER:-11}
+OS_VER=${OS_VER:-11}
 PUDDLE_VER=${PUDDLE_VER:-"latest"}
 
-# Puddles repository parent directory for RHOS 10+
-REPO_PATH=${REPO_PATH:-"http://download-node-02.eng.bos.redhat.com/rcm-guest/puddles/OpenStack/${UC_VER}.0-RHEL-7"}
-REPO_PATH_OLD=${REPO_PATH_OLD:-"http://download-node-02.eng.bos.redhat.com/rel-eng/OpenStack/${UC_VER}.0-RHEL-7-director"}
-
 # Argument to pass to rhos-release.
-RR_CMD=${RR_CMD:-"$UC_VER"}
+RR_CMD=${RR_CMD:-"$OS_VER"}
 
 # Do we obtain images from predefined images or do we create our own.
 # prepare_puddle_images - create our own.
@@ -92,8 +85,8 @@ RHEL_GUEST=${GUEST_DIR:-"$FILE_SERVER/gen_images/cloud/rhel-guest-image-latest.q
 GUEST_FILE=$(basename $RHEL_GUEST)
 
 # Director image RPMs path.
-OC_IMAGES=${OC_IMAGES:-"$FILE_SERVER/rpms/rhos$UC_VER/rhosp-director-images-$UC_VER-latest.rpm"}
-OC_IPA=${OC_IPA:-"$FILE_SERVER/rpms/rhos$UC_VER/rhosp-director-images-$UC_VER-ipa-latest.rpm"}
+OC_IMAGES=${OC_IMAGES:-"$FILE_SERVER/rpms/rhos$OS_VER/rhosp-director-images-$OS_VER-latest.rpm"}
+OC_IPA=${OC_IPA:-"$FILE_SERVER/rpms/rhos$OS_VER/rhosp-director-images-$OS_VER-ipa-latest.rpm"}
 
 # Path to the folder that contains all the repos
 AUTO_PATH=${AUTO_PATH:-"$FILE_SERVER/auto"}

@@ -2,7 +2,7 @@ set_puddle_params ()
 {
     PUDDLE=$(cat puddle)
     echo "Looking if $PUDDLE has an image package."
-    try curl -sL $AUTO_PATH/$UC_VER &> puddles.html || failure
+    try curl -sL $AUTO_PATH/$OS_VER &> puddles.html || failure
     if grep $PUDDLE puddles.html &> /dev/null
     then
         echo "Current puddle has an image package."
@@ -12,7 +12,7 @@ set_puddle_params ()
         CREATE_IMAGES=true
     fi
     
-    export TAR_PATH=${TAR_PATH:-"$AUTO_PATH/$UC_VER/$PUDDLE"}
+    export TAR_PATH=${TAR_PATH:-"$AUTO_PATH/$OS_VER/$PUDDLE"}
     # Location of the modified guest image.
     export MODIFIED_GUEST=${MODIFIED_GUEST:-"$TAR_PATH/guest-image.qcow2"}
     export GUEST_IMAGE=$(basename $MODIFIED_GUEST)

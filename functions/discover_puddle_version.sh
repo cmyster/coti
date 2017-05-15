@@ -20,7 +20,7 @@ discover_puddle_version ()
         echo "Failed to set puddle."
         raise ${FUNCNAME[0]}
     else
-        RR_CMD="${UC_VER} -p $PUDDLE"
+        RR_CMD="${OS_VER} -p $PUDDLE"
         echo $RR_CMD > rr_cmd
     fi
 

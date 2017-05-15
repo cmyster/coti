@@ -36,7 +36,7 @@ host_preprerations ()
     run clean
     run install_host_packages "$LONG"
     run install_extra_packages
-    run "discover_puddle_version $UC_VER"
+    run "discover_puddle_version $OS_VER"
     run set_puddle_params
     run update_os "$LONG"
     run host_tweaks

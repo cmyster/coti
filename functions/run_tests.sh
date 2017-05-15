@@ -9,6 +9,7 @@ run_tests ()
            *) HOME="home/$USER" ;;
     esac
 
+    rm -rf tests
     cp -r $CWD/tests .
     echo "Creating a list of relevant tests."
 

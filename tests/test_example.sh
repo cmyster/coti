@@ -1,7 +1,7 @@
 # Test parameters.
-NAME="Test overcloud stack status"
-DESCRIPTION="Testing that the overcloud stack status is CREATE_COMPLETE."
-TAG="overcloud"
+NAME="Test example"
+DESCRIPTION="This is just an example."
+TAG="example"
 
 # Source the environment and the project's configuration.                     
 source /home/stack/stackrc 2> /dev/null                                       
@@ -11,4 +11,4 @@ source /home/stack/tests/env 2> /dev/null
 set -e
 
 # Test starts here.
-openstack stack list | grep -e overcloud.*CREATE_COMPLETE &> /dev/null
+echo "Example!"

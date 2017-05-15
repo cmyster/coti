@@ -15,7 +15,7 @@ run_tests ()
     rm -rf test_list
     for file in $(ls tests/test_*.sh)
     do
-        if grep -e "TAG.*$TAG" $file
+        if grep -e "TAG.*$TAG" $file &> /dev/null
         then
             echo "Adding test: $(grep NAME $file | cut -d "=" -f 2)"
             echo $file >> test_list
@@ -29,8 +29,10 @@ run_tests ()
     scp -q tests.tar ${2}@${HOST}:/${HOME}/tests/
     $SSH ${2}@$HOST "tar xf /${HOME}/tests/tests.tar && rm -rf /${HOME}/tests/tests.tar"
     $SSH ${2}@$HOST "chmod +x /${HOME}/tests/*"
+    set > env
+    scp -q env ${2}@${HOST}:/${HOME}/tests/
 
-    echo "Starting to run tests on $HOST as user ${USER}."
+    echo "Starting to run tests with tag $TAG on $HOST as user ${USER}."
     for test in $(cat test_list)
     do
         NAME=$(grep NAME $test | cut -d "=" -f 2)
@@ -44,6 +46,6 @@ run_tests ()
             echo "[FAIL] $NAME"
         fi
 
-        echo -e "===\n"
+        echo -e "==="
     done
 }

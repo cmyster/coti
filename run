@@ -144,7 +144,7 @@ undercloud_restore ()
 run_automation ()
 {
     # Run automation tests
-    run "run_heat_tests $1" "$LONG"
+    run "run_tests $1 stack overcloud"
 }
 
 host_preprerations
@@ -156,6 +156,6 @@ predeploy_overcloud
 deploy_overcloud
 if $BCK_RES; then undercloud_backup; fi
 if $BCK_RES; then undercloud_restore; fi
-#run_automation ${NODES[0]}-1
+run_automation ${NODES[0]}-0
 
 echo "ALL DONE in $(time_diff $(( $(date +%s) - $START)))"

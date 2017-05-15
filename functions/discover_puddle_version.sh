@@ -9,7 +9,7 @@ discover_puddle_version ()
     try rpm -ivh $LATEST_RR &> /dev/null || failure
 
     echo "Getting repo URL from rhos-release."
-    URL=$(grep -A2 rhelosp-11.0-puddle /var/lib/rhos-release/repos/rhos-release-11.repo | grep baseurl | cut -d = -f 2 | rev | cut -d "/" -f 5- | rev)
+    URL=$(grep -A2 rhelosp-${OS_VER}.0-puddle /var/lib/rhos-release/repos/rhos-release-${OS_VER}.repo | grep baseurl | cut -d = -f 2 | rev | cut -d "/" -f 5- | rev)
     echo "Using repo URL: $URL"
     
     PUDDLE=$(elinks --dump $URL | grep -e http.*201 | awk '{print $NF}' | sort | tail -n 1 | rev | cut -d "/" -f 2 | rev)

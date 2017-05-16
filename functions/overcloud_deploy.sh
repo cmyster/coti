@@ -1,13 +1,22 @@
 overcloud_deploy ()
 {
     HOST=$1
-    echo "Running the overcloud deployment."
-    if [ -z "$ceph_NUM" ] || [ $ceph_NUM -eq 0 ]
+    USE_CEPH=""
+    USE_PANKO=""
+
+    if [ ! -z "$ceph_NUM" ] || [ $ceph_NUM -eq 0 ]
     then
-        USE_CEPH=""
-    else
         USE_CEPH="--ceph-storage-scale $ceph_NUM --ceph-storage-flavor ceph-storage -e $THT/environments/storage-environment.yaml -e ./templates/ceph.yaml"
     fi
+
+    if [ $OS_VER -lt 11 ]
+    then
+        USE_PANKO="-e $THT/environments/services/panko.yaml"
+    fi
+
+
+
+    echo "Running the overcloud deployment."
     cat > deploy <<EOF
 cd /home/stack
 source stackrc
@@ -19,7 +28,7 @@ openstack overcloud deploy \\
     --ntp-server $NTP \\
     -e ./templates/swap_env.yaml \\
     -e $THT/environments/services/sahara.yaml \\
-    -e $THT/environments/services/panko.yaml \\
+    $USE_PANKO \\
     -e $THT/environments/cinder-backup.yaml \\
     -e $THT/environments/network-environment.yaml \\
     -e $THT/environments/net-multiple-nics.yaml \\

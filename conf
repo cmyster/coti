@@ -27,7 +27,7 @@ UNDER_SEL=${UNDER_SEL:-"permissive"}
 OVER_SEL=${OVER_SEL:-"permissive"}
 
 # How images are accessed with virt-commands.
-LIBGUESTFS_BACKEND=direct
+LIBGUESTFS_BACKEND="direct"
 
 # Base path to EPEL
 EPEL="https://dl.fedoraproject.org/pub/epel/7/x86_64"
@@ -39,7 +39,7 @@ LONG=${LONG:-"(This step takes time.)"}
 LATEST_RR=${LATEST_RR:-"http://rhos-release.virt.bos.redhat.com/repos/rhos-release/rhos-release-latest.noarch.rpm"}
 
 # Version to install deploy.
-OS_VER=${OS_VER:-11}
+OS_VER=${OS_VER:-10}
 PUDDLE_VER=${PUDDLE_VER:-"latest"}
 
 # Argument to pass to rhos-release.
@@ -148,7 +148,9 @@ DHCP_OUT_START=121
 DHCP_OUT_END=250
 
 # Node numbers and settings.
-#!!! The base name needs to be the same as the node names in the NODES array.
+# !! The base name needs to be the same as the node names in the NODES array.
+# NAM - Name of the node.
+# FLV - Flavor to be used for nodes.
 # NUM - How many of that node.
 # RAM - RAM in MB.
 # SWP - SWAP in MB.
@@ -158,6 +160,7 @@ DHCP_OUT_END=250
 # OSD - Ceph specific, this is the size for the Ceph OSD.
 
 # undercloud nodes
+undercloud_NAM=${undercloud_NAM:-"undercloud"}
 undercloud_NUM=${undercloud_NUM:-1}
 undercloud_RAM=${undercloud_RAM:-16384}
 undercloud_SWP=${undercloud_SWP:-1024}
@@ -166,7 +169,9 @@ undercloud_DUM=${undercloud_DUM:-1}
 undercloud_DSK=${undercloud_DSK:-22}
 
 # controller nodes
-controller_NUM=${controller_NUM:-1}
+controller_NAM=${controller_NAM:-"controller"}
+controller_FLV=${controller_FLV:-"controller"}
+controller_NUM=${controller_NUM:-3}
 controller_RAM=${controller_RAM:-16384}
 controller_SWP=${controller_SWP:-1024}
 controller_CPU=${controller_CPU:-4}
@@ -174,7 +179,9 @@ controller_DUM=${controller_DUM:-0}
 controller_DSK=${controller_DSK:-17}
 
 # compute nodes
-compute_NUM=${compute_NUM:-1}
+compute_NAM=${compute_NAM:-"compute"}
+compute_FLV=${compute_NAM:-"compute"}
+compute_NUM=${compute_NUM:-3}
 compute_RAM=${compute_RAM:-16384}
 compute_SWP=${compute_SWP:-1024}
 compute_CPU=${compute_CPU:-4}
@@ -182,7 +189,9 @@ compute_DUM=${compute_DUM:-0}
 compute_DSK=${compute_DSK:-17}
 
 # ceph nodes
-ceph_NUM=${ceph_NUM:-1}
+ceph_NAM=${ceph_NAM:-"ceph"}
+ceph_FLV=${ceph_FLV:-"ceph-storage"}
+ceph_NUM=${ceph_NUM:-3}
 ceph_RAM=${ceph_RAM:-8192}
 ceph_SWP=${ceph_SWP:-1024}
 ceph_CPU=${ceph_CPU:-2}

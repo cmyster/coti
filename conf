@@ -169,8 +169,8 @@ undercloud_DUM=${undercloud_DUM:-1}
 undercloud_DSK=${undercloud_DSK:-22}
 
 # controller nodes
-controller_NAM=${controller_NAM:-"controller"}
-controller_FLV=${controller_FLV:-"controller"}
+controller_NAM=${controller_NAM:-"control"}
+controller_FLV=${controller_FLV:-"control"}
 controller_NUM=${controller_NUM:-3}
 controller_RAM=${controller_RAM:-16384}
 controller_SWP=${controller_SWP:-1024}

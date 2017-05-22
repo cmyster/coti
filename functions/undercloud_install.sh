@@ -4,6 +4,7 @@ undercloud_install ()
     echo "Installing openstack undercloud."
     scp -q $CWD/undercloud.conf stack@$HOST:
     scp -q $CWD/templates/hiera_selinux.yaml stack@$HOST:
+    TAR_PATH=$(cat tar_path)
     cat > install <<EOF
 cd /home/stack/
 if [[ "$UNDER_SEL" != "enforcing" ]]

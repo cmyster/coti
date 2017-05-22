@@ -4,6 +4,38 @@
 # This will be used for files and folder names.
 PROJECT="coti"
 
+# Help message
+HELP="
+Before running the script, make sure that conf is updated and the steps in\n
+the script itself (end of it) suits your needs.\n
+./run will start its things and its expecting access to internal resources.\n
+\n
+Parameters:\n
+ -h, --help: Print this message.\n
+       --sp: System prepare, making sure the host and resources are ready.\n
+       --uc: Install the unercloud.\n
+       --op: Overcloud preperations.\n
+       --oc: Overcloud deployment.\n
+      --bnr: Backup and restore, this will backup the undercloud machine and\n
+             restore onto a new undercloud. It needs a deployment.\n
+     --test: Run tests on a deployment.\n
+     --full: All of the above.\n
+\n
+For a full run:\n
+    ./run --sp\n
+    ./run --uc\n
+    ./run --op\n
+    ./run --oc\n
+    ./run --bnr\n
+    ./run --test\n
+Or  ./run --full\n
+\n
+You can also run the script with run time parameters, for instace:\n
+    OS_VER=11 ./run --full\n
+To do a full run on OpenStack 11.\n
+"
+
+
 # The script works here.
 # It is deleted and recreated in each run.
 WORK_DIR=${WORK_DIR:-"/tmp/$PROJECT"}

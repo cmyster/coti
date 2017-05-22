@@ -3,6 +3,41 @@
 # conf file is where everything else is defined.
 source conf
 
+# Gathiring run time arguments.
+SYS_PREP=false
+UC_INSTALL=false                                                       
+OC_PREP=false                                                             
+OC_DEPLOY=false                                                        
+RUN_TESTS=false                                                        
+BCK_RES=false
+
+case "$1" in
+    -h)
+        echo -ne $HELP && exit 0 ;;
+    --help)
+        echo -ne $HELP && exit 0 ;;
+    --sp)
+        SYS_PREP=true ;;
+    --uc)
+        UC_INSTALL=true ;;
+    --op)
+        OC_PREP=true ;;
+    --oc)
+        OC_DEPLOY=true ;;
+    --test)
+        RUN_TESTS=true ;;
+    --bnr)
+        BCK_RES=true ;;
+    --full)
+        SYS_PREP=true
+        UC_INSTALL=true
+        OC_PREP=true
+        OC_DEPLOY=true
+        RUN_TESTS=true
+        BCK_RES=true
+        ;;
+esac
+
 # Almost nothing happens here, all the functions are defined elsewhere.
 for file in $(ls functions/*.sh)
 do
@@ -147,15 +182,24 @@ run_automation ()
     run "run_tests $1 stack overcloud"
 }
 
-host_preprerations
-virt_setup
-create_installation_images
-create_virtual_environment
-install_main_undercloud
-predeploy_overcloud
-deploy_overcloud
-if $BCK_RES; then undercloud_backup; fi
-if $BCK_RES; then undercloud_restore; fi
-run_automation ${NODES[0]}-0
+if $SYS_PREP
+then
+    host_preprerations
+    virt_setup
+    create_installation_images
+    create_virtual_environment
+fi
+
+if $UC_INSTALL; then install_main_undercloud; fi
+if $OC_PREP; then predeploy_overcloud; fi
+if $OC_DEPLOY; then deploy_overcloud; fi
+if $BCK_RES
+
+then
+    undercloud_backup
+    undercloud_restore
+fi
+
+if $RUN_TESTS; then run_automation ${NODES[0]}-0; fi
 
 echo "ALL DONE in $(time_diff $(( $(date +%s) - $START)))"

@@ -12,8 +12,11 @@ set_puddle_params ()
         CREATE_IMAGES=true
     fi
     
-    export TAR_PATH=${TAR_PATH:-"$AUTO_PATH/$OS_VER/$PUDDLE"}
+    TAR_PATH=${TAR_PATH:-"$AUTO_PATH/$OS_VER/$PUDDLE"}
+    echo $TAR_PATH > tar_path
     # Location of the modified guest image.
-    export MODIFIED_GUEST=${MODIFIED_GUEST:-"$TAR_PATH/guest-image.qcow2"}
-    export GUEST_IMAGE=$(basename $MODIFIED_GUEST)
+    MODIFIED_GUEST=${MODIFIED_GUEST:-"$TAR_PATH/guest-image.qcow2"}
+    echo $MODIFIED_GUEST > modified_guest
+    GUEST_IMAGE=$(basename $MODIFIED_GUEST)
+    echo $GUEST_IMAGE > guest_image
 }

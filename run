@@ -4,6 +4,7 @@
 source conf
 
 # Gathiring run time arguments.
+SYS_CLEAR=false
 SYS_PREP=false
 UC_INSTALL=false                                                       
 OC_PREP=false                                                             
@@ -16,6 +17,8 @@ case "$1" in
         echo -ne $HELP && exit 0 ;;
     --help)
         echo -ne $HELP && exit 0 ;;
+    --clr)
+        SYS_CLEAR=true ;;
     --sp)
         SYS_PREP=true ;;
     --uc)
@@ -181,6 +184,8 @@ run_automation ()
     # Run automation tests
     run "run_tests $1 stack overcloud"
 }
+
+if $SYS_CLEAR; then run clean;fi
 
 if $SYS_PREP
 then

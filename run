@@ -77,7 +77,7 @@ host_clean ()
     run clean_pool
 }
 
-hust_preprerations ()
+host_preprerations ()
 {
     # Editing the host prior to do anything else.
     run install_host_packages "$LONG"
@@ -97,10 +97,10 @@ virt_setup ()
 {
     # Re-creating virtual resources.
     run restart_libvirt
-    run clean_vms
-    run clean_pool
-    run clean_vnets
-    run restart_libvirt
+    #run clean_vms
+    #run clean_pool
+    #run clean_vnets
+    #run restart_libvirt
     run create_vnet
     echo -e "Cleaned old resources after $(time_diff $(( $(date +%s) - $START)))\n"
 }

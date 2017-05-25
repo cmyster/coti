@@ -12,7 +12,7 @@ the script itself (end of it) suits your needs.\n
 \n
 Parameters:\n
  -h, --help: Print this message.\n
-      --clr: System cleans any virtual resources.
+    --clean: System cleans any virtual resources.
        --sp: System prepare, making sure the host and resources are ready.\n
        --uc: Install the unercloud.\n
        --op: Overcloud preperations.\n

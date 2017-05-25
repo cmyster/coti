@@ -32,6 +32,7 @@ case "$1" in
     --bnr)
         BCK_RES=true ;;
     --full)
+        SYS_CLEAN=true
         SYS_PREP=true
         UC_INSTALL=true
         OC_PREP=true
@@ -68,10 +69,17 @@ run ()
     echo "$1 finished with no errors and ran for $(time_diff $SECONDS)" | tee -a $LOG_FILE
 }
 
-host_preprerations ()
+host_clean ()
+{
+    run clean
+    run clean_vms                                                             
+    run clean_vnets                                                           
+    run clean_pool
+}
+
+hust_preprerations ()
 {
     # Editing the host prior to do anything else.
-    run clean
     run install_host_packages "$LONG"
     run install_extra_packages
     run "discover_puddle_version $OS_VER"
@@ -185,13 +193,7 @@ run_automation ()
     run "run_tests $1 stack overcloud"
 }
 
-if $SYS_CLEAN
-then
-    run clean
-    run clean_vms
-    run clean_vnets
-    run clean_pool
-fi
+if $SYS_CLEAN; then host_clean; fi
 
 if $SYS_PREP
 then
@@ -204,8 +206,8 @@ fi
 if $UC_INSTALL; then install_main_undercloud; fi
 if $OC_PREP; then predeploy_overcloud; fi
 if $OC_DEPLOY; then deploy_overcloud; fi
-if $BCK_RES
 
+if $BCK_RES
 then
     undercloud_backup
     undercloud_restore

@@ -1,4 +1,5 @@
 parameter_defaults:
+  ControlPlaneDefaultRoute: FINDEC2
   EC2MetadataIp: FINDEC2
   ExternalAllocationPools: [{'start': 'FINDSTRT', 'end': 'FINDEND'}]
   ExternalNetCidr: FINDCIDR

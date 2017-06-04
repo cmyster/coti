@@ -5,7 +5,10 @@ proto_firstrun ()
 set -e
 cd /root
 LOG_FILE=/root/proto_firstboot.log
-echo "clean_requirements_on_remove=1" >> /etc/yum.conf
+if ! grep "clean_requirements_on_remove=1" /etc/yum.conf
+then
+    echo "clean_requirements_on_remove=1" >> /etc/yum.conf
+fi
 systemctl stop NetowrkManager | tee -a \$LOG_FILE
 systemctl disable NetworkManager | tee -a \$LOG_FILE
 yum remove -y cloud-init* NetworkManager* *bigswitch* | tee -a \$LOG_FILE
@@ -61,7 +64,8 @@ fi
 # cleaning up and some tweaks
 rm -rf /etc/yum.repos.d/* /var/cache/yum/*
 echo "Some VIM settings" | tee -a \$LOG_FILE
-echo "syntax on
+cat > /etc/vimrc <<END
+syntax on
 set background=dark
 set backspace=2
 set colorcolumn=78
@@ -92,7 +96,8 @@ filetype indent on
 
 highlight Pmenu ctermfg=cyan ctermbg=blue
 highlight PmenuSel ctermfg=black ctermbg=cyan
-highlight ColorColumn ctermbg=0" > /etc/vimrc
+highlight ColorColumn ctermbg=0
+END
 
 echo "Enabling some needed services." | tee -a \$LOG_FILE
 systemctl enable gpm | tee -a \$LOG_FILE
@@ -115,16 +120,20 @@ then
 fi
 
 echo "Setting prompt." | tee -a \$LOG_FILE
+sed -i '/PS1/d' /root/.bashrc
 echo "PS1='\[\033[01;31m\]\u@\h\] \w \$\[\033[00m\] '" >> /root/.bashrc
 
 echo "Updating locate db and adding it to cron." | tee -a \$LOG_FILE
 updatedb
 ln -s /usr/bin/updatedb /etc/cron.hourly
 
-echo "Allowing more comfortable SSH connections." | tee -a \$LOG_FILE
-echo "    StrictHostKeyChecking no" >> /etc/ssh/ssh_config
-echo "    UserKnownHostsFile /dev/null" >> /etc/ssh/ssh_config
-echo "    CheckHostIp no" >> /etc/ssh/ssh_config
+echo "Allowing a more comfortable SSH connections." | tee -a \$LOG_FILE
+cat > /etc/ssh/ssh_config <<END
+    StrictHostKeyChecking no
+    UserKnownHostsFile /dev/null
+    CheckHostIp no
+END
+
 ln -s /dev/null /root/.ssh/known_hosts
 
 echo "Adding user stack." | tee -a \$LOG_FILE

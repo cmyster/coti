@@ -40,6 +40,8 @@ case "$1" in
         RUN_TESTS=true
         BCK_RES=true
         ;;
+    *)
+        echo -ne $HELP && exit 0 ;;
 esac
 
 # Almost nothing happens here, all the functions are defined elsewhere.

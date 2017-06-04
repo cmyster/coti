@@ -8,19 +8,20 @@ PROJECT="coti"
 HELP="
 Before running the script, make sure that conf is updated and the steps in\n
 the script itself (end of it) suits your needs.\n
-./run will start its things and its expecting access to internal resources.\n
+./run will start its thing and its expecting access to internal resources.\n
+There is no reason to think it will work outside the internal network.\n
 \n
 Parameters:\n
  -h, --help: Print this message.\n
-    --clean: System cleans any virtual resources.
+    --clean: Cleans the system of _any_ virtual resource.\n
        --sp: System prepare, making sure the host and resources are ready.\n
        --uc: Install the unercloud.\n
        --op: Overcloud preperations.\n
        --oc: Overcloud deployment.\n
       --bnr: Backup and restore, this will backup the undercloud machine and\n
-             restore onto a new undercloud. It needs a deployment.\n
+             restore onto a new undercloud. It needs a running deployment.\n
      --test: Run tests on a deployment.\n
-     --full: All of the above.\n
+     --full: All of the above minus backup and restore.\n
 \n
 For a full run:\n
     ./run --sp\n
@@ -72,7 +73,7 @@ LONG=${LONG:-"(This step takes time.)"}
 LATEST_RR=${LATEST_RR:-"http://rhos-release.virt.bos.redhat.com/repos/rhos-release/rhos-release-latest.noarch.rpm"}
 
 # Version to install deploy.
-OS_VER=${OS_VER:-10}
+OS_VER=${OS_VER:-12}
 PUDDLE_VER=${PUDDLE_VER:-"latest"}
 
 # Argument to pass to rhos-release.
@@ -103,6 +104,8 @@ CUST_ARGS="-m 8192 --smp 6 -q"
 # SSH arguments.
 SSH="/usr/bin/ssh -qtt -o StrictHostKeyChecking=no"
 
+USE_TELEMETRY=false
+
 ###   File server location.   
 ###   This is were the script gets stuff like guest images,
 ###   and also where it keeps modified ones.
@@ -114,7 +117,8 @@ FILE_SERVER=${FILE_SERVER:-"http://ikook.tlv.redhat.com"}
 SRV_DOMAIN=${FILE_SERVER##*://}
 
 # RHEL guest image.
-RHEL_GUEST=${GUEST_DIR:-"$FILE_SERVER/gen_images/cloud/rhel-guest-image-latest.qcow2"}
+RHEL_GUEST=${GUEST_DIR:-"$FILE_SERVER/gen_images/cloud/rhel-guest-image-7.4-142.x86_64.qcow2"}
+#RHEL_GUEST=${GUEST_DIR:-"$FILE_SERVER/gen_images/cloud/rhel-guest-image-latest.qcow2"}
 GUEST_FILE=$(basename $RHEL_GUEST)
 
 # Director image RPMs path.

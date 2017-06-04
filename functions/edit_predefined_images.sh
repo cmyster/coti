@@ -20,26 +20,41 @@ edit_predefined_images ()
     # adding repos and selinux stuff
     cat > edit_image << EOF
 #!/bin/bash
-LOG_FILE=/root/edit_image.log
+LOG_FILE=/root/predefine-image.log
 /usr/sbin/setenforce 0 | tee -a \$LOG_FILE
 cd /root/
-yum remove -y rhos-release | tee -a \$LOG_FILE
+
+if rpm -qa | grep rhos-release
+then
+    yum remove -y rhos-release | tee -a \$LOG_FILE
+fi
+
 if [ -r files.tar ]
 then
     tar xf files.tar | tee -a \$LOG_FILE
     rm -rf files.tar
 fi
+
 rpm -Uvh rhos-release-latest.noarch.rpm | tee -a \$LOG_FILE
 rm -rf rhos-release*.rpm | tee -a \$LOG_FILE
+
 rhos-release $RR_CMD | tee -a \$LOG_FILE
 yum remove -y *bigswitch*
 yum update -y | tee -a \$LOG_FILE
-yum install -y vim mc git wget python-psutil | tee -a \$LOG_FILE
+yum install -y mlocate vim mc git wget python-psutil | tee -a \$LOG_FILE
+
+updatedb
+ln -s /usr/bin/updatedb /etc/cron.hourly
+
+sed -i '/PS1/d' /root/.bashrc
+echo "PS1='\[\033[01;31m\]\u@\h\] \w \$\[\033[00m\] '" >> /root/.bashrc
+
 for package in \$(ls *.rpm)
 do
     rpm -Uvh \$package | tee -a \$LOG_FILE
     rm -rf \$package
 done
+
 /usr/bin/sed -i "s/SELINUX=.*/SELINUX=$OVER_SEL/" /etc/selinux/config
 echo $ROOT_PASS | passwd root --stdin
 touch /.autorelabel

@@ -2,6 +2,7 @@ undercloud_install ()
 {
     HOST=$1
     echo "Installing openstack undercloud."
+    sed -i "s/enable_telemetry=.*/enable_telemetry=$USE_TELEMETRY/g" $CWD/undercloud.conf
     scp -q $CWD/undercloud.conf stack@$HOST:
     scp -q $CWD/templates/hiera_selinux.yaml stack@$HOST:
     TAR_PATH=$(cat tar_path)

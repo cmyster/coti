@@ -44,7 +44,7 @@ openstack overcloud deploy \\
     -e $THT/environments/network-environment.yaml \\
     -e $THT/environments/net-multiple-nics.yaml \\
     -e $THT/environments/network-isolation.yaml \\
-    -e ./templates/overrides.yaml > overcloud_deploy.log &
+    -e ./templates/overrides.yaml &> overcloud_deploy.log &
 EOF
-    run_script_file deploy stack $HOST /home/stack/
+    run_script_file deploy stack $HOST /home/stack
 }

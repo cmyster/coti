@@ -73,7 +73,7 @@ LONG=${LONG:-"(This step takes time.)"}
 LATEST_RR=${LATEST_RR:-"http://rhos-release.virt.bos.redhat.com/repos/rhos-release/rhos-release-latest.noarch.rpm"}
 
 # Version to install deploy.
-OS_VER=${OS_VER:-11}
+OS_VER=${OS_VER:-12}
 PUDDLE_VER=${PUDDLE_VER:-"latest"}
 
 # Argument to pass to rhos-release.
@@ -117,7 +117,7 @@ FILE_SERVER=${FILE_SERVER:-"http://ikook.tlv.redhat.com"}
 SRV_DOMAIN=${FILE_SERVER##*://}
 
 # RHEL guest image.
-RHEL_GUEST=${GUEST_DIR:-"$FILE_SERVER/gen_images/cloud/rhel-guest-image-latest.qcow2"}
+RHEL_GUEST=${GUEST_DIR:-"$FILE_SERVER/gen_images/cloud/rhel-guest-image-7.4-latest.x86_64.qcow2"}
 GUEST_FILE=$(basename $RHEL_GUEST)
 
 # Director image RPMs path.

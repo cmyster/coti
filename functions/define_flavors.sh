@@ -22,5 +22,5 @@ define_flavors ()
         echo "openstack flavor create $f_name --ram $f_ram --disk $f_disk --vcpus $f_cpu" >> $SCRIPT
         echo 'openstack flavor set --property "cpu_arch"="x86_64" --property "capabilities:boot_option"="local" --property "capabilities:profile"="'$f_name'" '$f_name'' >> $SCRIPT
     done
-    run_script_file $SCRIPT stack $HOST /home/stack/
+    run_script_file $SCRIPT stack $HOST /home/stack
 }

@@ -20,6 +20,6 @@ tar -cf /root/${HOST}_backup.tar  \
 exit 0
 EOF
 
-    run_script_file backup_undercloud root $HOST /root/
+    run_script_file backup_undercloud root $HOST /root
     try scp -q root@${HOST}:/root/${HOST}_backup.tar .
 }

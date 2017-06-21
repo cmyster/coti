@@ -1,6 +1,18 @@
 overcloud_predeploy ()
 {
     HOST=$1
+    if [ ! -r default_gateway ]
+    then
+        echo "Default gateway was not saved."
+        raise ${FUNCNAME[0]}
+    fi
+
+    DEFAULT_GATEWAY=$(cat default_gateway)
+    if [ -z "$DEFAULT_GATEWAY" ]
+    then
+        echo "Default gateway was not set."
+        raise ${FUNCNAME[0]}
+    fi
     cat > predeploy <<EOF
 set -e
 cd /home/stack/
@@ -26,8 +38,8 @@ $SSH $DEFAULT_GATEWAY "echo hello"
 $SSH \$BR_IP "echo hello"
 
 # Adding the default DNS to the default subnet.
-SUBNET=\$(neutron subnet-list | grep start | cut -d" " -f 2)
-neutron subnet-update \$SUBNET --dns-nameserver $DNS
+SUBNET=\$(openstack subnet list -f value -c Name -c ID | grep ctlplane | cut -d " " -f 1)
+openstack subnet set \$SUBNET --dns-nameserver $DNS
 
 # Getting puddle images.
 tar xf images.tar
@@ -36,7 +48,7 @@ tar xf images.tar
 openstack overcloud image upload
 
 # Importing json file.
-openstack baremetal import --json instackenv.json
+openstack overcloud node import instackenv.json
 
 # Updating capabilities to each node.
 for node in \$(openstack baremetal node list -f value -c UUID -c Name | grep -i control | cut -d " " -f 1)
@@ -68,5 +80,5 @@ openstack baremetal introspection bulk start
 # Cleaning up.
 rm -rf ironic-python-agent.* overcloud-full.* deploy-ramdisk-ironic.* images.tar
 EOF
-    run_script_file predeploy stack $HOST /home/stack/
+    run_script_file predeploy stack $HOST /home/stack
 }

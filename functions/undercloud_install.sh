@@ -7,7 +7,6 @@ undercloud_install ()
     scp -q $CWD/templates/hiera_selinux.yaml stack@$HOST:
     TAR_PATH=$(cat tar_path)
     cat > install <<EOF
-cd /home/stack/
 if [[ "$UNDER_SEL" != "enforcing" ]]
 then
     /usr/bin/sudo /usr/bin/sed -i "s/SELINUX=.*/SELINUX=$UNDER_SEL/" /etc/selinux/config
@@ -33,5 +32,5 @@ then
     exit 1
 fi
 EOF
-    run_script_file install stack $HOST /home/stack/
+    run_script_file install stack $HOST /home/stack
 }

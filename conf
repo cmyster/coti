@@ -14,7 +14,7 @@ There is no reason to think it will work outside the internal network.\n
 Parameters:\n
  -h, --help: Print this message.\n
     --clean: Cleans the system of _any_ virtual resource.\n
-       --sp: System prepare, making sure the host and resources are ready.\n
+       --hp: Host preparation, making sure the host and resources are ready.\n
        --uc: Install the unercloud.\n
        --op: Overcloud preperations.\n
        --oc: Overcloud deployment.\n
@@ -24,7 +24,7 @@ Parameters:\n
      --full: All of the above minus backup and restore.\n
 \n
 For a full run:\n
-    ./run --sp\n
+    ./run --hp\n
     ./run --uc\n
     ./run --op\n
     ./run --oc\n

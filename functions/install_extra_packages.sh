@@ -4,10 +4,8 @@ install_extra_packages ()
     {
         echo "Downloading $1"
         try wget -q -nv -r -nd -np ${EPEL}/${1:0:1}/ -A "${1}*rpm" || failure
-        if rpm -qa | grep $1 &> /dev/null
+        if ! rpm -qa | grep $1 &> /dev/null
         then
-            echo "$1 is already installed, skipping."
-        else
             echo "Installing $1"
             try rpm -Uvh ${1}*rpm || failure
         fi
@@ -21,6 +19,6 @@ install_extra_packages ()
         install_from_epel $package
     done
 
-    tar cf files.tar *.rpm *.conf
-    rm -rf *.rpm
+    echo "Tarring needed files."
+    tar cf files.tar *.rpm *.conf &> /dev/null
 }

@@ -1,6 +1,19 @@
 create_json ()
 {
     HOST=$1
+    if [ ! -r default_gateway ]
+    then
+        echo "Default gateway was not saved."
+        raise ${FUNCNAME[0]}
+    fi
+
+    DEFAULT_GATEWAY=$(cat default_gateway)
+    if [ -z "$DEFAULT_GATEWAY" ]
+    then
+        echo "Default gateway was not set."
+        raise ${FUNCNAME[0]}
+    fi
+
     cat > temp.json <<EOF
 {
   "ssh-user": "stack",
@@ -49,8 +62,9 @@ EOF
 
             cat >> temp.json <<EOF
       "pm_addr": "$DEFAULT_GATEWAY",
-      "pm_password": "PLACE",
-      "pm_type": "pxe_ssh",
+      "pm_user": "admin"
+      "pm_password": "password",
+      "pm_type": "pxe_ipmitool",
       "mac": [
         "$CTRL_NET"
       ],
@@ -58,7 +72,6 @@ EOF
       "memory": "$memory",
       "disk": "$dsk",
       "arch": "x86_64",
-      "pm_user": "stack"
     },
 EOF
         done

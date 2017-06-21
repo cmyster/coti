@@ -21,15 +21,16 @@ EOF
     for xml in $(ls -1 net*.xml)
     do
         echo "Defining ${xml}."
-        try virsh net-define $xml || failure
+        try virsh net-define $xml &> /dev/null || failure
     done
 
     for net in $(virsh net-list --all | grep inactive | awk '{print $1}')
     do
         echo "Starting ${net}."
-        try virsh net-start $net || failure
-        try virsh net-autostart $net || failure
+        try virsh net-start $net &> /dev/null || failure
+        try virsh net-autostart $net &> /dev/null || failure
     done
 
     DEFAULT_GATEWAY=$(virsh net-dumpxml ${NETWORKS[0]} | grep "ip address" | tr "'" " "  | awk '{print $3}')
+    echo $DEFAULT_GATEWAY > default_gateway
 }

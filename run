@@ -4,8 +4,8 @@
 source conf
 
 # Gathiring run time arguments.
-SYS_CLEAN=false
-SYS_PREP=false
+CLEAN=false
+HOST_PREP=false
 UC_INSTALL=false                                                       
 OC_PREP=false                                                             
 OC_DEPLOY=false                                                        
@@ -18,9 +18,9 @@ case "$1" in
     --help)
         echo -ne $HELP && exit 0 ;;
     --clean)
-        SYS_CLEAN=true ;;
-    --sp)
-        SYS_PREP=true ;;
+        CLEAN=true ;;
+    --hp)
+        HOST_PREP=true ;;
     --uc)
         UC_INSTALL=true ;;
     --op)
@@ -32,8 +32,8 @@ case "$1" in
     --bnr)
         BCK_RES=true ;;
     --full)
-        SYS_CLEAN=true
-        SYS_PREP=true
+        CLEAN=true
+        HOST_PREP=true
         UC_INSTALL=true
         OC_PREP=true
         OC_DEPLOY=true
@@ -45,9 +45,9 @@ case "$1" in
 esac
 
 # Almost nothing happens here, all the functions are defined elsewhere.
+echo "Adding functions."
 for file in $(ls functions/*.sh)
 do
-    echo "Adding function: $(head -n 1 $file | cut -d " " -f 1)"
     source $file
 done
 
@@ -99,10 +99,6 @@ virt_setup ()
 {
     # Re-creating virtual resources.
     run restart_libvirt
-    #run clean_vms
-    #run clean_pool
-    #run clean_vnets
-    #run restart_libvirt
     run create_vnet
     echo -e "Cleaned old resources after $(time_diff $(( $(date +%s) - $START)))\n"
 }
@@ -195,9 +191,9 @@ run_automation ()
     run "run_tests $1 stack overcloud"
 }
 
-if $SYS_CLEAN; then host_clean; fi
+if $CLEAN; then host_clean; fi
 
-if $SYS_PREP
+if $HOST_PREP
 then
     host_preprerations
     virt_setup

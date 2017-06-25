@@ -62,18 +62,20 @@ EOF
 
             cat >> temp.json <<EOF
       "pm_addr": "$DEFAULT_GATEWAY",
-      "pm_user": "admin"
+      "pm_user": "admin",
       "pm_password": "password",
       "pm_type": "pxe_ipmitool",
+      "pm_port": "$pm_port",
       "mac": [
         "$CTRL_NET"
       ],
       "cpu": "$cpu",
       "memory": "$memory",
       "disk": "$dsk",
-      "arch": "x86_64",
+      "arch": "x86_64"
     },
 EOF
+        START=$(( START + 1 ))
         done
         sed -i '$ d' temp.json
         echo "    }" >> temp.json

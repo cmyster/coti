@@ -19,11 +19,7 @@ cd /home/stack/
 source stackrc
 
 # Setting the EC2Meta property.
-BR_NAME=\$(grep local_interface undercloud.conf | awk '{print \$NF}' | tr -d "\"")
-if [ -z "$BR_NAME" ]
-then
-    BR_NAME="br-ctlplane"
-fi
+BR_NAME="br-ctlplane"
 BR_IP=\$(/usr/sbin/ifconfig \$BR_NAME | grep "inet " | awk '{print \$2}')
 sed -i "s/FINDEC2/\$BR_IP/g" ./templates/overrides.yaml
 

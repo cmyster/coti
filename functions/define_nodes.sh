@@ -4,6 +4,7 @@ define_nodes ()
     cp $CWD/vm-body $WORK_DIR
 
     VM_ID=1
+    VBMCP=6320
 
     for (( index=0; index<${#NODES[@]}; index++ ))
     do
@@ -25,11 +26,13 @@ define_nodes ()
                 echo "cpu=$CPU" >> $INV
                 echo "memory=$RAM" >> $INV
                 echo "disk=$DSK" >> $INV
+                echo "pm_port=$VBMCP" >> $INV
                 echo "OSD=$OSD" >> $INV
                 uuid=$(cat /proc/sys/kernel/random/uuid)
                 echo "uuid=$uuid" >> $INV
                 echo "<domain type='kvm' id='$VM_ID'>" > ${NODES[$index]}-${i}.xml
                 VM_ID=$(( VM_ID + 1 ))
+                VBMCP=$(( VBMCP + 1 ))
 
                 cat >> ${NODES[$index]}-${i}.xml <<EOF
   <name>${NODES[$index]}-$i</name>

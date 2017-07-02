@@ -40,7 +40,11 @@ rm -rf rhos-release*.rpm | tee -a \$LOG_FILE
 
 rhos-release $RR_CMD | tee -a \$LOG_FILE
 yum remove -y *bigswitch*
-yum update -y | tee -a \$LOG_FILE
+if $UPDATE_IMAGE
+then
+    yum update -y | tee -a \$LOG_FILE
+fi
+
 yum install -y mlocate vim mc git wget python-psutil | tee -a \$LOG_FILE
 
 updatedb

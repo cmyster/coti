@@ -4,6 +4,7 @@ proto_firstrun ()
     cat > firstboot <<EOF
 set -e
 cd /root
+cp \$0 /root/proto_firstboot
 LOG_FILE=/root/proto_firstboot.log
 if ! grep "clean_requirements_on_remove=1" /etc/yum.conf
 then
@@ -25,15 +26,18 @@ rm -rf /etc/yum.repos.d/* /var/cache/yum/*
 rhos-release $RR_CMD
 
 # Updating the system.
-yum update -y | tee -a \$LOG_FILE
-yum groups mark convert | tee -a \$LOG_FILE
+if $UPDATE_IMAGE
+then
+    yum update -y | tee -a \$LOG_FILE
+fi
 
-# Installing packagaes I like having.
-yum install -y acpid ahc-tools createproto crudini device-mapper-multipath \
-dosfstools elinks gdb gdisk genisoimage git gpm hdparm ipmitool \
-iscsi-initiator-utils keepalived libvirt lsof mc mlocate net-tools ntp \
-plotnetcfg psmisc python-setuptools screen setroubleshoot sos sshpass \
-sysstat telnet tmux traceroute tree vim wget | tee -a \$LOG_FILE
+# Installing needed power management packages and other tools.
+yum install -y --skip-broken acpid ahc-tools createproto crudini \
+device-mapper-multipath dosfstools elinks gdb gdisk genisoimage git \
+gpm hdparm ipmitool iscsi-initiator-utils keepalived libvirt lsof mc \
+mlocate net-tools ntp plotnetcfg psmisc python-setuptools screen \
+setroubleshoot sos sshpass sysstat telnet tmux traceroute tree vim \
+wget | tee -a \$LOG_FILE
 
 # Installing development packages.
 yum group install -y "Development Tools" | tee -a \$LOG_FILE

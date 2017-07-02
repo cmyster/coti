@@ -85,6 +85,9 @@ RR_CMD=${RR_CMD:-"$OS_VER"}
 # predefined_images - use untouched images from RPM.
 OBTAIN_IMAGES=${OBTAIN_IMAGES:-"edit_predefined_images"}
 
+# Do images and proto gets updated to the latest bits from the repos.
+UPDATE_IMAGE=false
+
 # DNS to be used.
 # The default here is to use the host's configuration.
 DNS="${DNS:-$(grep nameserver /etc/resolv.conf | head -n 1 | cut -d " " -f 2)}"
@@ -201,7 +204,7 @@ undercloud_NUM=${undercloud_NUM:-1}
 undercloud_RAM=${undercloud_RAM:-16384}
 undercloud_SWP=${undercloud_SWP:-1024}
 undercloud_CPU=${undercloud_CPU:-4}
-undercloud_DUM=${undercloud_DUM:-1}
+undercloud_DUM=${undercloud_DUM:-0}
 undercloud_DSK=${undercloud_DSK:-22}
 
 # controller nodes
@@ -227,7 +230,7 @@ compute_DSK=${compute_DSK:-17}
 # ceph nodes
 ceph_NAM=${ceph_NAM:-"ceph"}
 ceph_FLV=${ceph_FLV:-"ceph-storage"}
-ceph_NUM=${ceph_NUM:-1}
+ceph_NUM=${ceph_NUM:-0}
 ceph_RAM=${ceph_RAM:-8192}
 ceph_SWP=${ceph_SWP:-1024}
 ceph_CPU=${ceph_CPU:-2}

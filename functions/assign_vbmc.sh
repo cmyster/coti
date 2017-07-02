@@ -11,7 +11,8 @@ assign_vbmc ()
         for inv in ${invs[@]}
         do
             source $inv
-            vbmc add $name --port $pm_port --username admin --password password 2> /dev/null
+            vbmc add $name --port $pm_port --username admin --password password --libvirt-uri qemu:///$HOST_IP 2> /dev/null
+            vbmc start $pm_port
         done
     fi
 }

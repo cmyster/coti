@@ -1,17 +1,10 @@
 overcloud_deploy ()
 {
     HOST=$1
-    USE_CEPH=""
-    USE_PANKO=""
 
     if [ $ceph_NUM -gt 0 ]
     then
         USE_CEPH="-e $THT/environments/storage-environment.yaml -e ./templates/ceph.yaml"
-    fi
-
-    if [ $OS_VER -gt 10 ]
-    then
-        USE_PANKO="-e $THT/environments/services/panko.yaml"
     fi
 
     # Starting index from 1, as 0 is Undercloud and no deployment parameters
@@ -36,7 +29,6 @@ openstack overcloud deploy \\
     --ntp-server $NTP \\
     $SCALES \\
     $FLAVORS \\
-    $USE_PANKO \\
     $USE_CEPH \\
     -e ./templates/swap_env.yaml \\
     -e $THT/environments/services/sahara.yaml \\

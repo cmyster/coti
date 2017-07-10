@@ -46,7 +46,7 @@ yum group install -y "Development Tools" | tee -a \$LOG_FILE
 yum install -y python-tripleoclient openstack-aodh-common \
 openstack-ceilometer-common openstack-gnocchi-common openstack-heat-common \
 openstack-ironic-common openstack-mistral-common openstack-neutron-common \
-openstack-nova-common openstack-panko-common | tee -a \$LOG_FILE
+openstack-nova-common | tee -a \$LOG_FILE
 
 if ls *.conf 2> /dev/null
 then

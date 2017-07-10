@@ -92,7 +92,6 @@ host_preprerations ()
     run fix_host_ssh
     run fix_virt_access
     run fix_host_kvm
-    run add_user_stack
     echo -e "Prepared host after $(time_diff $(( $(date +%s) - $START)))\n"
 }
 

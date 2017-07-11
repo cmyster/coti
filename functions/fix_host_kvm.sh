@@ -1,6 +1,6 @@
 fix_host_kvm ()
 {
-    echo "Making sure KVM (intel or amd) is loaded."
+    echo "Making sure KVM models are loaded."
     if grep Intel /proc/cpuinfo &> /dev/null
     then
         KVM="kvm-intel"
@@ -17,5 +17,11 @@ fix_host_kvm ()
     if [ $? -ne 0 ]
     then
         modprobe $KVM
+    fi
+
+    lsmod | grep vhost_net &> /dev/null
+    if [ $? -ne 0 ]
+    then
+        modprobe vhost_net
     fi
 }

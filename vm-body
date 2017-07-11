@@ -2,7 +2,7 @@
     <acpi/>
     <apic/>
   </features>
-  <cpu mode='host-passthrough'></cpu>
+  <cpu mode='host-model'></cpu>
   <clock offset='utc'>
     <timer name='rtc' tickpolicy='catchup'/>
     <timer name='pit' tickpolicy='delay'/>

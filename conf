@@ -49,7 +49,7 @@ CWD=$(pwd)
 THT="/usr/share/openstack-tripleo-heat-templates"
 
 # Shortcut to libvirt's image folder.
-VIRT_IMG="/var/lib/libvirt/images"
+VIRT_IMG="/home/libvirt/images"
 
 # Log file
 LOG_FILE=${LOG_FILE:-"$(pwd)/logs/$PROJECT-$(date +%s).log"}

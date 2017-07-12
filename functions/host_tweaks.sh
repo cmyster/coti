@@ -1,5 +1,11 @@
 host_tweaks ()
 {
+    echo "Making sure that $VIRT_IMG exists."
+    if [ ! -d $VIRT_IMG ]
+    then
+        mkdir -p $VIRT_IMG
+    fi
+
     echo "Adding configurations and other tweaks for easier life."
     # Adding Xauth for simpler SSH tunneling.
     if [ ! -f ~/.Xauthority ]

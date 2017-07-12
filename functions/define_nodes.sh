@@ -53,7 +53,7 @@ EOF
                     cat >> ${NODES[$index]}-${i}.xml <<EOF
     <disk type='file' device='disk'>
       <driver name='qemu' type='raw' cache='none' io='native'/>
-      <source file='/var/lib/libvirt/images/${NODES[$index]}-${i}.raw'/>
+      <source file='$VIRT_IMG/${NODES[$index]}-${i}.raw'/>
       <target dev='vda' bus='virtio'/>
       <address type='pci' domain='0x0000' bus='0x01' slot='0x01' function='0x0'/>
     </disk>
@@ -61,7 +61,7 @@ EOF
                     cat >> ${NODES[$index]}-${i}.xml <<EOF
     <disk type='file' device='disk'>
       <driver name='qemu' type='raw' cache='none' io='native'/>
-      <source file='/var/lib/libvirt/images/${NODES[$index]}-${i}_osd.raw'/>
+      <source file='$VIRT_IMG/${NODES[$index]}-${i}_osd.raw'/>
       <target dev='vdb' bus='virtio'/>
       <address type='pci' domain='0x0000' bus='0x01' slot='0x02' function='0x0'/>
     </disk>
@@ -70,7 +70,7 @@ EOF
                     cat >> ${NODES[$index]}-${i}.xml <<EOF
     <disk type='file' device='disk'>
       <driver name='qemu' type='raw' cache='none' io='native'/>
-      <source file='/var/lib/libvirt/images/${NODES[$index]}-${i}.raw'/>
+      <source file='$VIRT_IMG/${NODES[$index]}-${i}.raw'/>
       <target dev='vda' bus='virtio'/>
       <address type='pci' domain='0x0000' bus='0x01' slot='0x01' function='0x0'/>
     </disk>

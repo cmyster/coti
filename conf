@@ -201,36 +201,36 @@ DHCP_OUT_END=250
 # undercloud nodes
 undercloud_NAM=${undercloud_NAM:-"undercloud"}
 undercloud_NUM=${undercloud_NUM:-1}
-undercloud_RAM=${undercloud_RAM:-16384}
+undercloud_RAM=${undercloud_RAM:-65536}
 undercloud_SWP=${undercloud_SWP:-1024}
-undercloud_CPU=${undercloud_CPU:-4}
+undercloud_CPU=${undercloud_CPU:-12}
 undercloud_DUM=${undercloud_DUM:-0}
-undercloud_DSK=${undercloud_DSK:-22}
+undercloud_DSK=${undercloud_DSK:-60}
 
 # controller nodes
 controller_NAM=${controller_NAM:-"control"}
 controller_FLV=${controller_FLV:-"control"}
-controller_NUM=${controller_NUM:-3}
-controller_RAM=${controller_RAM:-16384}
+controller_NUM=${controller_NUM:-1}
+controller_RAM=${controller_RAM:-65536}
 controller_SWP=${controller_SWP:-1024}
-controller_CPU=${controller_CPU:-4}
+controller_CPU=${controller_CPU:-12}
 controller_DUM=${controller_DUM:-0}
 controller_DSK=${controller_DSK:-17}
 
 # compute nodes
 compute_NAM=${compute_NAM:-"compute"}
 compute_FLV=${compute_NAM:-"compute"}
-compute_NUM=${compute_NUM:-3}
-compute_RAM=${compute_RAM:-16384}
+compute_NUM=${compute_NUM:-1}
+compute_RAM=${compute_0AM:-65536}
 compute_SWP=${compute_SWP:-1024}
-compute_CPU=${compute_CPU:-4}
+compute_CPU=${compute_CPU:-12}
 compute_DUM=${compute_DUM:-0}
 compute_DSK=${compute_DSK:-17}
 
 # ceph nodes
 ceph_NAM=${ceph_NAM:-"ceph"}
 ceph_FLV=${ceph_FLV:-"ceph-storage"}
-ceph_NUM=${ceph_NUM:-3}
+ceph_NUM=${ceph_NUM:-0}
 ceph_RAM=${ceph_RAM:-8192}
 ceph_SWP=${ceph_SWP:-1024}
 ceph_CPU=${ceph_CPU:-2}

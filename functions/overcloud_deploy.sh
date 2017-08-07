@@ -2,8 +2,9 @@ overcloud_deploy ()
 {
     HOST=$1
 
-    if [ $ceph_NUM -gt 0 ]
+    if [ $ceph_NUM -ne 0 ]
     then
+        echo "Ceph is used, adding environment files for it."
         USE_CEPH="-e $THT/environments/storage-environment.yaml -e ./templates/ceph.yaml"
     fi
 
@@ -15,8 +16,11 @@ overcloud_deploy ()
         eval FLV=\$${NODES[$index]}_FLV
         eval NUM=\$${NODES[$index]}_NUM
 
-        SCALES="$SCALES --${FLV}-scale $NUM "
-        FLAVORS="$FLAVORS --${FLV}-flavor $FLV "
+        if [ $NUM -ne 0 ]
+        then
+            SCALES="$SCALES --${FLV}-scale $NUM "
+            FLAVORS="$FLAVORS --${FLV}-flavor $FLV "
+        fi
     done
 
     echo "Running the overcloud deployment."
@@ -31,12 +35,10 @@ openstack overcloud deploy \\
     $FLAVORS \\
     $USE_CEPH \\
     -e ./templates/swap_env.yaml \\
-    -e $THT/environments/services/sahara.yaml \\
-    -e $THT/environments/cinder-backup.yaml \\
-    -e $THT/environments/network-environment.yaml \\
-    -e $THT/environments/net-multiple-nics.yaml \\
+    -e $THT/environments/docker.yaml \\
+    -e $THT/docker-osp12.yaml \\
     -e $THT/environments/network-isolation.yaml \\
-    -e ./templates/overrides.yaml &> overcloud_deploy.log &
+    -e ./templates/overrides.yaml &> overcloud_deploy.log \&
 EOF
     run_script_file deploy stack $HOST /home/stack
 }

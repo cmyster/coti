@@ -139,7 +139,9 @@ install_main_undercloud ()
     run "undercloud_wait ${NODES[0]}-0" "$LONG"
     run "undercloud_ssh_access ${NODES[0]}-0 root $ROOT_PASS"
     run "undercloud_ssh_access ${NODES[0]}-0 stack stack"
+    run "pre_uc_install_wa ${NODES[0]}-0"
     run "undercloud_install ${NODES[0]}-0" "$LONG"
+#    run "post_uc_install_wa ${NODES[0]}-0"
     echo -e "Undercloud installed after $(time_diff $(( $(date +%s) - $START)))\n"
 }
 
@@ -158,8 +160,10 @@ predeploy_overcloud ()
 deploy_overcloud ()
 {
     # Running overcloud deploy and waiting for deployment to finish.
+    run "pre_oc_deploy_wa ${NODES[0]}-0"
     run "overcloud_deploy ${NODES[0]}-0"
     run "overcloud_wait ${NODES[0]}-0" "$LONG"
+    run "post_oc_deploy_wa ${NODES[0]}-0"
     run "populate_hosts ${NODES[0]}-0"
     echo -e "Overcloud deployed after $(time_diff $(( $(date +%s) - $START)))\n"
 }

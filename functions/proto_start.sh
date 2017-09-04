@@ -1,6 +1,6 @@
 proto_start ()
 {
-    try virt-install --ram 8192 --vcpus 4 --os-variant rhel7 --disk path=$VIRT_IMG/proto.qcow2,device=disk,bus=virtio,format=qcow2 --import --noautoconsole --vnc --network network:default --name proto || failure
+    try virt-install --ram 8192 --vcpus 4 --os-variant rhel7 --disk path=$VIRT_IMG/proto.qcow2 --import --network network:default --name proto || failure
 
     echo "Prepering a proto so it will be easier to install undercloud later."
 

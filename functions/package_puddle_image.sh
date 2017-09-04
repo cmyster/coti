@@ -1,11 +1,8 @@
-package_puddle_images ()
+package_puddle_image ()
 {
     PUDDLE=$(cat puddle)
     RR_CMD=$(cat rr_cmd)
-    try tar cf images.tar ironic-python-agent.initramfs ironic-python-agent.kernel overcloud-full.qcow2 overcloud-full.initrd overcloud-full.vmlinuz || failure
-    rm -rf overcloud-full* ironic-python-agent* usr
     mkdir $PUDDLE
-    mv images.tar $PUDDLE
     mv $GUEST_IMAGE $PUDDLE
     echo "built on: $(date)" > $PUDDLE/version
     echo "command used: rhos-relese $RR_CMD" >> $PUDDLE/version

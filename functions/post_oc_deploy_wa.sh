@@ -8,7 +8,6 @@ post_oc_deploy_wa ()
     echo "Running post-overcloud deploy workarounds."
     cat > post_oc_deploy_wa <<EOF
 ### Workrounds go here
-
 ### End of workarounds
 EOF
 

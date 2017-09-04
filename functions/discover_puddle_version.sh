@@ -1,28 +1,42 @@
 discover_puddle_version ()
 {
-    VERSION=$1
+    set_puddle ()
+    {
+        if [ -z $1 ]
+        then
+            echo "Failed to set puddle."
+            raise ${FUNCNAME[0]}
+        else
+            echo $1 > puddle
+            RR_CMD="${OS_VER} -p $PUDDLE"
+            echo $RR_CMD > rr_cmd
+        fi
+    }
 
-    echo "Deploying rhos-release RPM."
-    try rpm2cpio rhos-release-latest.noarch.rpm | cpio -idmv &> /dev/null || failure
+    discover ()
+    {
+        echo "Deploying rhos-release RPM."
+        try rpm2cpio rhos-release-latest.noarch.rpm | cpio -idmv &> /dev/null || failure
 
-    echo "Getting repo URL from rhos-release."
-    URL=$(grep -A2 rhelosp-${OS_VER}.0-puddle var/lib/rhos-release/repos/rhos-release-${OS_VER}.repo | grep baseurl | cut -d = -f 2 | rev | cut -d "/" -f 5- | rev)
-    echo "Using repo URL: $URL"
+        echo "Getting repo URL from rhos-release."
+        URL=$(grep -A2 rhelosp-${OS_VER}.0-puddle var/lib/rhos-release/repos/rhos-release-${OS_VER}.repo | grep baseurl | cut -d = -f 2 | rev | cut -d "/" -f 5- | rev)
+        echo $URL > puddle_dir_path
+        echo "Using repo URL: $URL"
     
-    PUDDLE=$(elinks --dump $URL | grep -e http.*201 | awk '{print $NF}' | sort | tail -n 1 | rev | cut -d "/" -f 2 | rev)
-    echo $PUDDLE > puddle
+        PUDDLE=$(links --dump $URL/latest_containers/container_images.yaml | grep docker: | tr ":" " " | awk '{print $2}' | head -n 1)
+        set_puddle $PUDDLE
+ 
+        echo "Using puddle: ${PUDDLE}."
+        echo "rhos-release will be run with: $(cat rr_cmd) "
 
-    if [ -z "$PUDDLE" ]
+        rm -rf etc usr var
+    }
+
+    if [[ "$PUDDLE_VER" == "latest" ]]
     then
-        echo "Failed to set puddle."
-        raise ${FUNCNAME[0]}
+        discover
     else
-        RR_CMD="${OS_VER} -p $PUDDLE"
-        echo $RR_CMD > rr_cmd
+        set_puddle $PUDDLE_VER
     fi
-
-    echo "Using puddle: ${PUDDLE}."
-    echo "rhos-release will be run with: $(cat rr_cmd) "
-
-    rm -rf etc usr var
 }
+

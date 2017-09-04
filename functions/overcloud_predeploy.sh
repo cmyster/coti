@@ -1,18 +1,7 @@
 overcloud_predeploy ()
 {
     HOST=$1
-    if [ ! -r default_gateway ]
-    then
-        echo "Default gateway was not saved."
-        raise ${FUNCNAME[0]}
-    fi
 
-    DEFAULT_GATEWAY=$(cat default_gateway)
-    if [ -z "$DEFAULT_GATEWAY" ]
-    then
-        echo "Default gateway was not set."
-        raise ${FUNCNAME[0]}
-    fi
     cat > predeploy <<EOF
 set -e
 cd /home/stack/
@@ -23,25 +12,9 @@ BR_NAME="br-ctlplane"
 BR_IP=\$(/usr/sbin/ifconfig \$BR_NAME | grep "inet " | awk '{print \$2}')
 sed -i "s/FINDEC2/\$BR_IP/g" ./templates/overrides.yaml
 
-# Copying SSH id to the default gateway.
-sshpass -p stack ssh-copy-id $DEFAULT_GATEWAY
-
-# Copying ssh id to EC2Meta.
-sshpass -p stack ssh-copy-id \$BR_IP
-
-# Testing passwordless SSH.
-$SSH $DEFAULT_GATEWAY "echo hello"
-$SSH \$BR_IP "echo hello"
-
 # Adding the default DNS to the default subnet.
 SUBNET=\$(openstack subnet list -f value -c Name -c ID | grep ctlplane | cut -d " " -f 1)
 openstack subnet set \$SUBNET --dns-nameserver $DNS
-
-# Getting puddle images.
-tar xf images.tar
-
-# Uploading images.
-openstack overcloud image upload
 
 # Importing json file.
 openstack overcloud node import instackenv.json
@@ -73,8 +46,6 @@ done
 openstack baremetal configure boot
 openstack baremetal introspection bulk start
 
-# Cleaning up.
-rm -rf ironic-python-agent.* overcloud-full.* deploy-ramdisk-ironic.* images.tar
 EOF
     run_script_file predeploy stack $HOST /home/stack
 }

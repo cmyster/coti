@@ -14,8 +14,6 @@ then
     sed -i '/hieradata_override/d' /home/stack/undercloud.conf
     echo "hieradata_override = /home/stack/hiera_selinux.yaml" >> /home/stack/undercloud.conf
 fi
-wget -q -nv -nd -np -r -A tar ${TAR_PATH}/ || exit 1
-tar xf images.tar
 sudo yum remove -y *bigswitch*
 openstack undercloud install
 tail -n 20 .instack/install-undercloud.log | grep "install complete" &> /dev/null

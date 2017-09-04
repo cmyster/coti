@@ -215,7 +215,7 @@ controller_RAM=${controller_RAM:-65536}
 controller_SWP=${controller_SWP:-1024}
 controller_CPU=${controller_CPU:-12}
 controller_DUM=${controller_DUM:-0}
-controller_DSK=${controller_DSK:-17}
+controller_DSK=${controller_DSK:-30}
 
 # compute nodes
 compute_NAM=${compute_NAM:-"compute"}
@@ -225,7 +225,7 @@ compute_RAM=${compute_0AM:-65536}
 compute_SWP=${compute_SWP:-1024}
 compute_CPU=${compute_CPU:-12}
 compute_DUM=${compute_DUM:-0}
-compute_DSK=${compute_DSK:-17}
+compute_DSK=${compute_DSK:-30}
 
 # ceph nodes
 ceph_NAM=${ceph_NAM:-"ceph"}

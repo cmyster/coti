@@ -5,7 +5,7 @@ overcloud_deploy ()
     if [ $ceph_NUM -ne 0 ]
     then
         echo "Ceph is used, adding environment files for it."
-        USE_CEPH="-e $THT/environments/storage-environment.yaml -e ./templates/ceph.yaml"
+        USE_CEPH="-e $THT/environments/ceph-ansible/ceph-ansible.yaml -e templates/ceph.yaml"
     fi
 
     # Starting index from 1, as 0 is Undercloud and no deployment parameters
@@ -36,6 +36,7 @@ openstack overcloud deploy \\
     $USE_CEPH \\
     -e ./templates/swap_env.yaml \\
     -e $THT/environments/docker.yaml \\
+    -e $THT/environments/docker-ha.yaml \\
     -e $THT/docker-osp12.yaml \\
     -e $THT/environments/network-isolation.yaml \\
     -e ./templates/overrides.yaml &> overcloud_deploy.log \&

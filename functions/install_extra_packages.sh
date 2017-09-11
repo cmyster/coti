@@ -7,7 +7,7 @@ install_extra_packages ()
         if ! rpm -qa | grep $1 &> /dev/null
         then
             echo "Installing $1"
-            try yum install $1 || failure
+            yum install $1 -y -q
         fi
     }
 

@@ -8,7 +8,7 @@ pre_uc_install_wa ()
     echo "Running pre-undercloud install workarounds."
     cat > pre_uc_install_wa <<EOF
 ### Workrounds go here
-
+sudo yum install -y docker --skip-broken
 ### End of workarounds
 EOF
 

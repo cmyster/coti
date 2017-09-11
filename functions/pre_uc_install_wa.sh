@@ -8,7 +8,9 @@ pre_uc_install_wa ()
     echo "Running pre-undercloud install workarounds."
     cat > pre_uc_install_wa <<EOF
 ### Workrounds go here
-sudo yum install -y docker --skip-broken
+# Dep-hell
+sudo rpm -e --nodeps iptables
+sudo rpm -e --nodeps subscription-manager
 ### End of workarounds
 EOF
 

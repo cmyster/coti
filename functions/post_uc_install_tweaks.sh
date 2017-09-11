@@ -34,13 +34,13 @@ if [ -z \$DK_IP ]; then exit 1; fi
 # Copying SSH id to the default gateway.
 for ip in $DEFAULT_GATEWAY \$BR_IP \$DK_IP
 do
-    sshpass -p stack ssh-copy-id \$ip &> /dev/null
+    sshpass -p $HOST_PASS ssh-copy-id root@\$ip &> /dev/null
 done
 
 # Testing passwordless SSH.
-$SSH $DEFAULT_GATEWAY "echo hello"
-$SSH \$BR_IP "echo hello"
-$SSH \$DK_IP "echo hello"
+$SSH root@$DEFAULT_GATEWAY "echo hello"
+$SSH root@\$BR_IP "echo hello"
+$SSH root@\$DK_IP "echo hello"
 EOF
 
 run_script_file post_uc_install_tweaks stack $HOST /home/stack

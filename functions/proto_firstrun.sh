@@ -32,7 +32,7 @@ then
 fi
 
 # Installing needed power management packages and other tools.
-$PKG_CUST install --skip-broken acpid ahc-tools createproto crudini \
+$PKG_CUST install acpid ahc-tools createproto crudini \
 device-mapper-multipath dosfstools elinks gdb gdisk genisoimage git \
 gpm hdparm ipmitool iscsi-initiator-utils keepalived libvirt lsof mc \
 mlocate net-tools ntp plotnetcfg psmisc python-setuptools screen \

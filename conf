@@ -107,7 +107,7 @@ CUST_ARGS="-m 8192 --smp 6 -q"
 # SSH arguments.
 SSH="/usr/bin/ssh -qtt -o StrictHostKeyChecking=no"
 
-USE_TELEMETRY=false
+USE_TELEMETRY=true
 
 ###   File server location.   
 ###   This is were the script gets stuff like guest images,

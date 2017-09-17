@@ -8,21 +8,24 @@ discover_puddle_version ()
             raise ${FUNCNAME[0]}
         else
             echo $1 > puddle
-            RR_CMD="${OS_VER} -p $PUDDLE"
+            RR_CMD="${OS_VER} -p $1"
             echo $RR_CMD > rr_cmd
         fi
     }
 
-    discover ()
+    find_url ()
     {
-        echo "Deploying rhos-release RPM."
+        echo "Extracting rhos-release RPM."
         try rpm2cpio rhos-release-latest.noarch.rpm | cpio -idmv &> /dev/null || failure
-
         echo "Getting repo URL from rhos-release."
         URL=$(grep -A2 rhelosp-${OS_VER}.0-puddle var/lib/rhos-release/repos/rhos-release-${OS_VER}.repo | grep baseurl | cut -d = -f 2 | rev | cut -d "/" -f 5- | rev)
         echo $URL > puddle_dir_path
         echo "Using repo URL: $URL"
-    
+    }
+
+    discover ()
+    {
+        URL=$(cat puddle_dir_path)
         PUDDLE=$(links --dump $URL/latest_containers/container_images.yaml | grep docker: | tr ":" " " | awk '{print $2}' | head -n 1)
         set_puddle $PUDDLE
  
@@ -34,8 +37,10 @@ discover_puddle_version ()
 
     if [[ "$PUDDLE_VER" == "latest" ]]
     then
+        find_url
         discover
     else
+        find_url
         set_puddle $PUDDLE_VER
     fi
 }

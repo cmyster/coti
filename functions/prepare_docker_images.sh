@@ -20,11 +20,12 @@ prepare_docker_images ()
     echo "Running pre-overcloud deploy workarounds."
     cat > prepare_docker_images <<EOF
 set -e
-links --dump $URL/latest_containers/container_images.yaml > container_images.yaml
-
+cd /home/stack/templates
+wget $URL/latest_containers/container_images.yaml
+cd /home/stack
 source stackrc
 openstack overcloud container image upload --verbose --config-file container_images.yaml
-openstack overcloud container image prepare --namespace=docker-registry.engineering.redhat.com/rhosp${OS_VER} --env-file=rhos${OS_VER}.yaml --prefix=openstack- --suffix=-docker  --tag=$PUDDLE
+openstack overcloud container image prepare --namespace=docker-registry.engineering.redhat.com/rhosp${OS_VER} --env-file=rhos${OS_VER}.yaml --prefix=openstack- --suffix=-docker --tag=$PUDDLE
 EOF
 
     run_script_file prepare_docker_images stack $HOST /home/stack                  

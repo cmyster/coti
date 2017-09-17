@@ -12,7 +12,7 @@ then
 fi
 systemctl stop NetowrkManager | tee -a \$LOG_FILE
 systemctl disable NetworkManager | tee -a \$LOG_FILE
-yum remove -y cloud-init* NetworkManager* *bigswitch* | tee -a \$LOG_FILE
+$PKG_CUST remove cloud-init* NetworkManager* *bigswitch* | tee -a \$LOG_FILE
 
 dhclient eth0 | tee -a \$LOG_FILE
 
@@ -28,11 +28,11 @@ rhos-release $RR_CMD
 # Updating the system.
 if $UPDATE_IMAGE
 then
-    yum update -y | tee -a \$LOG_FILE
+    $PKG_CUST update | tee -a \$LOG_FILE
 fi
 
 # Installing needed power management packages and other tools.
-yum install -y --skip-broken acpid ahc-tools createproto crudini \
+$PKG_CUST install --skip-broken acpid ahc-tools createproto crudini \
 device-mapper-multipath dosfstools elinks gdb gdisk genisoimage git \
 gpm hdparm ipmitool iscsi-initiator-utils keepalived libvirt lsof mc \
 mlocate net-tools ntp plotnetcfg psmisc python-setuptools screen \
@@ -40,10 +40,10 @@ setroubleshoot sos sshpass sysstat telnet tmux traceroute tree vim \
 wget | tee -a \$LOG_FILE
 
 # Installing development packages.
-yum group install -y "Development Tools" | tee -a \$LOG_FILE
+$PKG_CUST group install "Development Tools" | tee -a \$LOG_FILE
 
 # Installing OpenStack stuff.
-yum install -y python-tripleoclient openstack-aodh-common \
+$PKG_CUST install python-tripleoclient openstack-aodh-common \
 openstack-ceilometer-common openstack-gnocchi-common openstack-heat-common \
 openstack-ironic-common openstack-mistral-common openstack-neutron-common \
 openstack-nova-common | tee -a \$LOG_FILE
@@ -151,5 +151,5 @@ shutdown -hP -t 0 now | tee -a \$LOG_FILE
 
 EOF
     chmod +x firstboot
-    try virt-customize $CUST_ARGS -a $VIRT_IMG/proto.qcow2 --firstboot ./firstboot || failure
+    try virt-customize $VIRSH_CUST -a $VIRT_IMG/proto.qcow2 --firstboot ./firstboot || failure
 }

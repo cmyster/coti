@@ -15,9 +15,9 @@ MINIMAL_INSTANCE="m1.tiny"
 DEFAULT_KEYPAIR="heat_keypair"
 
 echo "Recreating the tempest folder."
-yum remove -y openstack-tempest python-tempest
+$PKG_CUST remove openstack-tempest python-tempest
 rm -rf /usr/share/openstack-tempest-13.0.0
-yum install -y openstack-tempest python-tempest
+$PKG_CUST install openstack-tempest python-tempest
 
 echo "Removing resources for cleaner operation."
 
@@ -55,7 +55,7 @@ echo "Running tempest configuration."
 tools/config_tempest.py identity.uri $OS_AUTH_URL identity.admin_password $OS_PASSWORD --deployer-input /home/stack/stack-deployer-input.conf
 
 echo "Setting heat_plugin."
-yum install -q -y crudini mlocate
+$PKG_CUST install crudini mlocate
 updatedb
 crudini --set etc/tempest.conf heat_plugin auth_url $OS_AUTH_URL
 crudini --set etc/tempest.conf heat_plugin username $OS_USERNAME

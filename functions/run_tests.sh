@@ -26,10 +26,10 @@ run_tests ()
     echo "Moving tests to ${HOST}."
 
     tar cf tests.tar -T test_list
-    $SSH ${2}@$HOST "rm -rf tests && mkdir tests"
+    $SSH_CUST ${2}@$HOST "rm -rf tests && mkdir tests"
     scp -q tests.tar ${2}@${HOST}:/${HOME}/tests/
-    $SSH ${2}@$HOST "tar xf /${HOME}/tests/tests.tar && rm -rf /${HOME}/tests/tests.tar"
-    $SSH ${2}@$HOST "chmod +x /${HOME}/tests/*"
+    $SSH_CUST ${2}@$HOST "tar xf /${HOME}/tests/tests.tar && rm -rf /${HOME}/tests/tests.tar"
+    $SSH_CUST ${2}@$HOST "chmod +x /${HOME}/tests/*"
     set > env
     scp -q env ${2}@${HOST}:/${HOME}/tests/
 
@@ -40,7 +40,7 @@ run_tests ()
         DESCRIPTION=$(grep DESCRIPTION $test | cut -d "=" -f 2)
         echo "Running: $NAME"
         echo "Description: $DESCRIPTION"
-        if $SSH ${USER}@$HOST /${HOME}/$test
+        if $SSH_CUST ${USER}@$HOST /${HOME}/$test
         then
             echo "[PASS] $NAME"
         else

@@ -9,5 +9,5 @@ run_script_file ()
     # example: run_script_file script_file stack undercloud-0 /home/stack
     chmod +x $1
     try scp -q $1 ${2}@${3}:${4} || failure
-    try $SSH ${2}@${3} \""${4}/${1}\"" &> ${1}.out || failure $1
+    try $SSH_CUST ${2}@${3} \""${4}/${1}\"" &> ${1}.out || failure $1
 }

@@ -1,4 +1,4 @@
 update_os ()
 {
-    try yum -q -y update || failure
+    try $PKG_CUST update || failure
 }

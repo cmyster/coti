@@ -23,7 +23,7 @@ vm_power ()
         if is_up
         then
             online=true
-            $SSH root@$HOST "shutdown -hP -t 0 now" &> /dev/null &
+            $SSH_CUST root@$HOST "shutdown -hP -t 0 now" &> /dev/null &
             while $online
             do
                 if ! is_up

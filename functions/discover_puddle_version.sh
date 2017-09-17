@@ -26,7 +26,7 @@ discover_puddle_version ()
     discover ()
     {
         URL=$(cat puddle_dir_path)
-        PUDDLE=$(links --dump $URL/latest_containers/container_images.yaml | grep docker: | tr ":" " " | awk '{print $2}' | head -n 1)
+        PUDDLE=$(elinks --dump $URL/latest_containers/container_images.yaml | grep docker: | tr ":" " " | awk '{print $2}' | head -n 1)
         set_puddle $PUDDLE
  
         echo "Using puddle: ${PUDDLE}."

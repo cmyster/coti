@@ -38,9 +38,9 @@ do
 done
 
 # Testing passwordless SSH.
-$SSH root@$DEFAULT_GATEWAY "echo hello"
-$SSH root@\$BR_IP "echo hello"
-$SSH root@\$DK_IP "echo hello"
+$SSH_CUST root@$DEFAULT_GATEWAY "echo hello"
+$SSH_CUST root@\$BR_IP "echo hello"
+$SSH_CUST root@\$DK_IP "echo hello"
 EOF
 
 run_script_file post_uc_install_tweaks stack $HOST /home/stack

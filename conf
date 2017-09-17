@@ -102,11 +102,15 @@ HOST_IP=$(ifconfig $NIC | grep "inet " | awk '{print $2}')
 HOST_PASS="12345678"
 
 # virt-customize arguments.
-CUST_ARGS="-m 8192 --smp 6 -q"
+VIRSH_CUST="-m 8192 --smp 6 -q"
 
 # SSH arguments.
-SSH="/usr/bin/ssh -qtt -o StrictHostKeyChecking=no"
+SSH_CUST="/usr/bin/ssh -qtt -o StrictHostKeyChecking=no"
 
+# Package management arguments.
+PKG_CUST="yum -q -y"
+
+# Installing Telemetry, its false by default.
 USE_TELEMETRY=true
 
 ###   File server location.   

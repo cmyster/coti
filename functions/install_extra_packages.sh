@@ -2,7 +2,8 @@ install_extra_packages ()
 {
     download_from_epel ()
     {
-        if ! /bin/ls $1 &> /dev/null
+        set -x
+        if ! /bin/ls ${1}*rpm &> /dev/null
         then
             echo "Downloading $1"
             try wget -q -nv -r -nd -np ${EPEL}/${1:0:1}/ -A "${1}*rpm" || failure
@@ -19,8 +20,15 @@ install_extra_packages ()
         fi
     }
 
-    try wget -q -nv $LATEST_RR || failure
-    try wget -q -nv $RHEL_GUEST || failure
+    if ! /bin/ls rhos-release-latest.noarch.rpm
+    then
+        try wget -q -nv $LATEST_RR || failure
+    fi
+
+    if ! /bin/ls rhel-guest-image*
+    then
+        try wget -q -nv $RHEL_GUEST || failure
+    fi
     
     for package in "nethogs" "htop" "sshpass"
     do

@@ -64,7 +64,7 @@ OVER_SEL=${OVER_SEL:-"permissive"}
 LIBGUESTFS_BACKEND="direct"
 
 # Base path to EPEL
-EPEL="https://dl.fedoraproject.org/pub/epel/7/x86_64"
+EPEL="https://dl.fedoraproject.org/pub/epel/7/x86_64/Packages"
 
 # Messge to display on long operations
 LONG=${LONG:-"(This step takes time.)"}
@@ -73,7 +73,7 @@ LONG=${LONG:-"(This step takes time.)"}
 LATEST_RR=${LATEST_RR:-"http://rhos-release.virt.bos.redhat.com/repos/rhos-release/rhos-release-latest.noarch.rpm"}
 
 # Version to install deploy.
-OS_VER=${OS_VER:-12}
+OS_VER=${OS_VER:-11}
 PUDDLE_VER=${PUDDLE_VER:-"latest"}
 
 # Argument to pass to rhos-release.
@@ -234,7 +234,7 @@ compute_DSK=${compute_DSK:-30}
 # ceph nodes
 ceph_NAM=${ceph_NAM:-"ceph"}
 ceph_FLV=${ceph_FLV:-"ceph-storage"}
-ceph_NUM=${ceph_NUM:-0}
+ceph_NUM=${ceph_NUM:-1}
 ceph_RAM=${ceph_RAM:-8192}
 ceph_SWP=${ceph_SWP:-1024}
 ceph_CPU=${ceph_CPU:-2}

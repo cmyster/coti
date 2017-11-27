@@ -25,10 +25,16 @@ discover_puddle_version ()
 
     discover ()
     {
+        set -x
         URL=$(cat puddle_dir_path)
-        PUDDLE=$(elinks --dump $URL/latest_containers/container_images.yaml | grep docker: | tr ":" " " | awk '{print $2}' | head -n 1)
+        IMAGE_URL="$URL/latest_containers/container_images.yaml"
+        if wget -q --spider $IMAGE_URL
+        then
+            PUDDLE=$(elinks --dump $URL/latest_containers/container_images.yaml | grep docker: | tr ":" " " | awk '{print $2}' | head -n 1)
+        else
+            PUDDLE=$(elinks --dump $URL | tr "]" " " | tr -d / | grep [0-9]-[0-9][0-9]-[0-9] | cut -d " " -f 6 | sed '/^$/d' | sort)
+        fi
         set_puddle $PUDDLE
- 
         echo "Using puddle: ${PUDDLE}."
         echo "rhos-release will be run with: $(cat rr_cmd) "
 

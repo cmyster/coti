@@ -47,9 +47,9 @@ esac
 # Almost nothing happens here, all the functions are defined elsewhere.
 CWD="$(pwd)"
 echo "Adding functions."
-for file in "$CWD"/functions/*.sh
+for file in ./functions/*.sh
 do
-    source "$CWD"/functions/"$file"
+    source "$file"
 done
 
 # Setting and recreating the work folder.

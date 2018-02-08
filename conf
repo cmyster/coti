@@ -6,35 +6,35 @@ PROJECT="coti"
 
 # Help message
 HELP="
-Before running the script, make sure that conf is updated and the steps in\n
-the script itself (end of it) suits your needs.\n
-./run will start its thing and its expecting access to internal resources.\n
-There is no reason to think it will work outside the internal network.\n
-\n
-Parameters:\n
- -h, --help: Print this message.\n
-    --clean: Cleans the system of _any_ virtual resource.\n
-       --hp: Host preparation, making sure the host and resources are ready.\n
-       --uc: Install the unercloud.\n
-       --op: Overcloud preperations.\n
-       --oc: Overcloud deployment.\n
-      --bnr: Backup and restore, this will backup the undercloud machine and\n
-             restore onto a new undercloud. It needs a running deployment.\n
-     --test: Run tests on a deployment.\n
-     --full: All of the above minus backup and restore.\n
-\n
-For a full run:\n
-    ./run --hp\n
-    ./run --uc\n
-    ./run --op\n
-    ./run --oc\n
-    ./run --bnr\n
-    ./run --test\n
-Or  ./run --full\n
-\n
-You can also run the script with run time parameters, for instace:\n
-    OS_VER=11 ./run --full\n
-To do a full run on OpenStack 11.\n
+Before running the script, make sure that conf is updated and the steps in
+the script itself (end of it) suits your needs.
+./run will start its thing and its expecting access to internal resources.
+There is no reason to think it will work outside the internal network.
+
+Parameters:
+ -h, --help: Print this message.
+    --clean: Cleans the system of _any_ virtual resource.
+       --hp: Host preparation, making sure the host and resources are ready.
+       --uc: Install the unercloud.
+       --op: Overcloud preperations.
+       --oc: Overcloud deployment.
+      --bnr: Backup and restore, this will backup the undercloud machine and
+             restore onto a new undercloud. It needs a running deployment.
+     --test: Run tests on a deployment.
+     --full: All of the above minus backup and restore.
+
+For a full run:
+    ./run --hp
+    ./run --uc
+    ./run --op
+    ./run --oc
+    ./run --bnr
+    ./run --test
+Or  ./run --full
+
+You can also run the script with run time parameters, for instace:
+    OS_VER=11 ./run --full
+To do a full run on OpenStack 11.
 "
 
 
@@ -214,32 +214,32 @@ undercloud_DSK=${undercloud_DSK:-100}
 # controller nodes
 controller_NAM=${controller_NAM:-"control"}
 controller_FLV=${controller_FLV:-"control"}
-controller_NUM=${controller_NUM:-3}
-controller_RAM=${controller_RAM:-16384}
+controller_NUM=${controller_NUM:-1}
+controller_RAM=${controller_RAM:-32768}
 controller_SWP=${controller_SWP:-1024}
-controller_CPU=${controller_CPU:-4}
+controller_CPU=${controller_CPU:-8}
 controller_DUM=${controller_DUM:-0}
-controller_DSK=${controller_DSK:-26}
+controller_DSK=${controller_DSK:-32}
 
 # compute nodes
 compute_NAM=${compute_NAM:-"compute"}
 compute_FLV=${compute_NAM:-"compute"}
-compute_NUM=${compute_NUM:-2}
-compute_RAM=${compute_RAM:-16384}
+compute_NUM=${compute_NUM:-1}
+compute_RAM=${compute_RAM:-32768}
 compute_SWP=${compute_SWP:-1024}
-compute_CPU=${compute_CPU:-3}
+compute_CPU=${compute_CPU:-8}
 compute_DUM=${compute_DUM:-0}
-compute_DSK=${compute_DSK:-28}
+compute_DSK=${compute_DSK:-32}
 
 # ceph nodes
 ceph_NAM=${ceph_NAM:-"ceph"}
 ceph_FLV=${ceph_FLV:-"ceph-storage"}
 ceph_NUM=${ceph_NUM:-1}
-ceph_RAM=${ceph_RAM:-8192}
+ceph_RAM=${ceph_RAM:-32768}
 ceph_SWP=${ceph_SWP:-1024}
-ceph_CPU=${ceph_CPU:-2}
+ceph_CPU=${ceph_CPU:-8}
 ceph_DUM=${ceph_DUM:-0}
-ceph_DSK=${ceph_DSK:-17}
-ceph_OSD=${ceph_OSD:-10}
+ceph_DSK=${ceph_DSK:-22}
+ceph_OSD=${ceph_OSD:-22}
 
 TOT_NODES=$(( controller_NUM + compute_NUM + ceph_NUM ))

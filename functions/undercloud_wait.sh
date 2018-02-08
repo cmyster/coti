@@ -8,20 +8,20 @@ undercloud_wait ()
     do
         case $i in
             100)
-                raise ${FUNCNAME[0]}
+                raise "${FUNCNAME[0]}"
                 ;;
         esac
 
-        if [ -r ${NODE_NAME}.hello ]
+        if [ -r "${NODE_NAME}".hello ]
         then
-            source ${NODE_NAME}.hello
+            source "${NODE_NAME}".hello
             if [ -z "$IP" ] || [ -z "$HOST" ]
             then
                 echo "An undercloud called $HOST sent a bad hello file."
-                raise ${FUNCNAME[0]}
+                raise "${FUNCNAME[0]}"
             else
                 echo "An undercloud called $HOST sent hello from ${IP}."
-                try set_hosts $HOST $IP || failure
+                try set_hosts "$HOST" "$IP" || failure
             fi
             break
         fi

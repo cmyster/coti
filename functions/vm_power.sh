@@ -3,14 +3,14 @@ vm_power ()
     HOST=$1
     OPTION=$2
 
-    if [ -z $HOST ] || [ -z $OPTION ]
+    if [ -z "$HOST" ] || [ -z "$OPTION" ]
     then
-        raise ${FUNCNAME[0]}
+        raise "${FUNCNAME[0]}"
     fi
 
     is_up ()
     {
-        if virsh domstate $HOST | grep running 
+        if virsh domstate "$HOST" | grep running 
         then
             return 0
         else
@@ -23,7 +23,7 @@ vm_power ()
         if is_up
         then
             online=true
-            $SSH_CUST root@$HOST "shutdown -hP -t 0 now" &> /dev/null &
+            $SSH_CUST root@"$HOST" "shutdown -hP -t 0 now" &> /dev/null &
             while $online
             do
                 if ! is_up
@@ -44,7 +44,7 @@ vm_power ()
         if ! is_up
         then
             online=false
-            try virsh start $1 || failure
+            try virsh start "$1" || failure
             while ! $online
             do
                 if is_up
@@ -62,18 +62,18 @@ vm_power ()
 
     restart ()
     {
-        stop  $HOST
-        start $HOST
+        stop  "$HOST"
+        start "$HOST"
     }
 
     echo "Trying to $OPTION $HOST"
 
     case "$OPTION" in
-        "start"   ) start   $HOST ;;
-        "stop"    ) stop    $HOST ;;
-        "restart" ) restart $HOST ;;
+        "start"   ) start   "$HOST" ;;
+        "stop"    ) stop    "$HOST" ;;
+        "restart" ) restart "$HOST" ;;
     esac
 
-    rm -rf $TEST_FILE
-    rm -rf $TMPFILE
+    rm -rf "$TEST_FILE"
+    rm -rf "$TMPFILE"
 }

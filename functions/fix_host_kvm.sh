@@ -13,14 +13,12 @@ fix_host_kvm ()
         echo "options $KVM nested=y" >> /etc/modprobe.d/dist.conf
     fi
 
-    lsmod | grep $KVM &> /dev/null
-    if [ $? -ne 0 ]
+    if lsmod | grep $KVM &> /dev/null
     then
         modprobe $KVM
     fi
 
-    lsmod | grep vhost_net &> /dev/null
-    if [ $? -ne 0 ]
+    if lsmod | grep vhost_net &> /dev/null
     then
         modprobe vhost_net
     fi

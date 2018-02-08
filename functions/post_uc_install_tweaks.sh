@@ -4,14 +4,14 @@ post_uc_install_tweaks ()
     if [ ! -r default_gateway ]
     then
         echo "Default gateway was not saved."
-        raise ${FUNCNAME[0]}
+        raise "${FUNCNAME[0]}"
     fi
 
     DEFAULT_GATEWAY=$(cat default_gateway)
     if [ -z "$DEFAULT_GATEWAY" ]
     then
         echo "Default gateway was not set."
-        raise ${FUNCNAME[0]}
+        raise "${FUNCNAME[0]}"
     fi
 
     cat > post_uc_install_tweaks <<EOF
@@ -43,5 +43,5 @@ $SSH_CUST root@\$BR_IP "echo hello"
 $SSH_CUST root@\$DK_IP "echo hello"
 EOF
 
-run_script_file post_uc_install_tweaks stack $HOST /home/stack
+run_script_file post_uc_install_tweaks stack "$HOST" /home/stack
 }

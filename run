@@ -14,9 +14,9 @@ BCK_RES=false
 
 case "$1" in
     -h)
-        echo -ne $HELP && exit 0 ;;
+        echo -ne "$HELP" && exit 0 ;;
     --help)
-        echo -ne $HELP && exit 0 ;;
+        echo -ne "$HELP" && exit 0 ;;
     --clean)
         CLEAN=true ;;
     --hp)
@@ -41,23 +41,23 @@ case "$1" in
         BCK_RES=true
         ;;
     *)
-        echo -ne $HELP && exit 0 ;;
+        echo -ne "$HELP" && exit 0 ;;
 esac
 
 # Almost nothing happens here, all the functions are defined elsewhere.
+CWD="$(pwd)"
 echo "Adding functions."
-for file in $(ls functions/*.sh)
+for file in "$CWD"/functions/*.sh
 do
-    source $file
+    source "$CWD"/functions/"$file"
 done
 
-# Setting current location and recreating the work folder.
-CWD=$(pwd)
-if [ ! -d $WORK_DIR ]
+# Setting and recreating the work folder.
+if [ ! -d "$WORK_DIR" ]
 then
-    mkdir -p $WORK_DIR
+    mkdir -p "$WORK_DIR"
 fi
-cd $WORK_DIR
+cd "$WORK_DIR" || exit 1
 echo "Work dir: $(pwd)"
 
 START=$(date +%s)
@@ -65,10 +65,11 @@ START=$(date +%s)
 # This is where functions are executed.
 run ()
 {
-    echo "[$(date +%T)] Running $1 $2" | tee -a $LOG_FILE
+    echo "[$(date +%T)] Running $1 $2" | tee -a "$LOG_FILE"
     SECONDS=0
     $1
-    echo "$1 finished with no errors and ran for $(time_diff $SECONDS)" | tee -a $LOG_FILE
+    echo "$1 finished with no errors and ran for $(time_diff $SECONDS)" | \
+        tee -a "$LOG_FILE"
 }
 
 host_clean ()
@@ -92,7 +93,7 @@ host_preprerations ()
     run fix_host_ssh
     run fix_virt_access
     run fix_host_kvm
-    echo -e "Prepared host after $(time_diff $(( $(date +%s) - $START)))\n"
+    echo -e "Prepared host after $(time_diff $(( $(date +%s) - START)))\n"
 }
 
 virt_setup ()
@@ -100,7 +101,7 @@ virt_setup ()
     # Re-creating virtual resources.
     run restart_libvirt
     run create_vnet
-    echo -e "Cleaned old resources after $(time_diff $(( $(date +%s) - $START)))\n"
+    echo -e "Cleaned old resources after $(time_diff $(( $(date +%s) - START)))\n"
 }
 
 create_installation_images ()
@@ -117,7 +118,7 @@ create_installation_images ()
         run "clean_vms proto"
         run package_puddle_image
         run upload_puddle_image
-        echo -e "Created installation images after $(time_diff $(( $(date +%s) - $START)))\n"
+        echo -e "Created installation images after $(time_diff $(( $(date +%s) - START)))\n"
     fi
 }
 
@@ -128,7 +129,7 @@ create_virtual_environment ()
     run create_node_images
     run define_nodes
     run "undercloud_firstboot ${NODES[0]}-0"
-    echo -e "Creates virtual environment after $(time_diff $(( $(date +%s) - $START)))\n"
+    echo -e "Creates virtual environment after $(time_diff $(( $(date +%s) - START)))\n"
 }
 
 install_main_undercloud ()
@@ -142,7 +143,7 @@ install_main_undercloud ()
     run "undercloud_install ${NODES[0]}-0" "$LONG"
     run "post_uc_install_wa ${NODES[0]}-0"
     run "post_uc_install_tweaks ${NODES[0]}-0"
-    echo -e "Undercloud installed after $(time_diff $(( $(date +%s) - $START)))\n"
+    echo -e "Undercloud installed after $(time_diff $(( $(date +%s) - START)))\n"
 }
 
 predeploy_overcloud ()
@@ -153,9 +154,9 @@ predeploy_overcloud ()
     run "create_json ${NODES[0]}-0"
     run assign_vbmc
     run "add_templates ${NODES[0]}-0"
-    run "prepare_docker_images ${NODES[0]}-0" "$LONG"
+    #run "prepare_docker_images ${NODES[0]}-0" "$LONG"
     run "overcloud_predeploy ${NODES[0]}-0" "$LONG"
-    echo -e "Finished deployment preperations after $(time_diff $(( $(date +%s) - $START)))\n"
+    echo -e "Finished deployment preperations after $(time_diff $(( $(date +%s) - START)))\n"
 }
 
 deploy_overcloud ()
@@ -166,7 +167,7 @@ deploy_overcloud ()
     run "overcloud_wait ${NODES[0]}-0" "$LONG"
     run "post_oc_deploy_wa ${NODES[0]}-0"
     run "populate_hosts ${NODES[0]}-0"
-    echo -e "Overcloud deployed after $(time_diff $(( $(date +%s) - $START)))\n"
+    echo -e "Overcloud deployed after $(time_diff $(( $(date +%s) - START)))\n"
 }
 
 undercloud_backup ()
@@ -174,7 +175,7 @@ undercloud_backup ()
     # Backup the main Undercloud machine.
     run "backup_undercloud ${NODES[0]}-0"
     run "vm_power ${NODES[0]}-0 stop"
-    echo -e "Undercloud backed up after $(time_diff $(( $(date +%s) - $START)))\n"
+    echo -e "Undercloud backed up after $(time_diff $(( $(date +%s) - START)))\n"
 }
 
 undercloud_restore ()
@@ -189,7 +190,7 @@ undercloud_restore ()
     run "restore_undercloud ${NODES[0]}-1"
     run "undercloud_install ${NODES[0]}-1" "$LONG"
     run "populate_hosts ${NODES[0]}-1"
-    echo -e "Undercloud restored after $(time_diff $(( $(date +%s) - $START)))\n"
+    echo -e "Undercloud restored after $(time_diff $(( $(date +%s) - START)))\n"
 }
 
 run_automation ()
@@ -218,6 +219,6 @@ then
     undercloud_restore
 fi
 
-if $RUN_TESTS; then run_automation ${NODES[0]}-0; fi
+if $RUN_TESTS; then run_automation "${NODES[0]}"-0; fi
 
-echo "ALL DONE in $(time_diff $(( $(date +%s) - $START)))"
+echo "ALL DONE in $(time_diff $(( $(date +%s) - START)))"

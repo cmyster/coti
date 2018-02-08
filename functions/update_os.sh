@@ -1,4 +1,4 @@
 update_os ()
 {
-    try $PKG_CUST update || failure
+    try "$PKG_CUST" update || failure
 }

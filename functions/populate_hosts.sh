@@ -11,5 +11,5 @@ openstack server list -f value \\
     | sed 's/overcloud-//g' \\
     | sort -rk2 >> /etc/hosts
 EOF
-    run_script_file populate_hosts root $HOST /root
+    run_script_file populate_hosts root "$HOST" /root
 }

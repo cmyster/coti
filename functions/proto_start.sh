@@ -1,6 +1,6 @@
 proto_start ()
 {
-    try virt-install --ram 8192 --vcpus 4 --os-variant rhel7 --disk path=$VIRT_IMG/proto.qcow2 --import --network network:default --name proto || failure
+    try virt-install --ram 8192 --vcpus 4 --os-variant rhel7 --disk path="$VIRT_IMG"/proto.qcow2 --import --network network:default --name proto || failure
 
     echo "Prepering a proto so it will be easier to install undercloud later."
 
@@ -8,7 +8,7 @@ proto_start ()
     counter=1
     while [[ "$PROTO_STATE" == "running" ]]
     do
-        case counter in
+        case $counter in
             360)
                 echo "This is taking too long, trying to shut down."
                 virsh shutdown proto

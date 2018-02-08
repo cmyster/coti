@@ -5,5 +5,5 @@ undercloud_ssh_access ()
     # $3 = The user's password.
     HOST=$1
     echo "Granting $2 a passwordless ssh acceess to $HOST"
-    try sshpass -p $3 ssh-copy-id -i /root/.ssh/id_rsa.pub ${2}@$HOST || failure
+    try sshpass -p "$3" ssh-copy-id -i /root/.ssh/id_rsa.pub "${2}@$HOST" || failure
 }

@@ -73,7 +73,7 @@ LONG=${LONG:-"(This step takes time.)"}
 LATEST_RR=${LATEST_RR:-"http://rhos-release.virt.bos.redhat.com/repos/rhos-release/rhos-release-latest.noarch.rpm"}
 
 # Version to install deploy.
-OS_VER=${OS_VER:-11}
+OS_VER=${OS_VER:-10}
 PUDDLE_VER=${PUDDLE_VER:-"latest"}
 
 # Argument to pass to rhos-release.
@@ -86,7 +86,7 @@ RR_CMD=${RR_CMD:-"$OS_VER"}
 OBTAIN_IMAGES=${OBTAIN_IMAGES:-"edit_predefined_images"}
 
 # Do images and proto gets updated to the latest bits from the repos.
-UPDATE_IMAGE=false
+UPDATE_IMAGE=true
 
 # DNS to be used.
 # The default here is to use the host's configuration.
@@ -205,31 +205,31 @@ DHCP_OUT_END=250
 # undercloud nodes
 undercloud_NAM=${undercloud_NAM:-"undercloud"}
 undercloud_NUM=${undercloud_NUM:-1}
-undercloud_RAM=${undercloud_RAM:-65536}
+undercloud_RAM=${undercloud_RAM:-32768}
 undercloud_SWP=${undercloud_SWP:-1024}
-undercloud_CPU=${undercloud_CPU:-12}
+undercloud_CPU=${undercloud_CPU:-8}
 undercloud_DUM=${undercloud_DUM:-0}
-undercloud_DSK=${undercloud_DSK:-60}
+undercloud_DSK=${undercloud_DSK:-100}
 
 # controller nodes
 controller_NAM=${controller_NAM:-"control"}
 controller_FLV=${controller_FLV:-"control"}
-controller_NUM=${controller_NUM:-1}
-controller_RAM=${controller_RAM:-65536}
+controller_NUM=${controller_NUM:-3}
+controller_RAM=${controller_RAM:-16384}
 controller_SWP=${controller_SWP:-1024}
-controller_CPU=${controller_CPU:-12}
+controller_CPU=${controller_CPU:-4}
 controller_DUM=${controller_DUM:-0}
-controller_DSK=${controller_DSK:-30}
+controller_DSK=${controller_DSK:-26}
 
 # compute nodes
 compute_NAM=${compute_NAM:-"compute"}
 compute_FLV=${compute_NAM:-"compute"}
-compute_NUM=${compute_NUM:-1}
-compute_RAM=${compute_0AM:-65536}
+compute_NUM=${compute_NUM:-2}
+compute_RAM=${compute_RAM:-16384}
 compute_SWP=${compute_SWP:-1024}
-compute_CPU=${compute_CPU:-12}
+compute_CPU=${compute_CPU:-3}
 compute_DUM=${compute_DUM:-0}
-compute_DSK=${compute_DSK:-30}
+compute_DSK=${compute_DSK:-28}
 
 # ceph nodes
 ceph_NAM=${ceph_NAM:-"ceph"}

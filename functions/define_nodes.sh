@@ -1,43 +1,45 @@
 define_nodes ()
 {
     echo "Creating a definition file for each node."
-    cp $CWD/vm-body $WORK_DIR
+    cp "$CWD"/vm-body "$WORK_DIR"
 
     VM_ID=1
     VBMCP=6320
 
     for (( index=0; index<${#NODES[@]}; index++ ))
     do
-        eval NUM=\$${NODES[$index]}_NUM
-        eval DUM=\$${NODES[$index]}_DUM
+        eval NUM="\$${NODES[$index]}"_NUM
+        eval DUM="\$${NODES[$index]}"_DUM
         TOT=$(( NUM + DUM ))
-        eval RAM=\$${NODES[$index]}_RAM
-        eval CPU=\$${NODES[$index]}_CPU
-        eval DSK=\$${NODES[$index]}_DSK
-        eval OSD=\$${NODES[$index]}_OSD
+        eval RAM="\$${NODES[$index]}"_RAM
+        eval CPU="\$${NODES[$index]}"_CPU
+        eval DSK="\$${NODES[$index]}"_DSK
+        eval OSD="\$${NODES[$index]}"_OSD
 
         if [ $TOT -gt 0 ]
         then
-            for (( i=0; i<$TOT; i++ ))
+            for (( i=0; i<TOT; i++ ))
             do
                 INV=${NODES[$index]}-$i.inv
-                echo "Defining ${NODES[$index]}-$i"
-                echo "name=${NODES[$index]}-$i" >> $INV
-                echo "cpu=$CPU" >> $INV
-                echo "memory=$RAM" >> $INV
-                echo "disk=$DSK" >> $INV
-                echo "pm_port=$VBMCP" >> $INV
-                echo "OSD=$OSD" >> $INV
                 uuid=$(cat /proc/sys/kernel/random/uuid)
-                echo "uuid=$uuid" >> $INV
-                echo "<domain type='kvm' id='$VM_ID'>" > ${NODES[$index]}-${i}.xml
+                echo "Defining ${NODES[$index]}-$i"
+                {
+                    echo "name=${NODES[$index]}-$i"
+                    echo "cpu=$CPU"
+                    echo "memory=$RAM"
+                    echo "disk=$DSK"
+                    echo "pm_port=$VBMCP"
+                    echo "OSD=$OSD"
+                    echo "uuid=$uuid"
+                } >> "INV"
+                echo "<domain type='kvm' id='$VM_ID'>" > "${NODES[$index]}"-${i}.xml
                 VM_ID=$(( VM_ID + 1 ))
                 VBMCP=$(( VBMCP + 1 ))
 
-                cat >> ${NODES[$index]}-${i}.xml <<EOF
+                cat >> "${NODES[$index]}"-${i}.xml <<EOF
   <name>${NODES[$index]}-$i</name>
   <uuid>$uuid</uuid>
-  <memory unit='KiB'>$(( $RAM * 1024 ))</memory>
+  <memory unit='KiB'>$(( RAM * 1024 ))</memory>
   <vcpu placement='static'>$CPU</vcpu>
   <os>
     <type arch='x86_64'>hvm</type>
@@ -45,12 +47,12 @@ define_nodes ()
   </os>
 EOF
 
-                cat vm-body >> ${NODES[$index]}-${i}.xml
+                cat vm-body >> "${NODES[$index]}"-${i}.xml
 
                 # in case of ceph there are two disks
                 if [[ "${NODES[$index]}" == "ceph" ]]
                 then
-                    cat >> ${NODES[$index]}-${i}.xml <<EOF
+                    cat >> "${NODES[$index]}"-${i}.xml <<EOF
     <disk type='file' device='disk'>
       <driver name='qemu' type='raw' cache='none' io='native'/>
       <source file='$VIRT_IMG/${NODES[$index]}-${i}.raw'/>
@@ -58,7 +60,7 @@ EOF
       <address type='pci' domain='0x0000' bus='0x01' slot='0x01' function='0x0'/>
     </disk>
 EOF
-                    cat >> ${NODES[$index]}-${i}.xml <<EOF
+                    cat >> "${NODES[$index]}"-${i}.xml <<EOF
     <disk type='file' device='disk'>
       <driver name='qemu' type='raw' cache='none' io='native'/>
       <source file='$VIRT_IMG/${NODES[$index]}-${i}_osd.raw'/>
@@ -67,7 +69,7 @@ EOF
     </disk>
 EOF
                 else
-                    cat >> ${NODES[$index]}-${i}.xml <<EOF
+                    cat >> "${NODES[$index]}"-${i}.xml <<EOF
     <disk type='file' device='disk'>
       <driver name='qemu' type='raw' cache='none' io='native'/>
       <source file='$VIRT_IMG/${NODES[$index]}-${i}.raw'/>
@@ -78,11 +80,11 @@ EOF
                 fi
 
                 n=1
-                for vnet in ${NETWORKS[@]}
+                for vnet in "${NETWORKS[@]}"
                 do
                     mac=$(hexdump -n3 -e'/3 "52:51:0'$n'" 3/1 ":%02x"' /dev/urandom)
-                    echo "$vnet=$mac" >> $INV
-                    cat >> ${NODES[$index]}-${i}.xml <<EOF
+                    echo "$vnet=$mac" >> "$INV"
+                    cat >> "${NODES[$index]}"-${i}.xml <<EOF
     <interface type='network'>
       <mac address='$mac'/>
       <source network='$vnet'/>
@@ -96,8 +98,8 @@ EOF
                 if [ $index -eq 0 ]
                 then
                     mac=$(hexdump -n3 -e'/3 "52:52:0'$n'" 3/1 ":%02x"' /dev/urandom)
-                    echo "default=$mac" >> $INV
-                    cat >> ${NODES[$index]}-${i}.xml <<EOF
+                    echo "default=$mac" >> "$INV"
+                    cat >> "${NODES[$index]}"-${i}.xml <<EOF
     <interface type='network'>
       <mac address='$mac'/>
       <source network='default'/>
@@ -107,12 +109,12 @@ EOF
 EOF
                 fi
 
-                cat >> ${NODES[$index]}-${i}.xml <<EOF
+                cat >> "${NODES[$index]}"-${i}.xml <<EOF
   </devices>
 </domain>
 EOF
 
-            define_vm ${NODES[$index]}-${i}
+            define_vm "${NODES[$index]}"-${i}
             done
         fi
     done

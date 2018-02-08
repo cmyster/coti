@@ -46,5 +46,5 @@ then
     restorecon -R /etc/keystone/ssl
 fi
 EOF
-    run_script_file restore root $HOST /root
+    run_script_file restore root "$HOST" /root
 }

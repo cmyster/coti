@@ -47,5 +47,5 @@ openstack baremetal configure boot
 openstack baremetal introspection bulk start
 
 EOF
-    run_script_file predeploy stack $HOST /home/stack
+    run_script_file predeploy stack "$HOST" /home/stack
 }

@@ -4,14 +4,14 @@ create_json ()
     if [ ! -r default_gateway ]
     then
         echo "Default gateway was not saved."
-        raise ${FUNCNAME[0]}
+        raise "${FUNCNAME[0]}"
     fi
 
     DEFAULT_GATEWAY=$(cat default_gateway)
     if [ -z "$DEFAULT_GATEWAY" ]
     then
         echo "Default gateway was not set."
-        raise ${FUNCNAME[0]}
+        raise "${FUNCNAME[0]}"
     fi
 
     cat > temp.json <<EOF
@@ -23,17 +23,16 @@ create_json ()
   "arch": "x86_64",
   "nodes": [
 EOF
-    invs=( $(ls -1 *.inv | grep -v ${NODES[0]}) )
+    invs=( $(ls -1 ./*.inv | grep -v "${NODES[0]}") )
     if [ ${#invs[@]} -gt 0 ]
     then
-        for inv in ${invs[@]}
+        for inv in "${invs[@]}"
         do
-            source $inv
-            eval CTRL_NET=\$${NETWORKS[0]}
-            echo $name | grep -i ceph &> /dev/null
-            if [ $? -eq 0 ]
+            source "$inv"
+            eval CTRL_NET="\$${NETWORKS[0]}"
+            if echo "$name" | grep -i ceph &> /dev/null
             then
-                dsk=$(( $disk / 2 ))
+                dsk=$(( disk / 2 ))
             else
                 dsk=$disk
             fi
@@ -85,12 +84,12 @@ EOF
   ]
 }
 EOF
-    try scp -q temp.json stack@${HOST}: || failure
+    try scp -q temp.json stack@"${HOST}": || failure
 
     cat > add_key <<EOF
 cat /home/stack/.ssh/id_rsa | tr "\n" "%" | sed 's/%/\\\n/g' > /home/stack/sshkey
 gawk 'BEGIN { while (getline < "/home/stack/sshkey") text=text \$0 "" }
             { gsub("PLACE", text); print }' temp.json > instackenv.json
 EOF
-    run_script_file add_key stack ${HOST} /home/stack
+    run_script_file add_key stack "${HOST}" /home/stack
 }

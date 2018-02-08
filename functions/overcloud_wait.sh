@@ -57,5 +57,5 @@ else
     exit 1
 fi
 EOF
-    run_script_file wait root $HOST /root
+    run_script_file wait root "$HOST" /root
 }

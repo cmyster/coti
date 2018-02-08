@@ -12,7 +12,7 @@ pre_oc_deploy_wa ()
 ### End of workarounds
 EOF
 
-    run_script_file pre_oc_deploy_wa stack $HOST /home/stack
+    run_script_file pre_oc_deploy_wa stack "$HOST" /home/stack
 
     # Workarounds that work from outside the nodes go here:
 }

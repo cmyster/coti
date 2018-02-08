@@ -1,9 +1,9 @@
 host_tweaks ()
 {
     echo "Making sure that $VIRT_IMG exists."
-    if [ ! -d $VIRT_IMG ]
+    if [ ! -d "$VIRT_IMG" ]
     then
-        mkdir -p $VIRT_IMG
+        mkdir -p "$VIRT_IMG"
     fi
 
     echo "Adding configurations and other tweaks for easier life."

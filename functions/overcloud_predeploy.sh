@@ -17,7 +17,7 @@ SUBNET=\$(openstack subnet list -f value -c Name -c ID | grep ctlplane | cut -d 
 openstack subnet set \$SUBNET --dns-nameserver $DNS
 
 # Importing json file.
-openstack overcloud node import instackenv.json
+openstack overcloud node import --instance-boot-option=local instackenv.json
 
 # Updating capabilities to each node.
 for node in \$(openstack baremetal node list -f value -c UUID -c Name | grep -i control | cut -d " " -f 1)
@@ -43,8 +43,10 @@ do
 done
 
 # Running introspection.
-openstack baremetal configure boot
-openstack baremetal introspection bulk start
+if ! $VIA_UI
+then
+    openstack overcloud node introspect --provide --all-manageable
+fi
 
 EOF
     run_script_file predeploy stack "$HOST" /home/stack

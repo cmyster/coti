@@ -33,8 +33,8 @@ For a full run:
 Or  ./run --full
 
 You can also run the script with run time parameters, for instace:
-    OS_VER=11 ./run --full
-To do a full run on OpenStack 11.
+    OS_VER=12 ./run --full
+To do a full run on OpenStack 12.
 "
 
 
@@ -73,7 +73,7 @@ LONG=${LONG:-"(This step takes time.)"}
 LATEST_RR=${LATEST_RR:-"http://rhos-release.virt.bos.redhat.com/repos/rhos-release/rhos-release-latest.noarch.rpm"}
 
 # Version to install deploy.
-OS_VER=${OS_VER:-10}
+OS_VER=${OS_VER:-13}
 PUDDLE_VER=${PUDDLE_VER:-"latest"}
 
 # Argument to pass to rhos-release.
@@ -83,10 +83,14 @@ RR_CMD=${RR_CMD:-"$OS_VER"}
 # prepare_puddle_images - create our own.
 # edit_predefined_images - edit images from RPM.
 # predefined_images - use untouched images from RPM.
-OBTAIN_IMAGES=${OBTAIN_IMAGES:-"edit_predefined_images"}
+OBTAIN_IMAGES=${OBTAIN_IMAGES:-"predefined_images"}
 
 # Do images and proto gets updated to the latest bits from the repos.
 UPDATE_IMAGE=true
+
+# Is the Overcloud deployeds via UI? If so you want to stop this script after
+# the overcloud pre-deploy stage and skip introspection.
+VIA_UI=true
 
 # DNS to be used.
 # The default here is to use the host's configuration.
@@ -124,7 +128,7 @@ FILE_SERVER=${FILE_SERVER:-"http://ikook.tlv.redhat.com"}
 SRV_DOMAIN=${FILE_SERVER##*://}
 
 # RHEL guest image.
-RHEL_GUEST=${GUEST_DIR:-"$FILE_SERVER/gen_images/cloud/rhel-guest-image-7.4-latest.x86_64.qcow2"}
+RHEL_GUEST=${GUEST_DIR:-"$FILE_SERVER/gen_images/cloud/rhel-guest-image-7.5-latest.x86_64.qcow2"}
 GUEST_FILE=$(basename $RHEL_GUEST)
 
 # Director image RPMs path.
@@ -207,37 +211,37 @@ undercloud_NAM=${undercloud_NAM:-"undercloud"}
 undercloud_NUM=${undercloud_NUM:-1}
 undercloud_RAM=${undercloud_RAM:-32768}
 undercloud_SWP=${undercloud_SWP:-1024}
-undercloud_CPU=${undercloud_CPU:-8}
+undercloud_CPU=${undercloud_CPU:-6}
 undercloud_DUM=${undercloud_DUM:-0}
 undercloud_DSK=${undercloud_DSK:-100}
 
 # controller nodes
 controller_NAM=${controller_NAM:-"control"}
 controller_FLV=${controller_FLV:-"control"}
-controller_NUM=${controller_NUM:-1}
-controller_RAM=${controller_RAM:-32768}
+controller_NUM=${controller_NUM:-3}
+controller_RAM=${controller_RAM:-16384}
 controller_SWP=${controller_SWP:-1024}
-controller_CPU=${controller_CPU:-8}
+controller_CPU=${controller_CPU:-4}
 controller_DUM=${controller_DUM:-0}
-controller_DSK=${controller_DSK:-32}
+controller_DSK=${controller_DSK:-24}
 
 # compute nodes
 compute_NAM=${compute_NAM:-"compute"}
 compute_FLV=${compute_NAM:-"compute"}
-compute_NUM=${compute_NUM:-1}
+compute_NUM=${compute_NUM:-2}
 compute_RAM=${compute_RAM:-32768}
 compute_SWP=${compute_SWP:-1024}
-compute_CPU=${compute_CPU:-8}
+compute_CPU=${compute_CPU:-6}
 compute_DUM=${compute_DUM:-0}
 compute_DSK=${compute_DSK:-32}
 
 # ceph nodes
 ceph_NAM=${ceph_NAM:-"ceph"}
 ceph_FLV=${ceph_FLV:-"ceph-storage"}
-ceph_NUM=${ceph_NUM:-1}
-ceph_RAM=${ceph_RAM:-32768}
+ceph_NUM=${ceph_NUM:-3}
+ceph_RAM=${ceph_RAM:-8192}
 ceph_SWP=${ceph_SWP:-1024}
-ceph_CPU=${ceph_CPU:-8}
+ceph_CPU=${ceph_CPU:-2}
 ceph_DUM=${ceph_DUM:-0}
 ceph_DSK=${ceph_DSK:-22}
 ceph_OSD=${ceph_OSD:-22}

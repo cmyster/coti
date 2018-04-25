@@ -1,6 +1,6 @@
 fetch_vbmc ()
 {
-    if ! rpm -qa | grep virtualbmc &> /dev/null
+    if ! locate site-packages | grep "virtualbmc/" &> /dev/null
     then
         try "$PKG_CUST" install python-setuptools libvirt-devel python-devel || failure
         try easy_install pip || failure

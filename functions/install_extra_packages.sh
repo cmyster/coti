@@ -2,7 +2,6 @@ install_extra_packages ()
 {
     download_from_epel ()
     {
-        set -x
         if ! /bin/ls "${1}"*rpm &> /dev/null
         then
             echo "Downloading $1"
@@ -20,12 +19,12 @@ install_extra_packages ()
         fi
     }
 
-    if ! /bin/ls rhos-release-latest.noarch.rpm
+    if ! /bin/ls rhos-release-latest.noarch.rpm &> /dev/null
     then
         try wget -q -nv "$LATEST_RR" || failure
     fi
 
-    if ! /bin/ls rhel-guest-image*
+    if ! /bin/ls rhel-guest-image* &> /dev/null
     then
         try wget -q -nv "$RHEL_GUEST" || failure
     fi

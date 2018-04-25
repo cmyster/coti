@@ -17,21 +17,23 @@ case "$1" in
         echo -ne "$HELP" && exit 0 ;;
     --help)
         echo -ne "$HELP" && exit 0 ;;
-    --clean)
+    help)
+        echo -ne "$HELP" && exit 0 ;;
+    clean)
         CLEAN=true ;;
-    --hp)
+    host)
         HOST_PREP=true ;;
-    --uc)
+    uc)
         UC_INSTALL=true ;;
-    --op)
+    op)
         OC_PREP=true ;;
-    --oc)
+    oc)
         OC_DEPLOY=true ;;
-    --test)
+    test)
         RUN_TESTS=true ;;
-    --bnr)
+    bnr)
         BCK_RES=true ;;
-    --full)
+    full)
         CLEAN=true
         HOST_PREP=true
         UC_INSTALL=true
@@ -154,7 +156,8 @@ predeploy_overcloud ()
     run "create_json ${NODES[0]}-0"
     run assign_vbmc
     run "add_templates ${NODES[0]}-0"
-    #run "prepare_docker_images ${NODES[0]}-0" "$LONG"
+    run "prepare_director_images ${NODES[0]}-0" "$LONG"
+    run "prepare_docker_images ${NODES[0]}-0" "$LONG"
     run "overcloud_predeploy ${NODES[0]}-0" "$LONG"
     echo -e "Finished deployment preperations after $(time_diff $(( $(date +%s) - START)))\n"
 }

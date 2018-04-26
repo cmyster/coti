@@ -5,11 +5,15 @@ clean_vms ()
 
     remove_vm ()
     {
-        IMG=$(virsh dumpxml "$1" | grep "source file" | tr "'" " " | awk '{print $3}')
         echo Removing "$1"
         virsh destroy "$1" &> /dev/null
+
+        for img in $(virsh dumpxml "$1" | grep "source file" | tr "'" " " | awk '{print $3}')
+        do
+            rm -rf $img 
+        done
+
         try virsh undefine "$1" &> /dev/null || failure
-        rm -rf "$IMG"
     }
 
     if [ $# -gt 0 ]

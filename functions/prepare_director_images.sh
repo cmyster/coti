@@ -2,6 +2,7 @@ prepare_director_images ()
 {
     HOST=$1
     cat > director_images <<EOF
+set -e
 cd /home/stack
 source stackrc
 rm -rf images
@@ -22,6 +23,7 @@ cd /home/stack
 mv images/* .
 rm -rf images
 openstack overcloud image upload
+rm -rf ironic-python-agent* overcloud-full*
 EOF
 
     run_script_file director_images stack "$HOST" /home/stack

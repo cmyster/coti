@@ -65,10 +65,4 @@ EOF
     then
         sed -i '/rm/d' /root/.bashrc
     fi
-    
-    # aliasing for quicker ssh to undercloud-0
-    if ! grep "ssh unedrcloud" /root/.bashrc
-    then
-        echo alias uc='ssh unedrcloud-0' >> /root/.bashrc
-    fi
 }

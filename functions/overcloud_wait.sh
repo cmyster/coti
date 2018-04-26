@@ -5,6 +5,7 @@ overcloud_wait ()
     STACK=overcloud
     cat > wait <<EOF
 #!/bin/bash
+cd /home/stack
 source stackrc
 INIT_TIMER=500
 MASTER_TIMER=20000

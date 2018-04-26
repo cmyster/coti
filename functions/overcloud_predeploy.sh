@@ -1,6 +1,11 @@
 overcloud_predeploy ()
 {
     HOST=$1
+    if [ ! -r ctlplane-addr ]                                                 
+    then                                                                      
+        echo "Default ctlplane IP was not saved."                             
+        raise "${FUNCNAME[0]}"                                                
+    fi 
 
     cat > predeploy <<EOF
 set -e
@@ -8,9 +13,7 @@ cd /home/stack/
 source stackrc
 
 # Setting the EC2Meta property.
-BR_NAME="br-ctlplane"
-ip a | grep -A10 ": br-ctlplane:" | grep "inet " | awk '{print \$2}' | cut -d "/" -f 1 | sort | uniq > /home/stack/ctlplane-addr
-BR_IP=\$(head -n 1 /home/stack/ctlplane-addr)
+BR_IP=$(head -n 1 ctlplane-addr)
 sed -i "s/FINDEC2/\$BR_IP/g" ./templates/overrides.yaml
 
 # Adding the default DNS to the default subnet.

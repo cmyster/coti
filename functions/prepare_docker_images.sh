@@ -2,23 +2,23 @@ prepare_docker_images ()
 {
     HOST=$1
 
-    if [ ! -r puddle_dir_path ]
+    if [ ! -r ctlplane-addr ]
     then
-        echo "Default puddle path URL was not saved."
+        echo "Default ctlplane IP was not saved."
         raise "${FUNCNAME[0]}"
     fi
 
     PUDDLE=$(cat puddle)
 
-    echo "Running pre-overcloud deploy workarounds."
+    echo "Generating conatiner yamls and uploading images to local registry."
     cat > prepare_docker_images <<EOF
 set -e
+cd /home/stack
 BR_NAME="br-ctlplane"
 REGISTRIES="--insecure-registry docker-registry.engineering.redhat.com"
-/sbin/ip a | grep -A10 ": br-ctlplane:" | grep "inet " | awk '{print \$2}' | cut -d "/" -f 1 | sort | uniq > /home/stack/ctlplane-addr
-MAIN_ADDR=\$(head -n 1 /home/stack/ctlplane-addr)
+MAIN_ADDR=$(head -n 1 ctlplane-addr)
 
-for address in \$(cat /home/stack/ctlplane-addr)
+for address in $(cat ctlplane-addr)
 do
     REGISTRIES="\$REGISTRIES --insecure-registry \${address}:8787"
 done

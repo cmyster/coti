@@ -23,11 +23,11 @@ case "$1" in
         CLEAN=true ;;
     host)
         HOST_PREP=true ;;
-    uc)
+    uc-inst)
         UC_INSTALL=true ;;
-    op)
+    oc-prep)
         OC_PREP=true ;;
-    oc)
+    oc-depl)
         OC_DEPLOY=true ;;
     test)
         RUN_TESTS=true ;;
@@ -40,7 +40,6 @@ case "$1" in
         OC_PREP=true
         OC_DEPLOY=true
         RUN_TESTS=true
-        BCK_RES=true
         ;;
     *)
         echo -ne "$HELP" && exit 0 ;;

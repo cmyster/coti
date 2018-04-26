@@ -20,6 +20,7 @@ if [ -r files.tar ]
 then
     tar xf files.tar
     rpm -Uvh *rpm --nodeps | tee -a \$LOG_FILE
+    rm -rf *rpm
 fi
 
 rm -rf /etc/yum.repos.d/* /var/cache/yum/*
@@ -145,6 +146,7 @@ useradd stack | tee -a \$LOG_FILE
 echo stack | passwd stack --stdin
 echo "stack ALL=(root) NOPASSWD:ALL" > /etc/sudoers.d/stack
 chmod 0440 /etc/sudoers.d/stack
+rm -rf /root/files.tar
 
 echo "Shutting down now." | tee -a \$LOG_FILE
 shutdown -hP -t 0 now | tee -a \$LOG_FILE

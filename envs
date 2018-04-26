@@ -9,7 +9,5 @@
     -e /home/stack/templates/swap_env.yaml \
     -e /home/stack/templates/node_scale.yaml \
     -e /home/stack/templates/ceph.yaml \
-    -e /home/stack/templates/container_images.yaml \
+    -e /home/stack/templates/docker_images.yaml \
     -e /home/stack/templates/overrides.yaml \
-
-

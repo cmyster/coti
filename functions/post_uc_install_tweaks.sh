@@ -26,6 +26,8 @@ set -e
 cd /home/stack/
 source stackrc
 
+sudo yum install -y ceph-ansible
+
 BR_NAME="br-ctlplane"
 BR_IP=\$(/usr/sbin/ifconfig \$BR_NAME | grep "inet " | awk '{print \$2}')
 echo "\$BR_NAME ip is \$BR_IP"

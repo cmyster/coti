@@ -2,6 +2,8 @@ define_flavors ()
 {
     HOST=$1
     SCRIPT="define_flavors" 
+    echo "cd /home/stack" >> $SCRIPT
+    echo "source stackrc" >> $SCRIPT
 
     for inv in $(ls ./*0.inv | grep -v -i under)
     do

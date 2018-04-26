@@ -3,6 +3,7 @@ prepare_director_images ()
     HOST=$1
     cat > director_images <<EOF
 cd /home/stack
+source stackrc
 rm -rf images
 mkdir images
 cd images
@@ -13,7 +14,7 @@ rpm2cpio rhosp-director-images-${OS_VER}-ipa-latest.rpm | cpio -idmv
 mv usr/share/rhosp-director-images/*.tar .
 rm -rf usr *.rpm
 for tarball in \$(/usr/bin/ls)
-    do
+do
     tar xf "\$tarball" || exit 1
 done
 rm -rf *.tar

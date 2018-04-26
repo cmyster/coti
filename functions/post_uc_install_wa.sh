@@ -21,18 +21,7 @@ post_uc_install_wa ()
 
     cat > post_uc_install_wa <<EOF
 ### Workrounds go here
-# Workaround for https://bugzilla.redhat.com/show_bug.cgi?id=1448482"
-sudo sed -i 's/::Compute::/::/' /usr/share/openstack-tripleo-heat-templates/environments/docker.yaml
-echo "setenforce permissive" | sudo tee -a /usr/share/openstack-tripleo-heat-templates/docker/firstboot/setup_docker_host.sh
-
-# Adding the correct docker registries and IPs
-BR_NAME="br-ctlplane"
-BR_IP=\$(/usr/sbin/ifconfig \$BR_NAME | grep "inet " | awk '{print \$2}')
-sudo sed -i '/INSECURE_REGISTRY/d' /etc/sysconfig/docker
-echo "INSECURE_REGISTRY=--insecure-registry ${DEFAULT_GATEWAY}:8787 --insecure-registry ${BR_IP}:8787 --insecure-registry docker-registry.engineering.redhat.com:8787" | sudo tee -a /etc/sysconfig/docker
-sudo systemctl stop docker
-sudo systemctl start docker
-
+exit 0
 ### End of workarounds
 EOF
 

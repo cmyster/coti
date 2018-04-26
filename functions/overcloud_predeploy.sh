@@ -9,15 +9,13 @@ source stackrc
 
 # Setting the EC2Meta property.
 BR_NAME="br-ctlplane"
-BR_IP=\$(/usr/sbin/ifconfig \$BR_NAME | grep "inet " | awk '{print \$2}')
+ip a | grep -A10 ": br-ctlplane:" | grep "inet " | awk '{print \$2}' | cut -d "/" -f 1 | sort | uniq > /home/stack/ctlplane-addr
+BR_IP=\$(head -n 1 /home/stack/ctlplane-addr)
 sed -i "s/FINDEC2/\$BR_IP/g" ./templates/overrides.yaml
 
 # Adding the default DNS to the default subnet.
 SUBNET=\$(openstack subnet list -f value -c Name -c ID | grep ctlplane | cut -d " " -f 1)
 openstack subnet set \$SUBNET --dns-nameserver $DNS
-
-# Importing json file.
-openstack overcloud node import --instance-boot-option=local instackenv.json
 
 # Updating capabilities to each node.
 for node in \$(openstack baremetal node list -f value -c UUID -c Name | grep -i control | cut -d " " -f 1)

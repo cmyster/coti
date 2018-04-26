@@ -8,25 +8,53 @@ prepare_docker_images ()
         raise "${FUNCNAME[0]}"
     fi
 
-    URL=$(cat puddle_dir_path)
-    if [ -z "$URL" ]
-    then
-        echo "Default puddle path URL was not set."
-        raise "${FUNCNAME[0]}"
-    fi
-
     PUDDLE=$(cat puddle)
 
     echo "Running pre-overcloud deploy workarounds."
     cat > prepare_docker_images <<EOF
 set -e
-cd /home/stack/templates
-wget $URL/latest_containers/container_images.yaml
+BR_NAME="br-ctlplane"
+REGISTRIES="--insecure-registry docker-registry.engineering.redhat.com"
+/sbin/ip a | grep -A10 ": br-ctlplane:" | grep "inet " | awk '{print \$2}' | cut -d "/" -f 1 | sort | uniq > /home/stack/ctlplane-addr
+MAIN_ADDR=\$(head -n 1 /home/stack/ctlplane-addr)
+
+for address in \$(cat /home/stack/ctlplane-addr)
+do
+    REGISTRIES="\$REGISTRIES --insecure-registry \${address}:8787"
+done
+
+sudo sed -i '/INSECURE_REGISTRY/d' /etc/sysconfig/docker
+echo "INSECURE_REGISTRY=\$REGISTRIES" | sudo tee -a /etc/sysconfig/docker
+sudo systemctl stop docker
+sudo systemctl start docker
 cd /home/stack
 source stackrc
-openstack overcloud container image upload --verbose --config-file container_images.yaml
-openstack overcloud container image prepare --namespace=docker-registry.engineering.redhat.com/rhosp${OS_VER} --env-file=rhos${OS_VER}.yaml --prefix=openstack- --suffix=-docker --tag=$PUDDLE
+
+openstack overcloud container image prepare \\
+    --namespace docker-registry.engineering.redhat.com/rhosp${OS_VER} \\
+    --tag-from-label {version}-{release} \\
+    --prefix openstack \\
+    --set ceph_namespace=registry.access.redhat.com/rhceph \\
+    --set ceph_image=rhceph-3-rhel7 \\
+    --set ceph_tag=latest \\
+    --push-destination \${MAIN_ADDR}:8787 \\
+    --output-images-file /home/stack/container_images.yaml \\
+    --output-env-file /home/stack/templates/docker_images.yaml
+
+sudo openstack overcloud container image upload --verbose --config-file /home/stack/container_images.yaml
+
+openstack overcloud container image prepare \\
+    --namespace=\${MAIN_ADDR}:8787/rhosp${OS_VER} \\
+    --env-file=/home/stack/templates/docker_images.yaml \\
+    --prefix=openstack- \\
+    --tag=$PUDDLE \\
+    --set ceph_namespace=\${MAIN_ADDR}:8787 \\
+    --set ceph_image=rhceph \\
+    --set ceph_tag=3-6 \\
 EOF
 
+    cat $CWD/envs >> prepare_docker_images
+    echo "" >> prepare_docker_images
+    echo "" >> prepare_docker_images
     run_script_file prepare_docker_images stack "$HOST" /home/stack                  
 }

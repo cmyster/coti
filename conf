@@ -12,25 +12,26 @@ the script itself (end of it) suits your needs.
 There is no reason to think it will work outside the internal network.
 
 Parameters:
- -h, --help: Print this message.
-    --clean: Cleans the system of _any_ virtual resource.
-       --hp: Host preparation, making sure the host and resources are ready.
-       --uc: Install the unercloud.
-       --op: Overcloud preperations.
-       --oc: Overcloud deployment.
-      --bnr: Backup and restore, this will backup the undercloud machine and
-             restore onto a new undercloud. It needs a running deployment.
-     --test: Run tests on a deployment.
-     --full: All of the above minus backup and restore.
+   -h, --help: Print this message.
+   clean: Cleans the system of _any_ virtual resource.
+   host:  Host preparation, making sure the host and resources are ready.
+   uc:    Install the unercloud.
+   op:    Overcloud preperations.
+   oc:    Overcloud deployment.
+   bnr:   Backup and restore, this will backup the undercloud machine and
+          restore onto a new undercloud. It needs a running deployment.
+   test:  Run tests on a deployment.
+   full:  All of the above minus backup and restore.
 
 For a full run:
-    ./run --hp
-    ./run --uc
-    ./run --op
-    ./run --oc
-    ./run --bnr
-    ./run --test
-Or  ./run --full
+    ./run clean
+    ./run host
+    ./run uc
+    ./run op
+    ./run oc
+    ./run bnr
+    ./run test
+Or  ./run full
 
 You can also run the script with run time parameters, for instace:
     OS_VER=12 ./run --full
@@ -209,11 +210,11 @@ DHCP_OUT_END=250
 # undercloud nodes
 undercloud_NAM=${undercloud_NAM:-"undercloud"}
 undercloud_NUM=${undercloud_NUM:-1}
-undercloud_RAM=${undercloud_RAM:-32768}
+undercloud_RAM=${undercloud_RAM:-16384}
 undercloud_SWP=${undercloud_SWP:-1024}
-undercloud_CPU=${undercloud_CPU:-6}
+undercloud_CPU=${undercloud_CPU:-4}
 undercloud_DUM=${undercloud_DUM:-0}
-undercloud_DSK=${undercloud_DSK:-100}
+undercloud_DSK=${undercloud_DSK:-32}
 
 # controller nodes
 controller_NAM=${controller_NAM:-"control"}

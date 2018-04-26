@@ -1,6 +1,5 @@
 define_nodes ()
 {
-    set -x
     echo "Creating a definition file for each node."
     cp "$CWD"/vm-body "$WORK_DIR"
 
@@ -19,7 +18,7 @@ define_nodes ()
 
         if [ $TOT -gt 0 ]
         then
-            if [[ "$OSD" != "0" ]]
+            if [ ! -z "$OSD" ]
             then
                 USE_OSD="OSD=$OSD"
             else
@@ -37,14 +36,12 @@ define_nodes ()
                     echo "memory=$RAM"
                     echo "disk=$DSK"
                     echo "pm_port=$VBMCP"
-                    echo "$USE_OSD"
                     echo "uuid=$uuid"
+                    echo "$USE_OSD"
                 } >> "$INV"
                 echo "<domain type='kvm' id='$VM_ID'>" > "${NODES[$index]}"-${i}.xml
                 VM_ID=$(( VM_ID + 1 ))
                 VBMCP=$(( VBMCP + 1 ))
-                exit 1
-
                 cat >> "${NODES[$index]}"-${i}.xml <<EOF
   <name>${NODES[$index]}-$i</name>
   <uuid>$uuid</uuid>

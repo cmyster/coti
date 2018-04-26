@@ -33,7 +33,7 @@ source stackrc
 openstack overcloud container image prepare \\
     --namespace docker-registry.engineering.redhat.com/rhosp${OS_VER} \\
     --tag-from-label {version}-{release} \\
-    --prefix openstack \\
+    --prefix openstack- \\
     --set ceph_namespace=registry.access.redhat.com/rhceph \\
     --set ceph_image=rhceph-3-rhel7 \\
     --set ceph_tag=latest \\

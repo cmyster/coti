@@ -30,11 +30,12 @@ source stackrc
 sudo yum install -y ceph-ansible
 
 # Saving the IPs set for br-ctlplane and docker0.
-sudo /usr/sbin/ip a | grep -A10 "br-ctlplane:" | grep "inet " | awk '{print \$2}' | cut -d "/" -f 1 | sort > ctlplane-addr
-sudo /usr/sbin/ip a | grep -A4 "docker0:" | grep "inet " | awk '{print \$2}' | cut -d "/" -f 1 | sort > docker0-addr
-
-BR_IP=\$(head -n 1 ctlplane-addr)
-DK_IP=\$(head -n 1 docker0-addr)
+sudo rm -rf ctlplane-addr docker0-addr
+sudo /usr/sbin/ip a | grep -A10 "br-ctlplane:" | grep "inet " | awk '{print \$2}' | cut -d "/" -f 1 | sort | tr "\\n" " "  > ctlplane-addr
+sudo /usr/sbin/ip a | grep -A4 "docker0:" | grep "inet " | awk '{print \$2}' | cut -d "/" -f 1 | sort | tr "\\n" " " > docker0-addr
+sudo chown stack:stack ctlplane-addr docker0-addr
+BR_IP=\$(cut -d " " -f 1 ctlplane-addr)
+DK_IP=\$(cut -d " " -f 1 docker0-addr)
 
 if [ -z $DEFAULT_GATEWAY ]; then exit 1; fi
 
@@ -51,7 +52,10 @@ do
 done
 
 # Instead of any internal IP, https will listen with the host's FQDN.
-sed -E "s/$CODED_IP/$(hostnamectl --static)/" -i /var/www/openstack-tripleo-ui/dist/tripleo_ui_config.js
+if ! grep $(hostnamectl --static) /var/www/openstack-tripleo-ui/dist/tripleo_ui_config.js
+then
+    sed -E "s/$CODED_IP/$(hostnamectl --static)/" -i /var/www/openstack-tripleo-ui/dist/tripleo_ui_config.js
+fi
 systemctl stop httpd
 systemctl start httpd
 EOF

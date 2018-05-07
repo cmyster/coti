@@ -119,6 +119,12 @@ PKG_CUST="yum -q -y"
 # Installing Telemetry, its false by default.
 USE_TELEMETRY=true
 
+# RHOS docker registry
+RHOS_REG="docker-registry.engineering.redhat.com"
+
+# CEPH docker registry
+CEPH_REG="brew-pulp-docker01.web.prod.ext.phx2.redhat.com:8888"
+
 ###   File server location.   
 ###   This is were the script gets stuff like guest images,
 ###   and also where it keeps modified ones.

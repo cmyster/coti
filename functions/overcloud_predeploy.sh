@@ -13,7 +13,7 @@ cd /home/stack/
 source stackrc
 
 # Setting the EC2Meta property.
-BR_IP=$(head -n 1 ctlplane-addr)
+BR_IP=$(cut -d " " -f 1 ctlplane-addr)
 sed -i "s/FINDEC2/\$BR_IP/g" ./templates/overrides.yaml
 
 # Adding the default DNS to the default subnet.

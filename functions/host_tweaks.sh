@@ -61,8 +61,17 @@ EOF
     fi
 
     # Removing rm -i from bashrc.
-    if grep rm /root/.bashrc
+    for c in "rm" "cp" "mv"
+    do
+        if grep "alias $c" /root/.bashrc
+        then
+            sed -i "|alias $c|d" /root/.bashrc
+        fi
+    done
+
+    # Aliasig for faster acceess to undercloud-0 as stack.
+    if ! grep "alias uc" /root/.bashrc
     then
-        sed -i '/rm/d' /root/.bashrc
+        echo "alias uc='ssh stack@undercloud-0'"
     fi
 }

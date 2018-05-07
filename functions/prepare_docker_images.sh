@@ -15,8 +15,10 @@ prepare_docker_images ()
 set -e
 cd /home/stack
 BR_NAME="br-ctlplane"
-REGISTRIES="--insecure-registry docker-registry.engineering.redhat.com"
-MAIN_ADDR=$(head -n 1 ctlplane-addr)
+RHOS_REG="--insecure-registry $RHOS_REG"
+CEPH_REG="--insecure-registry $CEPH_REG"
+REGISTRIES="\$RHOS_REG \$CEPH_REG"
+MAIN_ADDR=$(cut -d " " -f 1 ctlplane-addr)
 
 for address in $(cat ctlplane-addr)
 do
@@ -24,7 +26,7 @@ do
 done
 
 sudo sed -i '/INSECURE_REGISTRY/d' /etc/sysconfig/docker
-echo "INSECURE_REGISTRY=\$REGISTRIES" | sudo tee -a /etc/sysconfig/docker
+echo "INSECURE_REGISTRY=\"\$REGISTRIES\"" | sudo tee -a /etc/sysconfig/docker
 sudo systemctl stop docker
 sudo systemctl start docker
 cd /home/stack

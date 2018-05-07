@@ -7,7 +7,7 @@ PROJECT="coti"
 # Help message
 HELP="
 Before running the script, make sure that conf is updated and the steps in
-the script itself (end of it) suits your needs.
+the script itself suits your needs.
 ./run will start its thing and its expecting access to internal resources.
 There is no reason to think it will work outside the internal network.
 
@@ -15,27 +15,28 @@ Parameters:
    -h, --help: Print this message.
    clean:   Cleans the system of _any_ virtual resource.
    host:    Host preparation, making sure the host and resources are ready.
+   uc-prep: Prepares the undercloud machine for undercloud installation.
    uc-inst: Install the unercloud and some tweaks.
+   uc-post: Runs post installation tasks.
    oc-prep: Overcloud preperations (images, containers, flavors etc').
    oc-depl: Overcloud deployment.
+   oc-post: Runs post deployment tasks.
    bnr:     Backup and restore, this will backup the undercloud machine and
             restore onto a new undercloud. It needs a running deployment.
-   test:    Run tests on a deployment.
-   full:    All of the above minus backup and restore.
+   test:    Run tests from the tests folder on a deployment.
+   full:    Aims to deploy a working environment.
 
-For a full run:
+For a full deployment:
     ./run clean
     ./run host
+    ./run uc-prep
     ./run uc-inst
+    ./run uc-post
     ./run oc-prep
     ./run oc-depl
-    ./run bnr
+    ./run oc-post
     ./run test
 Or  ./run full
-
-You can also run the script with run time parameters, for instace:
-    OS_VER=13 ./run --full
-To do a full run on OpenStack 13.
 "
 
 
@@ -211,37 +212,37 @@ DHCP_OUT_END=250
 undercloud_NAM=${undercloud_NAM:-"undercloud"}
 undercloud_NUM=${undercloud_NUM:-1}
 undercloud_RAM=${undercloud_RAM:-16384}
-undercloud_SWP=${undercloud_SWP:-1024}
+undercloud_SWP=${undercloud_SWP:-256}
 undercloud_CPU=${undercloud_CPU:-4}
 undercloud_DUM=${undercloud_DUM:-0}
-undercloud_DSK=${undercloud_DSK:-20}
+undercloud_DSK=${undercloud_DSK:-22}
 
 # controller nodes
 controller_NAM=${controller_NAM:-"control"}
 controller_FLV=${controller_FLV:-"control"}
 controller_NUM=${controller_NUM:-3}
 controller_RAM=${controller_RAM:-16384}
-controller_SWP=${controller_SWP:-1024}
-controller_CPU=${controller_CPU:-4}
+controller_SWP=${controller_SWP:-256}
+controller_CPU=${controller_CPU:-3}
 controller_DUM=${controller_DUM:-0}
-controller_DSK=${controller_DSK:-20}
+controller_DSK=${controller_DSK:-22}
 
 # compute nodes
 compute_NAM=${compute_NAM:-"compute"}
 compute_FLV=${compute_NAM:-"compute"}
 compute_NUM=${compute_NUM:-2}
-compute_RAM=${compute_RAM:-32768}
-compute_SWP=${compute_SWP:-1024}
-compute_CPU=${compute_CPU:-6}
+compute_RAM=${compute_RAM:-12288}
+compute_SWP=${compute_SWP:-256}
+compute_CPU=${compute_CPU:-3}
 compute_DUM=${compute_DUM:-0}
-compute_DSK=${compute_DSK:-32}
+compute_DSK=${compute_DSK:-22}
 
 # ceph nodes
 ceph_NAM=${ceph_NAM:-"ceph"}
 ceph_FLV=${ceph_FLV:-"ceph-storage"}
-ceph_NUM=${ceph_NUM:-3}
-ceph_RAM=${ceph_RAM:-8192}
-ceph_SWP=${ceph_SWP:-1024}
+ceph_NUM=${ceph_NUM:-1}
+ceph_RAM=${ceph_RAM:-4096}
+ceph_SWP=${ceph_SWP:-256}
 ceph_CPU=${ceph_CPU:-2}
 ceph_DUM=${ceph_DUM:-0}
 ceph_DSK=${ceph_DSK:-18}

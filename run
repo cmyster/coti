@@ -3,13 +3,16 @@
 # conf file is where everything else is defined.
 source conf
 
-# Gathiring run time arguments.
+# Gathering run time arguments.
 CLEAN=false
 HOST_PREP=false
-UC_INSTALL=false                                                       
-OC_PREP=false                                                             
-OC_DEPLOY=false                                                        
-RUN_TESTS=false                                                        
+UC_PREP=false
+UC_INSTALL=false
+UC_POST=false
+OC_PREP=false
+OC_DEPLOY=false
+OC_POST=false
+RUN_TESTS=false
 BCK_RES=false
 
 case "$1" in
@@ -23,12 +26,18 @@ case "$1" in
         CLEAN=true ;;
     host)
         HOST_PREP=true ;;
+    uc-prep)
+        UC_PREP=true ;;
     uc-inst)
         UC_INSTALL=true ;;
+    uc-post)
+        UC_POST=true ;;
     oc-prep)
         OC_PREP=true ;;
     oc-depl)
         OC_DEPLOY=true ;;
+    oc-post)
+        OC_POST=true ;;
     test)
         RUN_TESTS=true ;;
     bnr)
@@ -36,9 +45,12 @@ case "$1" in
     full)
         CLEAN=true
         HOST_PREP=true
+        UC_PREP=true
         UC_INSTALL=true
+        UC_POST=true
         OC_PREP=true
         OC_DEPLOY=true
+        OC_POST=true
         RUN_TESTS=true
         ;;
     *)
@@ -94,7 +106,7 @@ host_preprerations ()
     run fix_host_ssh
     run fix_virt_access
     run fix_host_kvm
-    echo -e "Prepared host after $(time_diff $(( $(date +%s) - START)))\n"
+    echo -e "Host prepared in $(time_diff $(( $(date +%s) - START)))\n"
 }
 
 virt_setup ()
@@ -102,7 +114,7 @@ virt_setup ()
     # Re-creating virtual resources.
     run restart_libvirt
     run create_vnet
-    echo -e "Cleaned old resources after $(time_diff $(( $(date +%s) - START)))\n"
+    echo -e "Cleaned old resources in $(time_diff $(( $(date +%s) - START)))\n"
 }
 
 create_installation_images ()
@@ -119,7 +131,7 @@ create_installation_images ()
         run "clean_vms proto"
         run package_puddle_image
         run upload_puddle_image
-        echo -e "Created installation images after $(time_diff $(( $(date +%s) - START)))\n"
+        echo -e "Created installation images in $(time_diff $(( $(date +%s) - START)))\n"
     fi
 }
 
@@ -130,21 +142,33 @@ create_virtual_environment ()
     run create_node_images
     run define_nodes
     run "undercloud_firstboot ${NODES[0]}-0"
-    echo -e "Creates virtual environment after $(time_diff $(( $(date +%s) - START)))\n"
+    echo -e "Created virtual environment in $(time_diff $(( $(date +%s) - START)))\n"
 }
 
-install_main_undercloud ()
+prepare_main_undercloud ()
 {
-    # Installing the main Undercloud machine.
+    # Preparing the main Undercloud machine.
     run "vm_power ${NODES[0]}-0 start" "$LONG"
     run "undercloud_wait ${NODES[0]}-0" "$LONG"
     run "undercloud_ssh_access ${NODES[0]}-0 root $ROOT_PASS"
     run "undercloud_ssh_access ${NODES[0]}-0 stack stack"
     run "pre_uc_install_wa ${NODES[0]}-0"
+    echo -e "Undercloud preparations finished in $(time_diff $(( $(date +%s) - START)))\n"
+}
+
+install_main_undercloud ()
+{
+    # Installing the main Undercloud machine.
     run "undercloud_install ${NODES[0]}-0" "$LONG"
+    echo -e "Undercloud installed in $(time_diff $(( $(date +%s) - START)))\n"
+}
+
+post_install_main_undercloud ()
+{
+    # Installing the main Undercloud machine.
     run "post_uc_install_wa ${NODES[0]}-0"
     run "post_uc_install_tweaks ${NODES[0]}-0"
-    echo -e "Undercloud installed after $(time_diff $(( $(date +%s) - START)))\n"
+    echo -e "Undercloud post installation tasks finished in $(time_diff $(( $(date +%s) - START)))\n"
 }
 
 predeploy_overcloud ()
@@ -158,7 +182,7 @@ predeploy_overcloud ()
     run "create_json ${NODES[0]}-0"
     run "prepare_docker_images ${NODES[0]}-0" "$LONG"
     run "overcloud_predeploy ${NODES[0]}-0" "$LONG"
-    echo -e "Finished deployment preperations after $(time_diff $(( $(date +%s) - START)))\n"
+    echo -e "Finished deployment preperations in $(time_diff $(( $(date +%s) - START)))\n"
 }
 
 deploy_overcloud ()
@@ -167,9 +191,15 @@ deploy_overcloud ()
     run "pre_oc_deploy_wa ${NODES[0]}-0"
     run "overcloud_deploy ${NODES[0]}-0"
     run "overcloud_wait ${NODES[0]}-0" "$LONG"
+    echo -e "Overcloud deployed in $(time_diff $(( $(date +%s) - START)))\n"
+}
+
+post_deploy_overcloud ()
+{
+    # Running post deploy tasks.
     run "post_oc_deploy_wa ${NODES[0]}-0"
     run "populate_hosts ${NODES[0]}-0"
-    echo -e "Overcloud deployed after $(time_diff $(( $(date +%s) - START)))\n"
+    echo -e "Overcloud post deploy tasks finished in $(time_diff $(( $(date +%s) - START)))\n"
 }
 
 undercloud_backup ()
@@ -177,7 +207,7 @@ undercloud_backup ()
     # Backup the main Undercloud machine.
     run "backup_undercloud ${NODES[0]}-0"
     run "vm_power ${NODES[0]}-0 stop"
-    echo -e "Undercloud backed up after $(time_diff $(( $(date +%s) - START)))\n"
+    echo -e "Undercloud backed up in $(time_diff $(( $(date +%s) - START)))\n"
 }
 
 undercloud_restore ()
@@ -192,7 +222,7 @@ undercloud_restore ()
     run "restore_undercloud ${NODES[0]}-1"
     run "undercloud_install ${NODES[0]}-1" "$LONG"
     run "populate_hosts ${NODES[0]}-1"
-    echo -e "Undercloud restored after $(time_diff $(( $(date +%s) - START)))\n"
+    echo -e "Undercloud restored in $(time_diff $(( $(date +%s) - START)))\n"
 }
 
 run_automation ()
@@ -211,9 +241,12 @@ then
     create_virtual_environment
 fi
 
+if $UC_PREP; then prepare_main_undercloud; fi
 if $UC_INSTALL; then install_main_undercloud; fi
+if $UC_POST; then post_install_main_undercloud; fi
 if $OC_PREP; then predeploy_overcloud; fi
 if $OC_DEPLOY; then deploy_overcloud; fi
+if $OC_POST; then post_deploy_overcloud; fi
 
 if $BCK_RES
 then

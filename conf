@@ -92,7 +92,7 @@ UPDATE_IMAGE=true
 
 # Is the Overcloud deployeds via UI? If so you want to stop this script after
 # the overcloud pre-deploy stage and skip introspection.
-VIA_UI=false
+VIA_UI=true
 
 # DNS to be used.
 # The default here is to use the host's configuration.

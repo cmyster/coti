@@ -60,17 +60,13 @@ highlight ColorColumn ctermbg=0
 EOF
     fi
 
-    # Removing rm -i from bashrc.
-    for c in "rm" "cp" "mv"
-    do
-        if grep "alias $c" /root/.bashrc
-        then
-            sed -i "|alias $c|d" /root/.bashrc
-        fi
-    done
+    # Removing -i from bashrc.
+    sed -i '/alias cp/d' /root/.bashrc &> /dev/null
+    sed -i '/alias mv/d' /root/.bashrc &> /dev/null
+    sed -i '/alias rm/d' /root/.bashrc &> /dev/null
 
     # Aliasig for faster acceess to undercloud-0 as stack.
-    if ! grep "alias uc" /root/.bashrc
+    if ! grep "alias uc" /root/.bashrc &> /dev/null
     then
         echo "alias uc='ssh stack@undercloud-0'"
     fi

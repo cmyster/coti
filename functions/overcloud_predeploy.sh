@@ -18,7 +18,8 @@ sed -i "s/FINDEC2/\$BR_IP/g" ./templates/overrides.yaml
 
 # Adding the default DNS to the default subnet.
 SUBNET=\$(openstack subnet list -f value -c Name -c ID | grep ctlplane | cut -d " " -f 1)
-openstack subnet set \$SUBNET --dns-nameserver $DNS
+openstack subnet set --no-dns-nameservers \$SUBNET
+openstack subnet set --dns-nameserver $DNS \$SUBNET
 
 # Updating capabilities to each node.
 for node in \$(openstack baremetal node list -f value -c UUID -c Name | grep -i control | cut -d " " -f 1)

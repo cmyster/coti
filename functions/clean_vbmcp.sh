@@ -18,6 +18,6 @@ clean_vbmcp()
 
     echo "Restarting Virtual BMC service."
     try systemctl stop virtualbmc || failure
-    pgrep vbmc | xargs kill
+    pgrep vbmc | xargs kill 2> /dev/null
     try systemctl start virtualbmc || failure
 }

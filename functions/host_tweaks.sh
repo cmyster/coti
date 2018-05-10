@@ -70,4 +70,12 @@ EOF
     then
         echo "alias uc='ssh stack@undercloud-0'"
     fi
+
+    # Opening all ports.
+    systemctl disable firewalld                                                   
+    systemctl stop firewalld                                                      
+    iptables -F                                                                   
+    iptables -P INPUT ACCEPT
+    systemctl stop libvirtd
+    systemctl start libvirtd
 }

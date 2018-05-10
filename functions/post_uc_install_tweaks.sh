@@ -62,12 +62,6 @@ EOF
 
 run_script_file post_uc_install_tweaks root "$HOST" /home/stack
 
-# Opening all connections.
-systemctl disable firewalld
-systemctl stop firewalld
-iptables -F
-iptables -P INPUT ACCEPT
-
 # Finally, start a screen with an ssh tunnel to run in the background.
 try screen -d -m ssh undercloud-0 -L 0.0.0.0:443:"$CODED_IP":443 || failure
 

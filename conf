@@ -51,7 +51,7 @@ CWD=$(pwd)
 THT="/usr/share/openstack-tripleo-heat-templates"
 
 # Shortcut to libvirt's image folder.
-VIRT_IMG="/home/libvirt/images"
+VIRT_IMG="/var/lib/libvirt/images"
 
 # Log file
 BASE_LOG_FILE=${BASE_LOG_FILE:-"$(pwd)/logs/$PROJECT-$(date +%H%M%S)"}
@@ -213,6 +213,7 @@ DHCP_OUT_END=250
 # DUM - Extra (Dummy) nodes of the same type.
 # DSK - Size of disk in GB. Nodes can work with 12, Undercloud might need 22. 
 # OSD - Ceph specific, this is the size for the Ceph OSD.
+# OHA - OSD High Availability, how many OSDs per node. Total minimal OSDs is 5.
 
 # undercloud nodes
 undercloud_NAM=${undercloud_NAM:-"undercloud"}
@@ -247,11 +248,12 @@ compute_DSK=${compute_DSK:-22}
 ceph_NAM=${ceph_NAM:-"ceph"}
 ceph_FLV=${ceph_FLV:-"ceph-storage"}
 ceph_NUM=${ceph_NUM:-1}
-ceph_RAM=${ceph_RAM:-4096}
+ceph_RAM=${ceph_RAM:-8192}
 ceph_SWP=${ceph_SWP:-256}
-ceph_CPU=${ceph_CPU:-2}
+ceph_CPU=${ceph_CPU:-6}
 ceph_DUM=${ceph_DUM:-0}
-ceph_DSK=${ceph_DSK:-18}
-ceph_OSD=${ceph_OSD:-18}
+ceph_DSK=${ceph_DSK:-16}
+ceph_OSD=${ceph_OSD:-12}
+ceph_OHA=${ceph_OHA:-5}
 
 TOT_NODES=$(( controller_NUM + compute_NUM + ceph_NUM ))

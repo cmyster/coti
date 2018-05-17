@@ -6,6 +6,8 @@ define_nodes ()
     VM_ID=1
     VBMCP=6320
 
+    LETTER=( "b" "c" "d" "e" "f" "g" "h" "i" "j" "k" "l" "m" "n" "o" "p" "q" "r" "s" "t" "u" "v" "w" "x" "y" "z" )
+
     for (( index=0; index<${#NODES[@]}; index++ ))
     do
         eval NUM="\$${NODES[$index]}"_NUM
@@ -15,6 +17,7 @@ define_nodes ()
         eval CPU="\$${NODES[$index]}"_CPU
         eval DSK="\$${NODES[$index]}"_DSK
         eval OSD="\$${NODES[$index]}"_OSD
+        eval OHA="\$${NODES[$index]}"_OHA
 
         if [ $TOT -gt 0 ]
         then
@@ -55,7 +58,7 @@ EOF
 
                 cat vm-body >> "${NODES[$index]}"-${i}.xml
 
-                # in case of ceph there are two disks
+                # in case of ceph there are more disks
                 if [[ "${NODES[$index]}" == "ceph" ]]
                 then
                     cat >> "${NODES[$index]}"-${i}.xml <<EOF
@@ -66,14 +69,17 @@ EOF
       <address type='pci' domain='0x0000' bus='0x01' slot='0x01' function='0x0'/>
     </disk>
 EOF
-                    cat >> "${NODES[$index]}"-${i}.xml <<EOF
+                    for ha in $(seq 0 $(( OHA - 1 )))
+                    do
+                        cat >> "${NODES[$index]}"-${i}.xml <<EOF
     <disk type='file' device='disk'>
       <driver name='qemu' type='raw' cache='none' io='native'/>
-      <source file='$VIRT_IMG/${NODES[$index]}-${i}_osd.raw'/>
-      <target dev='vdb' bus='virtio'/>
-      <address type='pci' domain='0x0000' bus='0x01' slot='0x02' function='0x0'/>
+      <source file='$VIRT_IMG/${NODES[$index]}-${i}_osd${ha}.raw'/>
+      <target dev='vd${LETTER[$ha]}' bus='virtio'/>
+      <address type='pci' domain='0x0000' bus='0x03' slot='0x0$(( ha + 1 ))' function='0x0'/>
     </disk>
 EOF
+                    done
                 else
                     cat >> "${NODES[$index]}"-${i}.xml <<EOF
     <disk type='file' device='disk'>
@@ -95,7 +101,7 @@ EOF
       <mac address='$mac'/>
       <source network='$vnet'/>
       <model type='virtio'/>
-      <address type='pci' domain='0x0000' bus='0x02' slot='0x0$n' function='0x0'/>
+      <address type='pci' domain='0x0000' bus='0x04' slot='0x0$n' function='0x0'/>
     </interface>
 EOF
                     n=$(( n + 1 ))
@@ -110,7 +116,7 @@ EOF
       <mac address='$mac'/>
       <source network='default'/>
       <model type='virtio'/>
-      <address type='pci' domain='0x0000' bus='0x03' slot='0x01' function='0x0'/>
+      <address type='pci' domain='0x0000' bus='0x05' slot='0x01' function='0x0'/>
     </interface>
 EOF
                 fi

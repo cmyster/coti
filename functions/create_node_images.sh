@@ -7,6 +7,8 @@ create_node_images ()
         eval NUM="\$${NODES[$index]}"_NUM
         eval DUM="\$${NODES[$index]}"_DUM
         eval OSD="\$${NODES[$index]}"_OSD
+        eval OHA="\$${NODES[$index]}"_OHA
+
         TOT=$(( NUM + DUM ))
 
         if [ $TOT -gt 0 ]
@@ -15,11 +17,18 @@ create_node_images ()
             case "${NODES[$index]}" in
             ceph)
                 try qemu-img create -f raw "${NODES[$index]}".raw "${DSK}"G || failure
-                try qemu-img create -f raw "${NODES[$index]}"_osd.raw "${OSD}"G || failure
+                for ha in $(seq 0 $(( OHA - 1 )))
+                do
+                    try qemu-img create -f raw "${NODES[$index]}"_osd${ha}.raw "${OSD}"G || failure
+                done
                 for num in $(seq 0 $(( TOT - 1 )))
                 do
                     cp "${NODES[$index]}".raw "$VIRT_IMG/${NODES[$index]}-${num}".raw
-                    cp "${NODES[$index]}"_osd.raw "$VIRT_IMG/${NODES[$index]}-${num}"_osd.raw
+
+                    for ha in $(seq 0 $(( OHA - 1 )))
+                    do
+                        cp "${NODES[$index]}"_osd${ha}.raw "$VIRT_IMG/${NODES[$index]}-${num}"_osd${ha}.raw
+                    done
                 done
                 ;;
             undercloud)

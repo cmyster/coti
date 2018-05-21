@@ -41,13 +41,13 @@ openstack overcloud container image prepare \\
     --set ceph_tag=latest \\
     --push-destination \${MAIN_ADDR}:8787 \\
     --output-images-file /home/stack/container_images.yaml \\
-    --output-env-file /home/stack/templates/docker_images.yaml
+    --output-env-file /home/stack/environments/containers-default-parameters.yaml
 
 sudo openstack overcloud container image upload --verbose --config-file /home/stack/container_images.yaml
 
 openstack overcloud container image prepare \\
     --namespace=\${MAIN_ADDR}:8787/rhosp${OS_VER} \\
-    --env-file=/home/stack/templates/docker_images.yaml \\
+    --env-file=/home/stack/environments/containers-default-parameters.yaml \\
     --prefix=openstack- \\
     --tag=$PUDDLE \\
     --set ceph_namespace=\${MAIN_ADDR}:8787 \\

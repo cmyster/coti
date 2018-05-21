@@ -18,7 +18,7 @@ overcloud_deploy ()
 
     # Fixing name inconsistency. 
     sed -i 's/ControlCount/ControllerCount/g' node_scale.yaml
-    scp node_scale.yaml stack@"$HOST":/home/stack/templates/
+    scp node_scale.yaml stack@"$HOST":/home/stack/environments/
 
     echo "Running the overcloud deployment."
     cat > deploy <<EOF

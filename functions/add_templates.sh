@@ -1,4 +1,4 @@
-add_environments ()
+add_templates ()
 {
     RR_CMD=$(cat rr_cmd)
     HOST=$1
@@ -9,7 +9,7 @@ add_environments ()
     for (( index=1; index<${#NODES[@]}; index++ ))
     do
         eval SWP="\$${NODES[$index]}"_SWP
-        sed -i "s/FINDSWP/$SWP/g" ./environments/"${NODES[$index]}"_swap.yaml
+        sed -i "s/FINDSWP/$SWP/g" ./templates/"${NODES[$index]}"_swap.yaml
     done
 
     # The external network is usually the last one.
@@ -22,7 +22,7 @@ add_environments ()
     sed -i "s|FINDCIDR|${ext_base}.0/24|g" ./environments/overrides.yaml
     sed -i "s|FINDSTRT|${ext_base}.${DHCP_IN_START}|g" ./environments/overrides.yaml
     sed -i "s|FINDEND|${ext_base}.${DHCP_IN_END}|g" ./environments/overrides.yaml
-    sed -i "s|FINDVER|$RR_CMD|g" ./environments/node_tweaks.yaml
+    sed -i "s|FINDVER|$RR_CMD|g" ./templates/node_tweaks.yaml
     sed -i "s|FINDNSRV|${namesrv}|g" ./environments/node_tweaks.yaml
     sed -i "s|FINDDNS|${DNS}|g" ./environments/overrides.yaml
 

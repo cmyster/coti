@@ -14,6 +14,7 @@ OC_DEPLOY=false
 OC_POST=false
 RUN_TESTS=false
 BCK_RES=false
+ONCE=false
 
 case "$1" in
     -h)
@@ -53,6 +54,8 @@ case "$1" in
         OC_POST=true
         RUN_TESTS=true
         ;;
+    once)
+        ONCE=true ;;
     *)
         echo -ne "$HELP" && exit 0 ;;
 esac
@@ -231,6 +234,8 @@ run_automation ()
     # Run automation tests
     run "run_tests $1 stack overcloud"
 }
+
+if $ONCE; then run "$2 $3 $4 $5"; fi
 
 if $CLEAN; then host_clean; fi
 

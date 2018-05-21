@@ -1,3 +1,8 @@
 parameter_defaults:
     CephAnsibleDisksConfig:
         devices:
+            - '/dev/vd0'
+            - '/dev/vd1'
+            - '/dev/vd2'
+            - '/dev/vd3'
+            - '/dev/vd4'

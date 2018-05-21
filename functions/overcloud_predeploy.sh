@@ -50,6 +50,12 @@ then
     openstack overcloud node introspect --provide --all-manageable
 fi
 
+# Updating default plan with the provided environments and templates.
+for yaml in \$(ls -1 environments/*.yaml templates/*.yaml )
+do
+    openstack object create oy-vey-cloud \$yaml
+done
+
 EOF
     run_script_file predeploy stack "$HOST" /home/stack
 }

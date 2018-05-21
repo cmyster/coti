@@ -1,5 +1,5 @@
 resource_registry:
-  OS::TripleO::ControllerExtraConfigPre: node_tweaks.yaml
-  OS::TripleO::ComputeExtraConfigPre: node_tweaks.yaml
-  OS::TripleO::CephStorageExtraConfigPre: node_tweaks.yaml
+  OS::TripleO::ControllerExtraConfigPre: ../templates/node_tweaks.yaml
+  OS::TripleO::ComputeExtraConfigPre: ../templates/node_tweaks.yaml
+  OS::TripleO::CephStorageExtraConfigPre: ../templates/node_tweaks.yaml
 

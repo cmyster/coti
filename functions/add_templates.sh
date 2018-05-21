@@ -25,8 +25,13 @@ add_environments ()
     sed -i "s|FINDVER|$RR_CMD|g" ./environments/node_tweaks.yaml
     sed -i "s|FINDNSRV|${namesrv}|g" ./environments/node_tweaks.yaml
     sed -i "s|FINDDNS|${DNS}|g" ./environments/overrides.yaml
+
     tar cf environments.tar environments
+    tar cf templates.tar templates
 
     try scp -q environments.tar stack@"$HOST": || failure
+    try scp -q templates.tar stack@"$HOST": || failure
+
     try "$SSH_CUST" stack@"${NODES[0]}"-0 "tar xf environments.tar" || failure
+    try "$SSH_CUST" stack@"${NODES[0]}"-0 "tar xf templates.tar" || failure
 }

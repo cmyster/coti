@@ -13,6 +13,8 @@ resources:
       config: |
         #!/bin/bash
         echo "FINDNSRV" >> /etc/resolv.conf
+        systemctl stop NetworkManager
+        dhclient eth0
         yum remove -y rhos-release
         rpm -ivh http://rhos-release.virt.bos.redhat.com/repos/rhos-release/rhos-release-latest.noarch.rpm
         rm -rf /etc/yum.repos.d/*

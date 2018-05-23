@@ -53,7 +53,7 @@ fi
 # Updating default plan with the provided environments and templates.
 for yaml in \$(ls -1 environments/*.yaml templates/*.yaml )
 do
-    openstack object create oy-vey-cloud \$yaml
+    openstack object create overcloud \$yaml
 done
 
 EOF

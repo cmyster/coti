@@ -79,8 +79,8 @@ EOF
       <address type='pci' domain='0x0000' bus='0x03' slot='0x0$(( ha + 1 ))' function='0x0'/>
     </disk>
 EOF
-                        cat >> "$CWD"/environments/ceph_devices.yaml <<EOF
-            - '/dev/vd$ha'
+                        cat >> environments/ceph_devices.yaml <<EOF
+            - '/dev/vd${LETTER[$ha]}'
 EOF
                     done
                 else

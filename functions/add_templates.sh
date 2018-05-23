@@ -2,8 +2,6 @@ add_templates ()
 {
     RR_CMD=$(cat rr_cmd)
     HOST=$1
-    try cp -af "$CWD"/templates "$WORK_DIR"/ || failure
-    try cp -af "$CWD"/environments "$WORK_DIR"/ || failure
 
     # Add the wanted size of SWAP area per node.
     for (( index=1; index<${#NODES[@]}; index++ ))

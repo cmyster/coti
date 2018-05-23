@@ -8,6 +8,9 @@ define_nodes ()
 
     LETTER=( "b" "c" "d" "e" "f" "g" "h" "i" "j" "k" "l" "m" "n" "o" "p" "q" "r" "s" "t" "u" "v" "w" "x" "y" "z" )
 
+    try cp -af "$CWD"/templates "$WORK_DIR"/ || failure
+    try cp -af "$CWD"/environments "$WORK_DIR"/ || failure
+
     for (( index=0; index<${#NODES[@]}; index++ ))
     do
         eval NUM="\$${NODES[$index]}"_NUM

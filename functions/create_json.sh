@@ -93,10 +93,13 @@ gawk 'BEGIN { while (getline < "/home/stack/sshkey") text=text \$0 "" }
 EOF
     run_script_file add_key stack "${HOST}" /home/stack
 
-    cat > load_json <<EOF
+    if ! $VIA_UI
+    then
+        cat > load_json <<EOF
 cd /home/stack
 source stackrc
 openstack overcloud node import --instance-boot-option=local instackenv.json
 EOF
     run_script_file load_json stack "${HOST}" /home/stack
+    fi
 }

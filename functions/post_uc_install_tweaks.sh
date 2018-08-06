@@ -23,11 +23,8 @@ EOF
 
     cat > post_uc_install_tweaks <<EOF
 set -e
-cd /home/stack/
-source stackrc
-
 # Install ceph-ansible.
-sudo yum install -y ceph-ansible
+sudo yum install -y ceph-ansible &> /dev/null
 
 # Saving the IPs set for br-ctlplane and docker0.
 sudo rm -rf ctlplane-addr docker0-addr
@@ -56,8 +53,8 @@ if ! grep $(hostnamectl --static) /var/www/openstack-tripleo-ui/dist/tripleo_ui_
 then
     sed -E "s/$CODED_IP/$(hostnamectl --static)/" -i /var/www/openstack-tripleo-ui/dist/tripleo_ui_config.js
 fi
-systemctl stop httpd
-systemctl start httpd
+sudo systemctl stop httpd
+sudo systemctl start httpd
 EOF
 
 run_script_file post_uc_install_tweaks root "$HOST" /home/stack

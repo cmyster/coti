@@ -13,6 +13,7 @@ alias myip='echo $IP'
 alias screen='screen -U'
 alias uc='ssh stack@undercloud-0'
 export EDITOR=vim
+export TERM=xterm
 
 # LOCALES
 export LANG="en_US.UTF-8"

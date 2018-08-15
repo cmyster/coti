@@ -25,9 +25,12 @@ create_node_images ()
                 ;;
             *)
                 try qemu-img create -f raw "${NODES[$index]}".raw "${DSK}"G || failure
-                for num in $(seq 0 $(( TOT - 1 )))
+                for node in $(seq 0 $(( TOT - 1 )))
                 do
-                    cp "${NODES[$index]}".raw "$VIRT_IMG/${NODES[$index]}-${num}".raw
+                    for disk in $(seq 0 $(( SDX - 1 )))
+                    do
+                        cp "${NODES[$index]}".raw "$VIRT_IMG/${NODES[$index]}-${node}_${disk}".raw
+                    done
                 done
                 ;;
             esac

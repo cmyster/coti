@@ -64,7 +64,7 @@ EOF
                     cat >> "$XML" <<EOF
     <disk type='file' device='disk'>
       <driver name='qemu' type='raw' cache='none' io='native'/>
-      <source file='$VIRT_IMG/${NODES[$index]}-${i}$_${d}.raw'/>
+      <source file='$VIRT_IMG/${NODES[$index]}-${i}_${d}.raw'/>
       <target dev='vd${LETTERS[${d}]}' bus='virtio'/>
       <address type='pci' domain='0x0000' bus='0x03' slot='0x0$(( d + 1 ))' function='0x0'/>
     </disk>

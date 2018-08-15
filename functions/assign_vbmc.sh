@@ -1,13 +1,13 @@
 assign_vbmc ()
 {
-    invs=( $(ls -1 ./*.inv | grep -v "${NODES[0]}") )
+    invs=( $(ls -1 *.inv | grep -v "${NODES[0]}") )
     if [ ${#invs[@]} -gt 0 ]
     then
         DEFAULT_GATEWAY=$(cat default_gateway)
         for inv in "${invs[@]}"
         do
             source "$inv"
-            vbmc delete "$name" 2> /dev/null
+            vbmc delete "$name"
         done
         for inv in "${invs[@]}"
         do

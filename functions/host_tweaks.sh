@@ -37,4 +37,8 @@ host_tweaks ()
     iptables -P INPUT ACCEPT
     systemctl stop libvirtd
     systemctl start libvirtd
+
+    # Createing locatedb
+    /usr/bin/updatedb
+    ln -s /usr/bin/updatedb /etc/cron.hourly
 }

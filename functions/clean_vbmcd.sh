@@ -1,9 +1,12 @@
-clean_vbmcp()
+clean_vbmcd()
 {
     remove_vbmc_port ()
     {
         echo "Deleting virtual BMC port for ${1}."
-        vbmc delete "$1" 2> /dev/null
+        if pgrep vbmc &> /dev/null
+        then
+            vbmc delete "$1" 2> /dev/null
+        fi
     }
 
     if [ $# -gt 0 ]
@@ -17,7 +20,13 @@ clean_vbmcp()
     fi
 
     echo "Restarting Virtual BMC service."
-    try systemctl stop virtualbmc || failure
-    pgrep vbmc | xargs kill 2> /dev/null
-    try systemctl start virtualbmc || failure
+    if pgrep vbmc &> /dev/null
+    then
+        killall vbmc
+    fi
+    if pgrep vbmcd &> /dev/null
+    then
+        killall vbmcd
+    fi
+    try vbmcd || failure
 }

@@ -30,12 +30,7 @@ EOF
         do
             source "$inv"
             eval CTRL_NET="\$${NETWORKS[0]}"
-            if echo "$name" | grep -i ceph &> /dev/null
-            then
-                dsk=$(( disk / 2 ))
-            else
-                dsk=$disk
-            fi
+            dsk=$disk
             echo "adding $name to instackenv"
             cat >> temp.json <<EOF
     {
@@ -59,18 +54,34 @@ EOF
                 ;;
             esac
 
+            disks='"disks": ['
+            for l in $(seq 0 $dsk)
+            do
+                disks=${disks}'"vd'
+                disks=${disks}${LETTERS[$l]}
+                disks=${disks}'",'
+            done
+            disks=${disks::-1}
+            disks=${disks}'],'
+
+            cat >> temp.json <<EOF
+      "disk": "$dsk",
+      $disks
+EOF
+            
             cat >> temp.json <<EOF
       "pm_addr": "$DEFAULT_GATEWAY",
       "pm_user": "admin",
       "pm_password": "password",
       "pm_type": "pxe_ipmitool",
-      "pm_port": "$pm_port",
+      "pm_user": "stack",
+      "pm_type": "pxe_ssh",
+      "pm_password": "PLACE",
       "mac": [
         "$CTRL_NET"
       ],
       "cpu": "$cpu",
       "memory": "$memory",
-      "disk": "$dsk",
       "arch": "x86_64"
     },
 EOF

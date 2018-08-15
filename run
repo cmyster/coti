@@ -95,7 +95,7 @@ host_clean ()
     run clean_vms                                                             
     run clean_vnets                                                           
     run clean_pool
-    run clean_vbmcp
+    run clean_vbmcd
 }
 
 host_preprerations ()

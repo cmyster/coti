@@ -21,7 +21,7 @@ add_templates ()
     sed -i "s|FINDSTRT|${ext_base}.${DHCP_IN_START}|g" ./environments/overrides.yaml
     sed -i "s|FINDEND|${ext_base}.${DHCP_IN_END}|g" ./environments/overrides.yaml
     sed -i "s|FINDVER|$RR_CMD|g" ./templates/node_tweaks.yaml
-    sed -i "s|FINDNSRV|${namesrv}|g" ./environments/node_tweaks.yaml
+    sed -i "s|FINDNSRV|${namesrv}|g" ./templates/node_tweaks.yaml
     sed -i "s|FINDDNS|${DNS}|g" ./environments/overrides.yaml
 
     tar cf environments.tar environments

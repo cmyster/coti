@@ -4,15 +4,15 @@ assign_vbmc ()
     if [ ${#invs[@]} -gt 0 ]
     then
         DEFAULT_GATEWAY=$(cat default_gateway)
-        for inv in "${invs[@]}"
+        for port in $(vbmc list -f value | cut -d " " -f 1)
         do
-            source "$inv"
-            vbmc delete "$name"
+            vbmc delete "$port"
         done
+
         for inv in "${invs[@]}"
         do
             source "$inv"
-            vbmc add "$name" --port "$pm_port" --username admin --password password --libvirt-uri qemu:///system --address "::ffff:${DEFAULT_GATEWAY}" 2> /dev/null
+            vbmc add "$name" --port "$pm_port" --username admin --password password --libvirt-uri qemu:///system --address "::ffff:${DEFAULT_GATEWAY}"
             vbmc start "$name"
         done
     fi

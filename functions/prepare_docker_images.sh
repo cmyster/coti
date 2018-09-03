@@ -38,17 +38,16 @@ openstack overcloud container image prepare \\
     --prefix openstack- \\
     --set ceph_namespace=\${MAIN_ADDR}:8787 \\
     --set ceph_image=rhceph \\
-    --set ceph_tag=3-6 \\
+    --set ceph_tag=3-9 \\
     --push-destination \${MAIN_ADDR}:8787 \\
     --output-images-file /home/stack/container_images.yaml \\
-    --output-env-file /home/stack/environments/containers-default-parameters.yaml
+    --output-env-file /home/stack/environments/containers-default-parameters.yaml \\
+EOF
+    cat $CWD/envs >> prepare_docker_images
+    cat >> prepare_docker_images<<EOF
 
 sudo openstack overcloud container image upload --verbose --config-file /home/stack/container_images.yaml
 
 EOF
-
-    cat $CWD/envs >> prepare_docker_images
-    echo "" >> prepare_docker_images
-    echo "" >> prepare_docker_images
     run_script_file prepare_docker_images stack "$HOST" /home/stack                  
 }

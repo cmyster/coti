@@ -16,11 +16,6 @@ create_json ()
 
     cat > temp.json <<EOF
 {
-  "ssh-user": "stack",
-  "ssh-key": "PLACE",
-  "power_manager": "nova.virt.baremetal.virtual_power_driver.VirtualPowerManager",
-  "host-ip": "$DEFAULT_GATEWAY",
-  "arch": "x86_64",
   "nodes": [
 EOF
     invs=( $(ls -1 ./*.inv | grep -v "${NODES[0]}") )
@@ -32,8 +27,8 @@ EOF
             eval CTRL_NET="\$${NETWORKS[0]}"
             dsk=$disk
             echo "adding $name to instackenv"
+            echo "    {" >> temp.json
             cat >> temp.json <<EOF
-    {
       "name": "$name",
 EOF
             case "$name" in
@@ -54,32 +49,17 @@ EOF
                 ;;
             esac
 
-            disks='"disks": ['
-            for l in $(seq 0 $dsk)
-            do
-                disks=${disks}'"vd'
-                disks=${disks}${LETTERS[$l]}
-                disks=${disks}'",'
-            done
-            disks=${disks::-1}
-            disks=${disks}'],'
-
             cat >> temp.json <<EOF
       "disk": "$dsk",
-      $disks
 EOF
             
             cat >> temp.json <<EOF
       "pm_addr": "$DEFAULT_GATEWAY",
+      "pm_port": "$pm_port",
       "pm_user": "admin",
       "pm_password": "password",
       "pm_type": "pxe_ipmitool",
-      "pm_user": "stack",
-      "pm_type": "pxe_ssh",
-      "pm_password": "PLACE",
-      "mac": [
-        "$CTRL_NET"
-      ],
+      "mac": ["$CTRL_NET"],
       "cpu": "$cpu",
       "memory": "$memory",
       "arch": "x86_64"
@@ -97,18 +77,12 @@ EOF
 EOF
     try scp -q temp.json stack@"${HOST}": || failure
 
-    cat > add_key <<EOF
-cat /home/stack/.ssh/id_rsa | tr "\n" "%" | sed 's/%/\\\n/g' > /home/stack/sshkey
-gawk 'BEGIN { while (getline < "/home/stack/sshkey") text=text \$0 "" }
-            { gsub("PLACE", text); print }' temp.json > instackenv.json
-EOF
-    run_script_file add_key stack "${HOST}" /home/stack
-
     if ! $VIA_UI
     then
         cat > load_json <<EOF
 cd /home/stack
 source stackrc
+mv temp.json instackenv.json
 openstack overcloud node import --instance-boot-option=local instackenv.json
 EOF
     run_script_file load_json stack "${HOST}" /home/stack

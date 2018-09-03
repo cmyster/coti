@@ -13,27 +13,22 @@ create_node_images ()
         if [ $TOT -gt 0 ]
         then
             echo "Creating an image disk for ${NODES[$index]}"
-            case "${NODES[$index]}" in
-            undercloud)
-                try qemu-img create -f raw "${NODES[$index]}".raw "${DSK}"G || failure
+            # Creating an initial disk in the required size for this node.
+            try qemu-img create -f raw "${NODES[$index]}".raw "${DSK}"G || failure
+
+            # For the undercloud machine, we need to expand the guest image on top of the created image.
+            if [[ "${NODES[$index]}" == "undercloud" ]]
+            then
                 try virt-resize -q --expand /dev/sda1 guest-image.raw "${NODES[$index]}".raw || failure
-                for num in $(seq 0 $(( TOT - 1 )))
+        #        try virt-customize "$VIRSH_CUST" -a "${NODES[$index]}".raw || failure
+            fi
+            for node in $(seq 0 $(( TOT - 1 )))
+            do
+                for disk in $(seq 0 $(( SDX - 1 )))
                 do
-                    cp "${NODES[$index]}".raw "$VIRT_IMG/${NODES[$index]}-${num}".raw
-                    virt-customize "$VIRSH_CUST" -a "$VIRT_IMG/${NODES[$index]}-${num}".raw
+                    cp "${NODES[$index]}".raw "$VIRT_IMG/${NODES[$index]}-${node}_${disk}".raw
                 done
-                ;;
-            *)
-                try qemu-img create -f raw "${NODES[$index]}".raw "${DSK}"G || failure
-                for node in $(seq 0 $(( TOT - 1 )))
-                do
-                    for disk in $(seq 0 $(( SDX - 1 )))
-                    do
-                        cp "${NODES[$index]}".raw "$VIRT_IMG/${NODES[$index]}-${node}_${disk}".raw
-                    done
-                done
-                ;;
-            esac
+            done
         fi
     done
 }

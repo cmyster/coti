@@ -111,7 +111,7 @@ EOF
                 # While here, I can add OSDs to the ceph environment.
                 if [[ "${NODES[$index]}" == "ceph" ]]
                 then
-                    for d in $(seq 1 $SDX)
+                    for d in $(seq 1 $(( SDX -1 )))
                     do
                         cat >> environments/ceph_devices.yaml <<EOF
             - '/dev/vd${LETTERS[$d]}'

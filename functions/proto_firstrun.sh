@@ -40,14 +40,8 @@ mlocate net-tools ntp plotnetcfg psmisc python-setuptools screen \
 setroubleshoot sos sshpass sysstat telnet tmux traceroute tree vim \
 wget | tee -a \$LOG_FILE
 
-# Installing development packages.
-$PKG_CUST group install "Development Tools" | tee -a \$LOG_FILE
-
-# Installing OpenStack stuff.
-$PKG_CUST install python-tripleoclient openstack-aodh-common \
-openstack-ceilometer-common openstack-gnocchi-common openstack-heat-common \
-openstack-ironic-common openstack-mistral-common openstack-neutron-common \
-openstack-nova-common | tee -a \$LOG_FILE
+# Installing OOO client.
+$PKG_CUST install python-tripleoclient | tee -a \$LOG_FILE
 
 if ls *.conf 2> /dev/null
 then
@@ -130,7 +124,10 @@ echo "PS1='\[\033[01;31m\]\u@\h\] \w \$\[\033[00m\] '" >> /root/.bashrc
 
 echo "Updating locate db and adding it to cron." | tee -a \$LOG_FILE
 updatedb
-ln -s /usr/bin/updatedb /etc/cron.hourly
+if [ ! -f /etc/cron.hourly/updatedb ]
+then
+    ln -s /usr/bin/updatedb /etc/cron.hourly
+fi
 
 echo "Allowing a more comfortable SSH connections." | tee -a \$LOG_FILE
 cat > /etc/ssh/ssh_config <<END
@@ -139,6 +136,7 @@ cat > /etc/ssh/ssh_config <<END
     CheckHostIp no
 END
 
+rm -rf /root/.ssh/known_hosts
 ln -s /dev/null /root/.ssh/known_hosts
 
 echo "Adding user stack." | tee -a \$LOG_FILE

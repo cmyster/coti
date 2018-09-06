@@ -28,6 +28,7 @@ openstack overcloud deploy \\
     --templates \\
     --libvirt-type kvm \\
     --ntp-server $NTP \\
+    -e /home/stack/environments/node_scale.yaml \\
 EOF
     cat $CWD/envs >> deploy
     echo "    --log-file deploy.log &> deploy_full.log &" >> deploy

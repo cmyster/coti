@@ -41,8 +41,8 @@ EOF
     discover ()
     {
         URL=$(cat puddle_dir_path)
-        wget "$URL"/passed_phase2/overcloud_container_image_prepare.yaml
-        PUDDLE=$(grep " id:" overcloud_container_image_prepare.yaml | awk '{print $NF}')
+        PUDDLE=$(elinks --dump $URL/passed_phase1/RH7-RHOS-"${OS_VER}".repo | grep -A1 "\[RH7-RHOS-14.0\]" | grep baseurl | rev | cut -d "/" -f 4 | rev)
+        wget "$URL"/passed_phase1/overcloud_container_image_prepare.yaml
         set_puddle "$PUDDLE"
         echo "Using puddle: ${PUDDLE}."
         echo "rhos-release will be run with: $(cat rr_cmd)"

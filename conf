@@ -78,7 +78,7 @@ LONG=${LONG:-"(This step takes time.)"}
 LATEST_RR=${LATEST_RR:-"http://rhos-release.virt.bos.redhat.com/repos/rhos-release/rhos-release-latest.noarch.rpm"}
 
 # Version to install deploy.
-OS_VER=${OS_VER:-13}
+OS_VER=${OS_VER:-14}
 PUDDLE_VER=${PUDDLE_VER:-"latest"}
 
 # Argument to pass to rhos-release.
@@ -224,18 +224,18 @@ DHCP_OUT_END=250
 # undercloud nodes
 undercloud_NAM=${undercloud_NAM:-"undercloud"}
 undercloud_NUM=${undercloud_NUM:-1}
-undercloud_RAM=${undercloud_RAM:-16384}
+undercloud_RAM=${undercloud_RAM:-24576}
 undercloud_SWP=${undercloud_SWP:-256}
-undercloud_CPU=${undercloud_CPU:-4}
+undercloud_CPU=${undercloud_CPU:-6}
 undercloud_DUM=${undercloud_DUM:-0}
-undercloud_DSK=${undercloud_DSK:-22}
+undercloud_DSK=${undercloud_DSK:-24}
 undercloud_SDX=${undercloud_SDX:-1}
 
 # controller nodes
 controller_NAM=${controller_NAM:-"control"}
 controller_FLV=${controller_FLV:-"control"}
 controller_NUM=${controller_NUM:-3}
-controller_RAM=${controller_RAM:-16384}
+controller_RAM=${controller_RAM:-24576}
 controller_SWP=${controller_SWP:-256}
 controller_CPU=${controller_CPU:-4}
 controller_DUM=${controller_DUM:-0}
@@ -246,7 +246,7 @@ controller_SDX=${controller_SDX:-1}
 compute_NAM=${compute_NAM:-"compute"}
 compute_FLV=${compute_NAM:-"compute"}
 compute_NUM=${compute_NUM:-3}
-compute_RAM=${compute_RAM:-16384}
+compute_RAM=${compute_RAM:-24576}
 compute_SWP=${compute_SWP:-256}
 compute_CPU=${compute_CPU:-4}
 compute_DUM=${compute_DUM:-0}
@@ -262,7 +262,6 @@ ceph_SWP=${ceph_SWP:-256}
 ceph_CPU=${ceph_CPU:-6}
 ceph_DUM=${ceph_DUM:-0}
 ceph_DSK=${ceph_DSK:-12}
-ceph_OSD=${ceph_OSD:-12}
 ceph_SDX=${ceph_SDX:-6}
 
 TOT_NODES=$(( controller_NUM + compute_NUM + ceph_NUM ))

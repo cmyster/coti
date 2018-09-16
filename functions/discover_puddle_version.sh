@@ -41,8 +41,15 @@ EOF
     discover ()
     {
         URL=$(cat puddle_dir_path)
-        PUDDLE=$(elinks --dump $URL/passed_phase1/RH7-RHOS-"${OS_VER}".repo | grep -A1 "\[RH7-RHOS-14.0\]" | grep baseurl | rev | cut -d "/" -f 4 | rev)
-        wget "$URL"/passed_phase1/overcloud_container_image_prepare.yaml
+        PUDDLE=$(elinks --dump $URL/passed_phase1/RH7-RHOS-"${OS_VER}".0.repo | grep baseurl | grep "basearch/os" | rev | cut -d "/" -f 4 | rev)
+
+        if [ -z "$PUDDLE" ]                                                        
+        then                                                                  
+            echo "Failed to set puddle."                                      
+            raise "${FUNCNAME[0]}"                                            
+        fi
+
+        try wget "$URL"/passed_phase1/overcloud_container_image_prepare.yaml || failure
         set_puddle "$PUDDLE"
         echo "Using puddle: ${PUDDLE}."
         echo "rhos-release will be run with: $(cat rr_cmd)"

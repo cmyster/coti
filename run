@@ -81,7 +81,7 @@ START=$(date +%s)
 # This is where functions are executed.
 run ()
 {
-    LOG_FILE="${BASE_LOG_FILE}_${1}.log"
+    LOG_FILE="${BASE_LOG_FILE}_$1.log"
     echo "[$(date +%T)] Running $1 $2" | tee -a "$LOG_FILE"
     SECONDS=0
     $1
@@ -157,6 +157,7 @@ prepare_main_undercloud ()
     run "undercloud_ssh_access ${NODES[0]}-0 root $ROOT_PASS"
     run "undercloud_ssh_access ${NODES[0]}-0 stack stack"
     run "pre_uc_install_wa ${NODES[0]}-0"
+    run "undercloud_container ${NODES[0]}-0"
     echo -e "Undercloud preparations finished in $(time_diff $(( $(date +%s) - START)))\n"
 }
 

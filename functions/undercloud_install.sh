@@ -8,6 +8,7 @@ undercloud_install ()
     scp -q "$CWD"/templates/hiera_selinux.yaml stack@"$HOST":
     TAR_PATH=$(cat tar_path)
     cat > install <<EOF
+cd /home/stack
 if [[ "$UNDER_SEL" != "enforcing" ]]
 then
     /usr/bin/sudo /usr/bin/sed -i "s/SELINUX=.*/SELINUX=$UNDER_SEL/" /etc/selinux/config
@@ -17,7 +18,7 @@ then
 fi
 sudo $PKG_CUST remove *bigswitch*
 openstack undercloud install
-tail -n 20 .instack/install-undercloud.log | grep "install complete" &> /dev/null
+tail -n 20 ./install-undercloud.log | grep "install complete" &> /dev/null
 
 if [ $? -ne 0 ]
 then

@@ -225,10 +225,10 @@ DHCP_OUT_END=250
 undercloud_NAM=${undercloud_NAM:-"undercloud"}
 undercloud_NUM=${undercloud_NUM:-1}
 undercloud_RAM=${undercloud_RAM:-24576}
-undercloud_SWP=${undercloud_SWP:-256}
+undercloud_SWP=${undercloud_SWP:-1024}
 undercloud_CPU=${undercloud_CPU:-6}
 undercloud_DUM=${undercloud_DUM:-0}
-undercloud_DSK=${undercloud_DSK:-24}
+undercloud_DSK=${undercloud_DSK:-32}
 undercloud_SDX=${undercloud_SDX:-1}
 
 # controller nodes
@@ -236,7 +236,7 @@ controller_NAM=${controller_NAM:-"control"}
 controller_FLV=${controller_FLV:-"control"}
 controller_NUM=${controller_NUM:-3}
 controller_RAM=${controller_RAM:-24576}
-controller_SWP=${controller_SWP:-256}
+controller_SWP=${controller_SWP:-1024}
 controller_CPU=${controller_CPU:-4}
 controller_DUM=${controller_DUM:-0}
 controller_DSK=${controller_DSK:-22}

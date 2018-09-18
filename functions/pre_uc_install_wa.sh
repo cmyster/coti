@@ -8,9 +8,15 @@ pre_uc_install_wa ()
     echo "Running pre-undercloud install workarounds."
     cat > pre_uc_install_wa <<EOF
 ### Workrounds go here
-# Dep-hell
-sudo rpm -e --nodeps iptables
-sudo rpm -e --nodeps subscription-manager
+# This is to avoid some dependancy hell.
+for pack in "iptables" "subscription-manager" "bigswitch"
+do
+    if rpm -qa | grep \$pack
+    then
+        rpm -qa | grep \$pack | xargs sudo rpm -e --nodeps
+    fi
+done
+sudo yum install -y subscription-manager iptables
 ### End of workarounds
 EOF
 

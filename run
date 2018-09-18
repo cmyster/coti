@@ -158,6 +158,7 @@ prepare_main_undercloud ()
     run "undercloud_ssh_access ${NODES[0]}-0 stack stack"
     run "pre_uc_install_wa ${NODES[0]}-0"
     run "undercloud_container ${NODES[0]}-0"
+    run "undercloud_gen_conf ${NODES[0]}-0"
     echo -e "Undercloud preparations finished in $(time_diff $(( $(date +%s) - START)))\n"
 }
 

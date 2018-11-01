@@ -7,7 +7,7 @@ undercloud_install ()
 cd /home/stack
 sudo $PKG_CUST remove *bigswitch*
 openstack undercloud install
-if tail -n 20 ./install-undercloud.log | grep "successfully installed" &> /dev/null
+if ! tail -n 20 ./install-undercloud.log | grep "successfully installed" &> /dev/null
 then
     echo "Installation did not report complete."
     exit 1

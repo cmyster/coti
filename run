@@ -79,9 +79,9 @@ echo "Work dir: $(pwd)"
 START=$(date +%s)
 
 # This is where functions are executed.
+LOG_FILE="${BASE_LOG_FILE}_$1.log"
 run ()
 {
-    LOG_FILE="${BASE_LOG_FILE}_$1.log"
     echo "[$(date +%T)] Running $1 $2" | tee -a "$LOG_FILE"
     SECONDS=0
     $1

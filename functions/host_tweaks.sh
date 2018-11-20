@@ -38,6 +38,15 @@ host_tweaks ()
     systemctl stop libvirtd
     systemctl start libvirtd
 
+    # Add en_US language to environemt file if missing
+    if ! grep en_US /etc/environment
+    then
+        cat >> /etc/environment <<EOF
+LANG=en_US.utf-8
+LC_ALL=en_US.utf-8
+EOF
+    fi
+
     # Createing locatedb
     /usr/bin/updatedb
     ln -s /usr/bin/updatedb /etc/cron.hourly

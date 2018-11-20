@@ -77,6 +77,8 @@ LONG="(This step takes time.)"
 # RPM location of latest rhos-release
 LATEST_RR="http://rhos-release.virt.bos.redhat.com/repos/rhos-release/rhos-release-latest.noarch.rpm"
 
+# TODO:
+# I need to fix this part to search for specific puddles.
 # Version to install deploy.
 OS_VER=14
 PUDDLE_VER="latest"

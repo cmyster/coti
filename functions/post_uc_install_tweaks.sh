@@ -21,6 +21,10 @@ post_uc_install_tweaks ()
 EOF
     cat > post_uc_install_tweaks <<EOF
 set -e
+
+# Make sure we're up-to-date.
+yum update -y
+
 # Install ceph-ansible.
 yum install -y ceph-ansible &> /dev/null
 

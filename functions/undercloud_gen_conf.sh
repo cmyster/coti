@@ -23,5 +23,6 @@ inspection_iprange=${CIDR}.${DHCP_INTRO_START},${CIDR}.${DHCP_INTRO_END}
 masquerade = true
 EOF
 
+    chmod 0644 undercloud.conf
     scp -q undercloud.conf stack@"$HOST":
 }

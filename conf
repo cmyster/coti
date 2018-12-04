@@ -145,7 +145,7 @@ SRV_DOMAIN=${FILE_SERVER##*://}
 
 # RHEL guest image.
 RHEL_VERSION="7.6"
-RHEL_GUEST="$FILE_SERVER/gen_images/cloud/rhel-guest-image-${RHEL_VERSION}-latest.x86_64.qcow2"
+RHEL_GUEST="$FILE_SERVER/gen_images/cloud/rhel-guest-image-${RHEL_VERSION}-225.x86_64.qcow2"
 GUEST_FILE=$(basename $RHEL_GUEST)
 
 # Director image RPMs path.

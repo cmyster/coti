@@ -9,7 +9,7 @@ clean_vbmcd()
         fi
     }
 
-    for port in $(/usr/bin/python /usr/bin/vbmc list | grep -v "+-\|Address" | awk '{print $2}' | grep -v "^$")
+    for port in $(timeout 10 /usr/bin/python /usr/bin/vbmc list | grep -v "+-\|Address" | awk '{print $2}' | grep -v "^$")
     do
         remove_vbmc_port "$port"
     done

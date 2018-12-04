@@ -34,17 +34,17 @@ EOF
             case "$name" in
                 controller*)
                     cat >> temp.json <<EOF
-      "capabilities":"profile:control,boot_option:local",
+      "capabilities":"profile:control",
 EOF
                 ;;
                 compute*)
                     cat >> temp.json <<EOF
-      "capabilities":"profile:compute,boot_option:local",
+      "capabilities":"profile:compute",
 EOF
                 ;;
                 ceph*)
                     cat >> temp.json <<EOF
-      "capabilities":"profile:ceph-storage,boot_option:local",
+      "capabilities":"profile:ceph-storage",
 EOF
                 ;;
             esac
@@ -82,8 +82,8 @@ EOF
         cat > load_json <<EOF
 cd /home/stack
 source stackrc
-mv temp.json instackenv.json
-openstack overcloud node import --instance-boot-option=local instackenv.json
+cp temp.json instackenv.json
+openstack overcloud node import instackenv.json
 EOF
     run_script_file load_json stack "${HOST}" /home/stack
     fi

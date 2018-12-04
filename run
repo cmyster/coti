@@ -50,9 +50,9 @@ case "$1" in
         UC_INSTALL=true
         UC_POST=true
         OC_PREP=true
-        OC_DEPLOY=true
-        OC_POST=true
-        RUN_TESTS=true
+#        OC_DEPLOY=true
+#        OC_POST=true
+#        RUN_TESTS=true
         ;;
     once)
         ONCE=true ;;

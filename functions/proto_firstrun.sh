@@ -33,12 +33,11 @@ then
 fi
 
 # Installing needed power management packages and other tools.
-$PKG_CUST install acpid ahc-tools createproto crudini \
-device-mapper-multipath dosfstools elinks gdb gdisk genisoimage git \
-gpm hdparm ipmitool iscsi-initiator-utils keepalived libvirt lsof mc \
-mlocate net-tools ntp plotnetcfg psmisc python-setuptools screen \
-setroubleshoot sos sshpass sysstat telnet tmux traceroute tree vim \
-wget | tee -a \$LOG_FILE
+$PKG_CUST install acpid createproto crudini device-mapper-multipath \
+dosfstools elinks gdb gdisk genisoimage git gpm hdparm ipmitool \
+iscsi-initiator-utils lsof mc mlocate net-tools ntp plotnetcfg psmisc \
+python-setuptools screen setroubleshoot sos sshpass sysstat telnet tmux \
+traceroute tree vim wget | tee -a \$LOG_FILE
 
 # Installing OOO client.
 $PKG_CUST install python-tripleoclient | tee -a \$LOG_FILE

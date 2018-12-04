@@ -19,7 +19,7 @@ post_uc_install_tweaks ()
 
 
 EOF
-    cat > post_uc_install_tweaks <<EOF
+    cat > post_uc_install_tweaks_root <<EOF
 set -e
 
 # Make sure we're up-to-date.
@@ -61,9 +61,29 @@ do
 done
 EOF
 
-run_script_file post_uc_install_tweaks root "$HOST" /root
+    run_script_file post_uc_install_tweaks_root root "$HOST" /root
 
-# Save admin's password locally
-$SSH_CUST stack@$HOST "source /home/stack/stackrc && sudo hiera admin_password" > admin_password
-$SSH_CUST stack@$HOST "cat /home/stack/ctlplane-addr" > ctlplane-addr
+    # stack user needs some passwordless SSH love as well.
+    cat > post_uc_install_tweaks_stack <<EOF
+set -e
+cd /home/stack
+
+# Copying SSH ids.
+for ip in $DEFAULT_GATEWAY \$(cat /home/stack/ctlplane-addr) \$(cat /home/stack/docker0-addr)
+do
+    sshpass -p $HOST_PASS ssh-copy-id root@\$ip &> /dev/null
+done
+
+# Testing passwordless SSH.
+for ip in $DEFAULT_GATEWAY \$(cat /home/stack/ctlplane-addr) \$(cat /home/stack/docker0-addr) 
+do
+    $SSH_CUST root@\$ip "echo hello"
+done
+EOF
+
+    run_script_file post_uc_install_tweaks_stack stack "$HOST" /home/stack
+
+    # Save admin's password locally
+    $SSH_CUST stack@$HOST "source /home/stack/stackrc && sudo hiera admin_password" > admin_password
+    $SSH_CUST stack@$HOST "cat /home/stack/ctlplane-addr" > ctlplane-addr
 }

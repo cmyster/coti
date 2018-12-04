@@ -54,11 +54,11 @@ EOF
 EOF
             
             cat >> temp.json <<EOF
-      "pm_addr": "127.0.0.1",
+      "pm_addr": "$DEFAULT_GATEWAY",
       "pm_port": "$pm_port",
       "pm_user": "admin",
       "pm_password": "password",
-      "pm_type": "pxe_ipmitool",
+      "pm_type": "ipmi",
       "mac": ["$CTRL_NET"],
       "cpu": "$cpu",
       "memory": "$memory",

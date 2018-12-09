@@ -21,7 +21,7 @@ post_uc_install_wa ()
 
     cat > post_uc_install_wa <<EOF
 ### Workrounds go here
-exit 0
+sudo yum remove -y *libvirt*
 ### End of workarounds
 EOF
 

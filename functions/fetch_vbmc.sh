@@ -1,7 +1,13 @@
 fetch_vbmc ()
 {
     # Dependencies
-    try "$PKG_CUST" install python-setuptools libvirt-devel python-devel || failure
+    for pkg in "python-setuptools" "libvirt-devel" "python-devel"
+    do
+        if ! rpm -qa | grep $pkg &> /dev/null
+        then
+            try "$PKG_CUST" install $pkg || failure
+        fi
+    done
 
     # Install PIP.
     if ! which pip &> /dev/null

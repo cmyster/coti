@@ -2,6 +2,7 @@ define_flavors ()
 {
     HOST=$1
     SCRIPT="define_flavors" 
+    rm -rf "$SCRIPT"
     echo "cd /home/stack" >> $SCRIPT
     echo "source stackrc" >> $SCRIPT
 
@@ -26,5 +27,5 @@ define_flavors ()
             echo 'openstack flavor set --property "cpu_arch"="x86_64" --property "capabilities:boot_option"="local" --property "capabilities:profile"="'$f_name'" '$f_name''
         } >> "$SCRIPT"
     done
-    run_script_file $SCRIPT stack "$HOST" /home/stack
+    run_script_file "$SCRIPT" stack "$HOST" /home/stack
 }

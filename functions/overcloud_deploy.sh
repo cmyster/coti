@@ -10,7 +10,7 @@ overcloud_deploy ()
     do
         eval NAM="\$${NODES[$index]}"_NAM
         eval FLV="\$${NODES[$index]}"_FLV
-        eval NUM="\$${NODES[$index]}"_NU
+        eval NUM="\$${NODES[$index]}"_NUM
 
         echo "    ${NAM^}Count: $NUM" >> node_scale.yaml
         echo "    Overcloud${NAM^}Flavor: $FLV">> node_scale.yaml

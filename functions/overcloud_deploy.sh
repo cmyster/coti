@@ -24,6 +24,7 @@ overcloud_deploy ()
     cat > deploy <<EOF
 cd /home/stack
 source stackrc
+rm -rf deploy.log deploy_full.log
 openstack overcloud deploy \\
     --templates \\
     --libvirt-type kvm \\
@@ -32,5 +33,7 @@ openstack overcloud deploy \\
 EOF
     cat $CWD/envs >> deploy
     echo "    --log-file deploy.log &> deploy_full.log &" >> deploy
+    sed 's/CephCount/CephStorageCount/g' -i deploy
+    sed 's/CephFlavor/CephStorageFlavor/g' -i deploy
     run_script_file deploy stack "$HOST" /home/stack
 }

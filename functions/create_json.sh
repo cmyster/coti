@@ -34,7 +34,7 @@ EOF
             case "$name" in
                 controller*)
                     cat >> temp.json <<EOF
-      "capabilities":"profile:control",
+      "capabilities":"profile:controller",
 EOF
                 ;;
                 compute*)
@@ -44,7 +44,7 @@ EOF
                 ;;
                 ceph*)
                     cat >> temp.json <<EOF
-      "capabilities":"profile:ceph-storage",
+      "capabilities":"profile:ceph",
 EOF
                 ;;
             esac

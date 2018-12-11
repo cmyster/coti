@@ -22,9 +22,9 @@ openstack subnet set --no-dns-nameservers \$SUBNET
 openstack subnet set --dns-nameserver $DNS \$SUBNET
 
 # Updating capabilities to each node.
-for node in \$(openstack baremetal node list -f value -c UUID -c Name | grep -i control | cut -d " " -f 1)
+for node in \$(openstack baremetal node list -f value -c UUID -c Name | grep -i controller | cut -d " " -f 1)
 do
-    openstack baremetal node set \$node --property capabilities='profile:control,boot_option:local'
+    openstack baremetal node set \$node --property capabilities='profile:controller,boot_option:local'
 done
 
 for node in \$(openstack baremetal node list -f value -c UUID -c Name | grep -i compute | cut -d " " -f 1)
@@ -34,7 +34,7 @@ done
 
 for node in \$(openstack baremetal node list -f value -c UUID -c Name | grep -i ceph | cut -d " " -f 1)
 do
-    openstack baremetal node set \$node --property capabilities='profile:ceph-storage,boot_option:local'
+    openstack baremetal node set \$node --property capabilities='profile:ceph,boot_option:local'
 done
 
 # Setting the boot drive (in libvirt there is only 'name' and its /dev/vda).

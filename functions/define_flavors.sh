@@ -12,9 +12,9 @@ define_flavors ()
         f_tmp_name=$(echo "$name" | cut -d "-" -f 1)
         case "$f_tmp_name" in
             ceph)
-                f_name="ceph-storage" ;;
+                f_name="ceph" ;;
             controller)
-                f_name="control" ;;
+                f_name="controller" ;;
             compute)
                 f_name="compute" ;;
         esac

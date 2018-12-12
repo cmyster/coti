@@ -19,8 +19,8 @@ sed "s|latest|$TAG|g" -i /home/stack/containers-prepare-parameter.yaml
 sed "s|name_prefix:.*|name_prefix: $PREFIX|g" -i /home/stack/containers-prepare-parameter.yaml
 sed "s|registry.access.redhat.com|$NAMESPACE|g" -i /home/stack/containers-prepare-parameter.yaml
 sed "s|ceph_tag:.*|ceph_tag: $CEPH_TAG|g" -i /home/stack/containers-prepare-parameter.yaml
-sed "s|ceph_namespace:.*|ceph_namespace: $CEPH_NAMESPACE|g -i /home/stack/containers-prepare-parameter.yaml
-sed "s|ceph_image:.*|ceph_image: $CEPH_IMAGE|g -i /home/stack/containers-prepare-parameter.yaml
+sed "s|ceph_namespace:.*|ceph_namespace: $CEPH_NAMESPACE|g" -i /home/stack/containers-prepare-parameter.yaml
+sed "s|ceph_image:.*|ceph_image: $CEPH_IMAGE|g" -i /home/stack/containers-prepare-parameter.yaml
 EOF
     run_script_file set_container stack "$HOST" /home/stack
 }

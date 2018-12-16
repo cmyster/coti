@@ -20,4 +20,10 @@ fetch_vbmc ()
     then
         try pip install virtualbmc || failure
     fi
+
+    if ! pgrep -a vbmcd &> /dev/null
+    then
+        echo "Starting vbmcd."
+        try vbmcd || failure
+    fi
 }

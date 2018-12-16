@@ -203,7 +203,7 @@ NETWORKS=(
 
 # Undercloud's local interface and host adresses.
 LOCAL_INTERFACE="eth0"
-CIDR="192.168.24"
+CIDR="10.10.0"
 LOCAL_IP="${CIDR}.1/24"
 PUBLIC_HOST="${CIDR}.2"
 ADMIN_HOST="${CIDR}.3"

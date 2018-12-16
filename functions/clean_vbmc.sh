@@ -5,20 +5,24 @@ clean_vbmc()
         if [ ! -z "$port" ]
         then
             echo "Deleting virtual BMC port for $port."
-            try vbmc stop "$port" || failure
-            try vbmc delete "$port" || failure
+            vbmc stop "$port" &> /dev/null
+            vbmc delete "$port" &> /dev/null
         fi
     done
 
-    echo "Sleeping to all port deletion before verifying removal."
-    sleep 30
+    sleep 3
 
-    for port in $(vbmc list | grep -v "+-\|Address" | awk '{print $2}')
-    do
-        if [ ! -z $port ]
-        then
-            echo "VBMC port $port was not deleted."
-            raise "${FUNCNAME[0]}"
-        fi
-    done
+    echo "Searching and stopping stagnant vbmc processes."
+    if pgrep -a vbmc
+    then
+        for pid in $(pgrep -a vbmc | awk '{print $1}')
+        do
+            kill $pid
+            if ps -o pid= -p $pid &> /dev/null
+            then
+                echo "Couldn't stop ${pid}."
+                raise "${FUNCNAME[0]}"
+            fi
+        done
+    fi
 }

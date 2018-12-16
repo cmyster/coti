@@ -32,8 +32,9 @@ openstack overcloud deploy \\
     -e /home/stack/environments/node_scale.yaml \\
 EOF
     cat $CWD/envs >> deploy
-    echo "    --log-file deploy.log &> deploy_full.log &" >> deploy
+    echo "    --log-file deploy.log &> deploy_full.log" >> deploy
     sed 's/CephCount/CephStorageCount/g' -i deploy
     sed 's/CephFlavor/CephStorageFlavor/g' -i deploy
     run_script_file deploy stack "$HOST" /home/stack
+    #$SSH_CUST stack@$HOST "/home/stack/deploy"
 }

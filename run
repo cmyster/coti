@@ -95,7 +95,7 @@ host_clean ()
     run clean_vms                                                             
     run clean_vnets                                                           
     run clean_pool
-    run clean_vbmcd
+    run clean_vbmc
 }
 
 host_preprerations ()
@@ -146,7 +146,10 @@ create_virtual_environment ()
     run create_node_images
     run define_nodes
     run "fetch_vbmc ${NODES[0]}-0"
-    run assign_vbmc
+    run vbmc_add
+    run "vbmc_stat down"
+    run vbmc_start
+    run "vbmc_stat running"
     run "undercloud_firstboot ${NODES[0]}-0"
     echo -e "Created virtual environment in $(time_diff $(( $(date +%s) - START)))\n"
 }

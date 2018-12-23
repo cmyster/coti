@@ -54,7 +54,7 @@ EOF
 EOF
             
             cat >> temp.json <<EOF
-      "pm_addr": "$DEFAULT_GATEWAY",
+      "pm_addr": "$HOST_IP",
       "pm_port": "$pm_port",
       "pm_user": "admin",
       "pm_password": "password",

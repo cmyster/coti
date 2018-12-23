@@ -49,7 +49,7 @@ then
 fi
 
 # Copying SSH ids.
-for ip in $DEFAULT_GATEWAY \$(cat /home/stack/ctlplane-addr) \$(cat /home/stack/docker0-addr)
+for ip in $DEFAULT_GATEWAY \$(cat /home/stack/ctlplane-addr) \$(cat /home/stack/docker0-addr) $HOST_IP
 do
     sshpass -p $HOST_PASS ssh-copy-id root@\$ip &> /dev/null
 done

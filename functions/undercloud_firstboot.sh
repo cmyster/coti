@@ -10,44 +10,6 @@ NETCFG_DIR="/etc/sysconfig/network-scripts"
 
 set -e
 
-static_ip ()
-{
-    echo "Creating static ip for nic eth\${1}." >> \$LOG_FILE
-    echo "Starting dchclient on eth\$1 to discover network settings." >> \$LOG_FILE
-    dhclient eth\$1 &>> \$LOG_FILE
-
-    IP=\$(ifconfig eth\$1 | grep "inet " | awk '{print \$2}')
-    NAMESRV=\$(grep nameserver /etc/resolv.conf | head -n 1 | cut -d " " -f 2)
-    MAC=\$(ifconfig eth\$1 | grep ether | awk '{print \$2}')
-
-    echo "NIC eth\$1 has this IP: \$IP and this MAC: \$MAC." >> \$LOG_FILE
-
-    echo "DEVICE=eth\$1
-    BOOTPROTO=static
-    IPADDR=\$IP
-    DNS1=\$NAMESRV
-    GATEWAY=\$NAMESRV
-    HWADDR=\$MAC
-    NETMASK=255.255.255.0
-    PEERDNS=no
-    ONBOOT=yes
-    USERCTL=yes" > \$NETCFG_DIR/ifcfg-eth\$1
-
-    echo "No more need for dhclient." >> \$LOG_FILE
-    for dhc_pid in \$(ps -ef | grep dhclient | grep -v grep | awk '{print \$2}')
-    do
-        echo "Killing \$dhc_pid" &>> \$LOG_FILE
-        kill -9 \$dhc_pid &>> \$LOG_FILE
-    done
-    # Running it twice because even with -9 it might need a 2nd attempt.
-    sleep 1
-    for dhc_pid in \$(ps -ef | grep dhclient | grep -v grep | awk '{print \$2}')
-    do
-        echo "Killing \$dhc_pid" &>> \$LOG_FILE
-        kill -9 \$dhc_pid &>> \$LOG_FILE
-    done
-}
-
 if [ ! -z \$BACKUP_FILE ]
 then
     echo "Restoring from \$BACKUP_FILE" >> \$LOG_FILE
@@ -58,8 +20,7 @@ else
 fi
 
 echo "Creating a configuration file for each NIC." &>> \$LOG_FILE
-NICS=${#NETWORKS[@]}
-for nic in \$(seq 0 \$NICS)
+for nic in 0 1
 do
     echo "DEVICE=eth\$nic
     ONBOOT=yes
@@ -69,8 +30,40 @@ do
     TYPE=Ethernet" > \$NETCFG_DIR/ifcfg-eth\$nic
 done
 
-static_ip \$NICS
-static_ip \$(( \$NICS - 1 ))
+echo "Creating static ip for nic eth1." >> \$LOG_FILE
+echo "Starting dchclient on eth1 to discover network settings." >> \$LOG_FILE
+dhclient eth1 &>> \$LOG_FILE
+
+IP=\$(ifconfig eth1 | grep "inet " | awk '{print \$2}')
+NAMESRV=\$(grep nameserver /etc/resolv.conf | head -n 1 | cut -d " " -f 2)
+MAC=\$(ifconfig eth1 | grep ether | awk '{print \$2}')
+
+echo "NIC eth1 has this IP: \$IP and this MAC: \$MAC." >> \$LOG_FILE
+
+echo "DEVICE=eth1
+BOOTPROTO=static
+IPADDR=\$IP
+DNS1=\$NAMESRV
+GATEWAY=\$NAMESRV
+HWADDR=\$MAC
+NETMASK=255.255.255.0
+PEERDNS=no
+ONBOOT=yes
+USERCTL=yes" > \$NETCFG_DIR/ifcfg-eth1
+
+echo "No more need for dhclient." >> \$LOG_FILE
+for dhc_pid in \$(ps -ef | grep dhclient | grep -v grep | awk '{print \$2}')
+do
+    echo "Killing \$dhc_pid" &>> \$LOG_FILE
+    kill -9 \$dhc_pid &>> \$LOG_FILE
+done
+# Running it twice because even with -9 it might need a 2nd attempt.
+sleep 1
+for dhc_pid in \$(ps -ef | grep dhclient | grep -v grep | awk '{print \$2}')
+do
+    echo "Killing \$dhc_pid" &>> \$LOG_FILE
+    kill -9 \$dhc_pid &>> \$LOG_FILE
+done
 
 echo "Changing the default hostname to something meaningful." >> \$LOG_FILE
 echo "${NODE_NAME}.redhat.com" > /etc/hostname
@@ -80,8 +73,8 @@ echo "Restarting the networking service." >> \$LOG_FILE
 systemctl restart network &>> \$LOG_FILE
 
 echo "Gathering facts and saving to a hello file." >> \$LOG_FILE
-IP=\$(ifconfig eth\$NICS | grep "inet " | awk '{print \$2}')
-MAC=\$(ifconfig eth\$NICS | grep "ether " | awk '{print \$2}')
+IP=\$(ifconfig eth1 | grep "inet " | awk '{print \$2}')
+MAC=\$(ifconfig eth1 | grep "ether " | awk '{print \$2}')
 SHORT_HOST=\$(hostname | cut -d "." -f 1)
 HELLO=/root/\${SHORT_HOST}.hello
 echo HOST=\${SHORT_HOST} > \$HELLO

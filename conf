@@ -192,6 +192,7 @@ NODES=(
 
 # Network setup per node.
 # Always keep provisioning network first and the external network last.
+# First network will be 10.10.0.1, second 10.20.0.1 ... 
 NETWORKS=(
            "ControlPlane"
            "StorageIP"
@@ -201,9 +202,9 @@ NETWORKS=(
            "External"
          )
 
-# Undercloud's local interface and host adresses.
+# Undercloud's local interface and host adresses, this is a new internel net.
 LOCAL_INTERFACE="eth0"
-CIDR="10.10.0"
+CIDR="192.168.0" # First three octets only.
 LOCAL_IP="${CIDR}.1/24"
 PUBLIC_HOST="${CIDR}.2"
 ADMIN_HOST="${CIDR}.3"

@@ -73,11 +73,35 @@ EOF
 
                 # Adding networking device blocks.
                 n=1
-                for vnet in "${NETWORKS[@]}"
-                do
-                    mac=$(hexdump -n3 -e'/3 "52:51:0'$n'" 3/1 ":%02x"' /dev/urandom)
-                    echo "$vnet=$mac" >> "$INV"
+                # If this is the Undercloud it needs only the 
+                # ControlPlane and libvirt's default networks.
+                if [ $index -eq 0 ]
+                then
+                    vnet="${NETWORKS[0]}"
+                    mac_ctl=$(hexdump -n3 -e'/3 "52:51:01" 3/1 ":%02x"' /dev/urandom)
+                    mac_def=$(hexdump -n3 -e'/3 "52:51:02" 3/1 ":%02x"' /dev/urandom)
+                    echo "${vnet}=${mac_ctl}" >> "$INV"
+                    echo "default=${mac_def}" >> "$INV"
                     cat >> "$XML" <<EOF
+    <interface type='network'>
+      <mac address='$mac_ctl'/>
+      <source network='$vnet'/>
+      <model type='virtio'/>
+      <address type='pci' domain='0x0000' bus='0x04' slot='0x01' function='0x0'/>
+    </interface>
+    <interface type='network'>
+      <mac address='$mac_def'/>
+      <source network='default'/>
+      <model type='virtio'/>
+      <address type='pci' domain='0x0000' bus='0x04' slot='0x02' function='0x0'/>
+    </interface>
+EOF
+                else
+                    for vnet in "${NETWORKS[@]}"
+                    do
+                        mac=$(hexdump -n3 -e'/3 "52:51:0'$n'" 3/1 ":%02x"' /dev/urandom)
+                        echo "$vnet=$mac" >> "$INV"
+                        cat >> "$XML" <<EOF
     <interface type='network'>
       <mac address='$mac'/>
       <source network='$vnet'/>
@@ -85,22 +109,8 @@ EOF
       <address type='pci' domain='0x0000' bus='0x04' slot='0x0$n' function='0x0'/>
     </interface>
 EOF
-                    n=$(( n + 1 ))
-                done
-
-                # If this is the underclouyd node, it needs libvirt's 'default' network as well.
-                if [ $index -eq 0 ]
-                then
-                    mac=$(hexdump -n3 -e'/3 "52:52:0'$n'" 3/1 ":%02x"' /dev/urandom)
-                    echo "default=$mac" >> "$INV"
-                    cat >> "${NODES[$index]}"-${i}.xml <<EOF
-    <interface type='network'>
-      <mac address='$mac'/>
-      <source network='default'/>
-      <model type='virtio'/>
-      <address type='pci' domain='0x0000' bus='0x05' slot='0x01' function='0x0'/>
-    </interface>
-EOF
+                        n=$(( n + 1 ))
+                    done
                 fi
 
                 # Finally, closing the file.

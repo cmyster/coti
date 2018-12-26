@@ -7,6 +7,7 @@ create_vnet ()
     do
         cat > net-"${NETWORKS[ $index ]}".xml <<EOF
 <network>
+  <bridge name='${NETWORKS[ $index ]}' stp='on' delay='0'/>
   <name>${NETWORKS[ $index ]}</name>
   <ip address="10.$(( index + 1 ))0.0.1" netmask="255.255.255.0">
   </ip>

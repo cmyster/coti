@@ -18,7 +18,9 @@ overcloud_deploy ()
 
     # Fixing name inconsistency. 
     sed -i 's/ControlCount/ControllerCount/g' node_scale.yaml
-    scp node_scale.yaml stack@"$HOST":/home/stack/environments/
+    sed -i 's/CephCount/CephStorageCount/g' node_scale.yaml
+    sed -i 's/CephFlavor/CephStorageFlavor/g' node_scale.yaml
+    try scp -q node_scale.yaml stack@"$HOST":/home/stack/environments/ || failure
 
     echo "Running the overcloud deployment."
     cat > deploy <<EOF
@@ -31,10 +33,17 @@ openstack overcloud deploy \\
     --ntp-server $NTP \\
     -e /home/stack/environments/node_scale.yaml \\
 EOF
+    # If Ceph is used, add the relevant environments.
+    CEPH_COUNT=$(grep -i Ceph node_scale.yaml | grep -i Count | awk '{print $NF}')
+    if [ $CEPH_COUNT -gt 0 ]
+    then
+        echo "    -e /usr/share/openstack-tripleo-heat-templates/environments/ceph-ansible/ceph-ansible.yaml \\" >> deploy
+        echo "    -e /home/stack/environments/ceph.yaml \\" >> deploy
+        echo "    -e /home/stack/environments/ceph_devices.yaml \\" >> deploy
+    fi
+
     cat $CWD/envs >> deploy
+
     echo "    --log-file deploy.log &> deploy_full.log" >> deploy
-    sed 's/CephCount/CephStorageCount/g' -i deploy
-    sed 's/CephFlavor/CephStorageFlavor/g' -i deploy
     run_script_file deploy stack "$HOST" /home/stack
-    #$SSH_CUST stack@$HOST "/home/stack/deploy"
 }

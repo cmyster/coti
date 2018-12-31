@@ -270,7 +270,7 @@ compute_SDX=1
 # ceph nodes
 ceph_NAM="ceph"
 ceph_FLV="ceph"
-ceph_NUM=0
+ceph_NUM=1
 ceph_RAM=8192
 ceph_SWP=256
 ceph_CPU=6

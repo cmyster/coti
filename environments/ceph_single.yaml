@@ -1,3 +1,0 @@
-parameter_defaults:
-  CephAnsibleExtraConfig:
-    common_single_host_mode: true

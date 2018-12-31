@@ -56,7 +56,7 @@ EOF
 
     # Createing locatedb
     /usr/bin/updatedb
-    if [ ! -r /etc/cron.hourly/updatedb]
+    if [ ! -r /etc/cron.hourly/updatedb ]
     then
         ln -s /usr/bin/updatedb /etc/cron.hourly
     fi

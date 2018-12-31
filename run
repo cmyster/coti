@@ -170,7 +170,7 @@ prepare_main_undercloud ()
 install_main_undercloud ()
 {
     # Installing the main Undercloud machine.
-    run "undercloud_install ${NODES[0]}-0" "$LONG"
+    run "undercloud_install ${NODES[0]}-0" "This should take 30-40 minutes."
     echo -e "Undercloud installed in $(time_diff $(( $(date +%s) - START)))\n"
 }
 

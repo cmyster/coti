@@ -127,6 +127,11 @@ EOF
             - '/dev/vd${LETTERS[$d]}'
 EOF
                     done
+                    # Finally we need to define the scenario.
+                        cat >> environments/ceph_devices.yaml <<EOF
+        osd_scenario: collocated
+EOF
+
                 fi
             define_vm "${NODES[$index]}"-${i}
             done

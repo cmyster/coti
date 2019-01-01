@@ -1,7 +1,7 @@
 # Test parameters.
-NAME="Example test"
-DESCRIPTION="This is just an example."
-TAG="example"
+NAME="overcloud deploy status"
+DESCRIPTION="Testing that the overcloud status is reporting success."
+TAG="overcloud"
 
 # Exit on the first error.
 set -e
@@ -11,4 +11,4 @@ set -e
 . /home/stack/tests/env
 
 # Test starts here.
-echo "Example!"
+openstack overcloud status | grep DEPLOY_SUCCESS &> /dev/null

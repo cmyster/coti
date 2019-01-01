@@ -1,0 +1,4 @@
+parameter_defaults:
+  CephPoolDefaultPgNum: 64
+  CephAnsibleExtraConfig:
+    common_single_host_mode: true

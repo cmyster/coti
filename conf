@@ -23,7 +23,7 @@ Parameters:
    oc-post: Runs post deployment tasks.
    bnr:     Backup and restore, this will backup the undercloud machine and
             restore onto a new undercloud. It needs a running deployment.
-   test:    Run tests from the tests folder on a deployment.
+   tests:   Run tests from the tests folder on a deployment.
    full:    Aims to deploy a working environment.
 
 For a full deployment:
@@ -35,7 +35,7 @@ For a full deployment:
     ./run oc-prep
     ./run oc-depl
     ./run oc-post
-    ./run test
+    ./run tests
 Or  ./run full
 "
 

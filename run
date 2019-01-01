@@ -39,7 +39,7 @@ case "$1" in
         OC_DEPLOY=true ;;
     oc-post)
         OC_POST=true ;;
-    test)
+    tests)
         RUN_TESTS=true ;;
     bnr)
         BCK_RES=true ;;
@@ -264,6 +264,6 @@ then
     undercloud_restore
 fi
 
-if $RUN_TESTS; then run_automation "${NODES[0]}"-0; fi
+if $RUN_TESTS; then run_automation "${NODES[0]}-0"; fi
 
 echo "ALL DONE in $(time_diff $(( $(date +%s) - START)))"

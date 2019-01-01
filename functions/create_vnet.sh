@@ -17,7 +17,7 @@ EOF
 
     EXT_NET=$(ls -1 net*.xml | grep -i ext)
     sed -i 2i"<forward mode='nat'><nat><port start='1024' end='65535'/></nat></forward>" "$EXT_NET"
-    sed -i 5i"<dhcp><range start='10.${nets}0.0.${DHCP_OUT_START}' end='10.${nets}0.0.${DHCP_OUT_END}'/></dhcp>" "$EXT_NET"
+    sed -i 6i"<dhcp><range start='10.${nets}0.0.${DHCP_OUT_START}' end='10.${nets}0.0.${DHCP_OUT_END}'/></dhcp>" "$EXT_NET"
 
     for xml in net*.xml
     do

@@ -12,9 +12,10 @@ add_templates ()
 
     # The external network is usually the last one.
     nets=${#NETWORKS[@]}
-    ext_net=${NETWORKS[$(( nets - 1  ))]}
+    ext_net=${NETWORKS[$(( nets - 1 ))]}
     ext_gw=$(virsh net-dumpxml "$ext_net" | grep "ip address" | tr "'" " " | awk '{print $3}')
     ext_base=$(echo "$ext_gw" | cut -d "." -f 1-3)
+    ext_vip=$(( DHCP_OUT_END + 1 ))
     namesrv="$(grep nameserver /etc/resolv.conf | head -n 1)"
     sed -i "s|FINDEXT|$ext_gw|g" ./environments/overrides.yaml
     sed -i "s|FINDCIDR|${ext_base}.0/24|g" ./environments/overrides.yaml
@@ -23,6 +24,7 @@ add_templates ()
     sed -i "s|FINDVER|$RR_CMD|g" ./templates/node_tweaks.yaml
     sed -i "s|FINDNSRV|${namesrv}|g" ./templates/node_tweaks.yaml
     sed -i "s|FINDDNS|${DNS}|g" ./environments/overrides.yaml
+    sed -i "s|FINDVIP|${ext_base}.${ext_vip}|g" ./environments/overrides.yaml
 
     tar cf environments.tar environments
     tar cf templates.tar templates

@@ -213,14 +213,14 @@ ADMIN_HOST="${CIDR}.3"
 # nodes externally bypassing some limitations caused from network isolation.
 # There is a pair of ranges, one for internal access and one for external.
 # The number here represent the final (rightmost) notation.
-# '1' is reserved for the gateway.
+# '.1' is reserved for the gateway.
 # Introspection IPs are in the same CIDR but have a differnt range.
-DHCP_IN_START=5
-DHCP_IN_END=90
-DHCP_INTRO_START=91
-DHCP_INTRO_END=120
-DHCP_OUT_START=121
-DHCP_OUT_END=250
+DHCP_OUT_START=2
+DHCP_OUT_END=90
+DHCP_IN_START=92
+DHCP_IN_END=180
+DHCP_INTRO_START=181
+DHCP_INTRO_END=250
 
 # Node numbers and settings.
 # !! The base name needs to be the same as the node names in the NODES array.

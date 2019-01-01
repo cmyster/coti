@@ -4,5 +4,6 @@ parameter_defaults:
   ExternalAllocationPools: [{'start': 'FINDSTRT', 'end': 'FINDEND'}]
   ExternalNetCidr: FINDCIDR
   ExternalInterfaceDefaultRoute: FINDEXT 
+  PublicVirtualFixedIPs: [{'ip_address':'FINDVIP'}]
   DnsServers: ["FINDDNS"]
 

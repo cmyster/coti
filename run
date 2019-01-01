@@ -197,8 +197,7 @@ deploy_overcloud ()
 {
     # Running overcloud deploy and waiting for deployment to finish.
     run "pre_oc_deploy_wa ${NODES[0]}-0"
-    run "overcloud_deploy ${NODES[0]}-0"
-    run "overcloud_wait ${NODES[0]}-0" "$LONG"
+    run "overcloud_deploy ${NODES[0]}-0" "This takes about 60-80 minutes."
     echo -e "Overcloud deployed in $(time_diff $(( $(date +%s) - START)))\n"
 }
 

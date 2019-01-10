@@ -74,18 +74,16 @@ EOF
                 # Adding networking device blocks.
                 n=1
                 # If this is the Undercloud it needs only the 
-                # ControlPlane, External and libvirt's default networks.
+                # ControlPlane and External networks.
                 if [ $index -eq 0 ]
                 then
-                    nets=${#NETWORKS[@]}                                                                                                                                                    │·······
+                    nets=${#NETWORKS[@]}
                     vnet_ctl="${NETWORKS[0]}"
                     vnet_ext="${NETWORKS[$(( nets - 1 ))]}"
                     mac_ctl=$(hexdump -n3 -e'/3 "52:51:01" 3/1 ":%02x"' /dev/urandom)
                     mac_ext=$(hexdump -n3 -e'/3 "52:51:02" 3/1 ":%02x"' /dev/urandom)
-                    mac_def=$(hexdump -n3 -e'/3 "52:51:03" 3/1 ":%02x"' /dev/urandom)
                     echo "${vnet_ctl}=${mac_ctl}" >> "$INV"
                     echo "${vnet_ext}=${mac_ext}" >> "$INV"
-                    echo "default=${mac_def}" >> "$INV"
                     cat >> "$XML" <<EOF
     <interface type='network'>
       <mac address='$mac_ctl'/>
@@ -98,12 +96,6 @@ EOF
       <source network='$vnet_ext'/>
       <model type='virtio'/>
       <address type='pci' domain='0x0000' bus='0x04' slot='0x02' function='0x0'/>
-    </interface>
-    <interface type='network'>
-      <mac address='$mac_def'/>
-      <source network='default'/>
-      <model type='virtio'/>
-      <address type='pci' domain='0x0000' bus='0x04' slot='0x03' function='0x0'/>
     </interface>
 EOF
                 else

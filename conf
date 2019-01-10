@@ -56,8 +56,8 @@ VIRT_IMG="/var/lib/libvirt/images"
 # Log file
 BASE_LOG_FILE="$(pwd)/logs/$PROJECT-$(date +%H%M%S)"
 
-# Selinux state on the undercloud.
-UNDER_SEL="permissive"
+# Selinux enabled or disabled during undercloud installation
+UNDER_SEL="false"
 
 # Selinux state on the overcloud.
 OVER_SEL="permissive"
@@ -106,6 +106,9 @@ DNS=$(grep nameserver /etc/resolv.conf | head -n 1 | cut -d " " -f 2)
 # Host default nic.
 NIC=$(ip route get $DNS | grep dev | awk '{print $5}')
 
+# Hostname's FQDN
+HOST_NAME=$(hostnamectl --static)
+
 # Host IP.
 HOST_IP=$(ifconfig $NIC | grep "inet " | awk '{print $2}')
 
@@ -145,7 +148,7 @@ SRV_DOMAIN=${FILE_SERVER##*://}
 
 # RHEL guest image.
 RHEL_VERSION="7.6"
-RHEL_GUEST="$FILE_SERVER/gen_images/cloud/rhel-guest-image-${RHEL_VERSION}-225.x86_64.qcow2"
+RHEL_GUEST="$FILE_SERVER/gen_images/cloud/rhel-guest-image-${RHEL_VERSION}-210.x86_64.qcow2"
 GUEST_FILE=$(basename $RHEL_GUEST)
 
 # Director image RPMs path.
@@ -251,7 +254,7 @@ controller_FLV="controller"
 controller_NUM=3
 controller_RAM=32768
 controller_SWP=256
-controller_CPU=5
+controller_CPU=4
 controller_DUM=0
 controller_DSK=64
 controller_SDX=1
@@ -262,7 +265,7 @@ compute_FLV="compute"
 compute_NUM=3
 compute_RAM=32768
 compute_SWP=256
-compute_CPU=5
+compute_CPU=4
 compute_DUM=0
 compute_DSK=64
 compute_SDX=1

@@ -14,11 +14,12 @@ post_uc_install_tweaks ()
         raise "${FUNCNAME[0]}"
     fi
 
-    # Need to know what is the hard coded IP looks like...
-    ssh undercloud-0 ls -l &> /dev/null <<EOF
+    # I need to swap the IP set in the UI config file to the one set in the
+    # external network to be able to connect to the UI via SSH tunnel later.
+    UI_CONF_FILE="/var/lib/config-data/puppet-generated/tripleo-ui/var/www/openstack-tripleo-ui/dist/tripleo_ui_config.js"
 
+    ($SSH_CUST root@$HOST -L 0.0.0.0:443:$PUBLIC_HOST:443) &
 
-EOF
     cat > post_uc_install_tweaks_root <<EOF
 set -e
 
@@ -59,6 +60,13 @@ for ip in $DEFAULT_GATEWAY \$(cat /home/stack/ctlplane-addr) \$(cat /home/stack/
 do
     $SSH_CUST root@\$ip "echo hello"
 done
+
+# Changing preconfigured IP to the external net's IP
+if grep $PUBLIC_HOST $UI_CONF_FILE
+then
+    sed 's/$PUBLIC_HOST/$HOST_NAME/g' -i $UI_CONF_FILE
+    docker restart tripleo_ui &> /dev/null
+fi
 EOF
 
     run_script_file post_uc_install_tweaks_root root "$HOST" /root

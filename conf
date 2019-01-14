@@ -75,7 +75,7 @@ EPEL="https://dl.fedoraproject.org/pub/epel/7/x86_64/Packages"
 LONG="(This step takes time.)"
 
 # RPM location of latest rhos-release
-LATEST_RR="http://rhos-release.virt.bos.redhat.com/repos/rhos-release/rhos-release-latest.noarch.rpm"
+LATEST_RR="http://download.eng.bos.redhat.com/rcm-guest/puddles/OpenStack/rhos-release/rhos-release-latest.noarch.rpm"
 
 # TODO:
 # I need to fix this part to search for specific puddles.

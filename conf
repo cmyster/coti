@@ -39,13 +39,12 @@ For a full deployment:
 Or  ./run full
 "
 
+# Starting location, used to resolve paths.
+CWD=$(pwd)
 
 # The script works here.
 # It is deleted and recreated in each run.
-WORK_DIR="/tmp/$PROJECT"
-
-# Starting location, used to resolve paths.
-CWD=$(pwd)
+WORK_DIR="/$CWD/workdir"
 
 # Shortcut to the tripleo heat templates.
 THT="/usr/share/openstack-tripleo-heat-templates"

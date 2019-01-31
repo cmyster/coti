@@ -1,7 +1,7 @@
 #!/bin/bash
 
 # conf file is where everything else is defined.
-source conf
+. conf
 
 # Gathering run time arguments.
 CLEAN=false
@@ -206,6 +206,9 @@ post_deploy_overcloud ()
     # Running post deploy tasks.
     run "post_oc_deploy_wa ${NODES[0]}-0"
     run "populate_hosts ${NODES[0]}-0"
+    run "post_oc_deploy_int_net ${NODES[0]}-0"
+    run "post_oc_deploy_ext_net ${NODES[0]}-0"
+    run "post_oc_deploy_repos ${NODES[0]}-0"
     echo -e "Overcloud post deploy tasks finished in $(time_diff $(( $(date +%s) - START)))\n"
 }
 

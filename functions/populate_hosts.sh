@@ -3,6 +3,7 @@ populate_hosts ()
     HOST=$1
     cat > populate_hosts <<EOF
 #!/bin/bash
+echo "# coti" >> /etc/hosts
 cd /home/stack
 source stackrc
 openstack server list -f value \\

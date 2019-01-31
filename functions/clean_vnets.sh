@@ -37,4 +37,8 @@ clean_vnets ()
             try ovs-vsctl del-br "$br" &> /dev/null || failure
         done
     fi
+
+    # Regardless, its always good to clrear cache:
+    echo "Clearing ARP cache."
+    ip -s -s neigh flush all &> /dev/null
 }

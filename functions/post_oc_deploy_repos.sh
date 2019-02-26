@@ -9,7 +9,7 @@ post_oc_deploy_repos ()
         . $inv
         ips+=" $int_ip"
     done
-    # Whilte here, piggy back and also change the root password.
+    # While here, piggy back and also change the root password.
     cat > post_oc_deploy_repos <<EOF
 set -e
 cd /etc

@@ -10,7 +10,8 @@ openstack server list -f value \\
     | awk '{print \$4" "\$2}' \\
     | sed 's/ctlplane=//g' \\
     | sed 's/overcloud-//g' \\
-    | sort -rk2 >> /etc/hosts
+    | sort -k2 >> /etc/hosts \\
+    | sed 's/storage//g'
 EOF
     run_script_file populate_hosts root "$HOST" /root
 }

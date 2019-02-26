@@ -91,7 +91,8 @@ EOF
 
     run_script_file post_uc_install_tweaks_stack stack "$HOST" /home/stack
 
-    # Save admin's password locally
-    $SSH_CUST stack@$HOST "source /home/stack/stackrc && sudo hiera admin_password" > admin_password
+    # Save admin's password locally.
+    $SSH_CUST $HOST "grep OS_PASSWORD /home/stack/stackrc" | cut -d "=" -f 2 > admin_password
+    # Save ctlplane's IP locally.
     $SSH_CUST stack@$HOST "cat /home/stack/ctlplane-addr" > ctlplane-addr
 }

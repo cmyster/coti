@@ -89,6 +89,8 @@ run ()
         tee -a "$LOG_FILE"
 }
 
+export LIBGUESTFS_BACKEND=direct
+
 host_clean ()
 {
     run clean
@@ -170,7 +172,7 @@ prepare_main_undercloud ()
 install_main_undercloud ()
 {
     # Installing the main Undercloud machine.
-    run "undercloud_install ${NODES[0]}-0" "This should take 30-40 minutes."
+    run "undercloud_install ${NODES[0]}-0" "This should take 40-50 minutes."
     echo -e "Undercloud installed in $(time_diff $(( $(date +%s) - START)))\n"
 }
 

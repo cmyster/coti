@@ -64,9 +64,6 @@ OVER_SEL="permissive"
 # Undercloud admin password
 ADMIN_PASSWORD="12345678"
 
-# How images are accessed with virt-commands.
-LIBGUESTFS_BACKEND="direct"
-
 # Base path to EPEL
 EPEL="https://dl.fedoraproject.org/pub/epel/7/x86_64/Packages"
 

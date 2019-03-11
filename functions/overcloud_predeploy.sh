@@ -17,8 +17,15 @@ BR_IP=$(cut -d " " -f 1 ctlplane-addr)
 sed -i "s/FINDEC2/\$BR_IP/g" ./environments/overrides.yaml
 
 # Adding the default DNS to the default subnet.
-SUBNET=\$(openstack subnet list -f value -c Name -c ID | grep ctlplane | cut -d " " -f 1)
-openstack subnet set --no-dns-nameservers \$SUBNET
+if [ $OS_VER -gt 11 ]
+then
+    SUBNET=\$(openstack subnet list -f value -c Name -c ID | grep ctlplane | cut -d " " -f 1)
+    openstack subnet set --no-dns-nameservers \$SUBNET
+else
+    SUBNET=\$(openstack subnet list -f value -c Name -c ID)
+    openstack subnet unset --dns-nameserver $DNS \$SUBNET
+fi
+
 openstack subnet set --dns-nameserver $DNS \$SUBNET
 
 # Updating capabilities to each node.
@@ -47,7 +54,13 @@ done
 # Running introspection.
 if ! $VIA_UI
 then
-    openstack overcloud node introspect --provide --all-manageable
+    if [ $OS_VER -gt 11 ]
+    then
+        openstack overcloud node introspect --provide --all-manageable
+    else
+        openstack baremetal configure boot
+        openstack baremetal introspection bulk start
+    fi
 fi
 
 EOF

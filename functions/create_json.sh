@@ -52,13 +52,18 @@ EOF
             cat >> temp.json <<EOF
       "disk": "$dsk",
 EOF
-            
+            if [ $OS_VER -gt 11 ]
+            then
+                IPMI="ipmi"
+            else
+                IPMI="pxe_ssh"
+            fi
             cat >> temp.json <<EOF
       "pm_addr": "$DEFAULT_GATEWAY",
       "pm_port": "$pm_port",
       "pm_user": "admin",
       "pm_password": "password",
-      "pm_type": "ipmi",
+      "pm_type": "$IPMI",
       "mac": ["$CTRL_NET"],
       "cpu": "$cpu",
       "memory": "$memory",
@@ -82,8 +87,21 @@ EOF
         cat > load_json <<EOF
 cd /home/stack
 source stackrc
+
+# Cleaning JIC
+for i in \$(ironic node-list | grep enroll | cut -d " " -f 2)
+do
+    ironic node-delete \$i
+done
+
 cp temp.json instackenv.json
-openstack overcloud node import instackenv.json
+
+if [ $OS_VER -gt 11 ]
+then
+    openstack overcloud node import instackenv.json
+else
+    openstack baremetal import --json instackenv.json
+fi
 EOF
     run_script_file load_json stack "${HOST}" /home/stack
     fi

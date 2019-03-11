@@ -76,7 +76,7 @@ LATEST_RR="http://download.eng.bos.redhat.com/rcm-guest/puddles/OpenStack/rhos-r
 # TODO:
 # I need to fix this part to search for specific puddles.
 # Version to install deploy.
-OS_VER=14
+OS_VER=10
 PUDDLE_VER="latest"
 
 # Argument to pass to rhos-release.
@@ -204,6 +204,7 @@ NETWORKS=(
 # Undercloud's local interface and host adresses, this is a new internel net.
 LOCAL_INTERFACE="eth0"
 CIDR="192.168.0" # First three octets only.
+CIDR_OLD="192.0.2" # For OSP 10 and lower.
 LOCAL_IP="${CIDR}.1/24"
 PUBLIC_HOST="${CIDR}.2"
 ADMIN_HOST="${CIDR}.3"

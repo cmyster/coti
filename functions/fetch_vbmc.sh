@@ -16,7 +16,7 @@ fetch_vbmc ()
         if ! which pip &> /dev/null
         then
             install_deps
-            try easy_install pip || failure
+            try easy_install -q pip &> /dev/null || failure
         fi
     }
 
@@ -25,20 +25,9 @@ fetch_vbmc ()
         if ! locate site-packages | grep "virtualbmc/" &> /dev/null
         then
             install_pip
-            try pip install virtualbmc || failure
+            try pip -q install virtualbmc || failure
         fi
     }
 
-    #if ! pgrep -a vbmcd &> /dev/null
-    #then
-        install_vbmc
-        #echo "Starting vbmcd."
-        #try vbmcd || failure
-        #vbmcd_pid=$(pgrep -a vbmcd | awk '{print $1}')
-        #if ! ps -o pid= -p $vbmcd_pid &> /dev/null
-        #then
-        #    echo "Couldn't start vbmcd."
-        #    raise "${FUNCNAME[0]}"
-        #fi
-    #fi
+    install_vbmc
 }

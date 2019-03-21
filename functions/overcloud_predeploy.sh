@@ -23,7 +23,10 @@ then
     openstack subnet set --no-dns-nameservers \$SUBNET
 else
     SUBNET=\$(openstack subnet list -f value -c Name -c ID)
-    openstack subnet unset --dns-nameserver $DNS \$SUBNET
+    if openstack subnet show \$SUBNET | grep $DNS &> /dev/null
+    then
+        openstack subnet unset --dns-nameserver $DNS \$SUBNET
+    fi
 fi
 
 openstack subnet set --dns-nameserver $DNS \$SUBNET

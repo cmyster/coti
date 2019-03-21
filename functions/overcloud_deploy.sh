@@ -37,9 +37,18 @@ EOF
     CEPH_COUNT=$(grep -i Ceph node_scale.yaml | grep -i Count | awk '{print $NF}')
     if [ $CEPH_COUNT -gt 0 ]
     then
-        echo "    -e /usr/share/openstack-tripleo-heat-templates/environments/ceph-ansible/ceph-ansible.yaml \\" >> deploy
+        if [ $OS_VER -gt 11 ]
+        then
+            echo "    -e /usr/share/openstack-tripleo-heat-templates/environments/ceph-ansible/ceph-ansible.yaml \\" >> deploy
+        fi
         echo "    -e /home/stack/environments/ceph.yaml \\" >> deploy
         echo "    -e /home/stack/environments/ceph_devices.yaml \\" >> deploy
+    fi
+
+    if [ $OS_VER -gt 11 ]
+    then
+        echo "    -e /usr/share/openstack-tripleo-heat-templates/environments/services/octavia.yaml \\" >> deploy
+        echo "    -e /home/stack/containers-prepare-parameter.yaml \\" >> deploy
     fi
 
     cat $CWD/envs >> deploy

@@ -60,4 +60,10 @@ EOF
     then
         ln -s /usr/bin/updatedb /etc/cron.hourly
     fi
+
+    # Creating stack user on virthost.
+    echo "Adding user stack."
+    useradd stack
+    echo stack | passwd stack --stdin
+    echo "stack ALL=(root) NOPASSWD:ALL" > /etc/sudoers.d/stack
 }

@@ -203,8 +203,13 @@ NETWORKS=(
 
 # Undercloud's local interface and host adresses, this is a new internel net.
 LOCAL_INTERFACE="eth0"
-CIDR="192.168.0" # First three octets only.
-CIDR_OLD="192.0.2" # For OSP 10 and lower.
+# We need only the first three octates.
+if [ $OS_VER -gt 11 ]
+then
+    CIDR="192.168.0"
+else
+    CIDR="192.0.2"
+fi
 LOCAL_IP="${CIDR}.1/24"
 PUBLIC_HOST="${CIDR}.2"
 ADMIN_HOST="${CIDR}.3"

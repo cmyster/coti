@@ -1,12 +1,6 @@
 undercloud_gen_conf ()
 {
     HOST=$1
-    if [ $OS_VER -gt 10 ]
-    then
-        cidr=$CIDR
-    else
-        Cidr=$CIDR_OLD
-    fi
     echo "Configuring undercloud configuration."
     cat > undercloud.conf <<EOF
 [DEFAULT]
@@ -24,11 +18,11 @@ enable_tempest=false
 undercloud_enable_selinux=$UNDER_SEL
 [ctlplane-subnet]
 local_subnet=ctlplane-subnet
-cidr=${cidr}.0/24
-dhcp_start=${cidr}.${DHCP_IN_START}
-dhcp_end=${cidr}.${DHCP_IN_END}
-gateway=${cidr}.1
-inspection_iprange=${cidr}.${DHCP_INTRO_START},${cidr}.${DHCP_INTRO_END}
+cidr=${CIDR}.0/24
+dhcp_start=${CIDR}.${DHCP_IN_START}
+dhcp_end=${CIDR}.${DHCP_IN_END}
+gateway=${CIDR}.1
+inspection_iprange=${CIDR}.${DHCP_INTRO_START},${CIDR}.${DHCP_INTRO_END}
 masquerade = true
 EOF
 

@@ -5,8 +5,8 @@ undercloud_install ()
     TAR_PATH=$(cat tar_path)
     cat > install <<EOF
 cd /home/stack
-##sudo $PKG_CUST remove *bigswitch*
-##openstack undercloud install
+sudo $PKG_CUST remove *bigswitch*
+openstack undercloud install
 
 if [ $OS_VER -gt 11 ]
 then

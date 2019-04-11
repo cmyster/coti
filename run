@@ -3,7 +3,7 @@
 # conf file is where everything else is defined.
 . conf
 
-# Gathering run time arguments.
+# Setting all steps to false.
 CLEAN=false
 HOST_PREP=false
 UC_PREP=false
@@ -15,6 +15,11 @@ OC_POST=false
 RUN_TESTS=false
 BCK_RES=false
 ONCE=false
+
+# Gathering run time arguments.
+# TODO:
+# Better argument management.
+# Index based would allow better step management and breakpoints.
 
 case "$1" in
     -h)

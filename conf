@@ -76,7 +76,7 @@ LATEST_RR="http://download.eng.bos.redhat.com/rcm-guest/puddles/OpenStack/rhos-r
 # TODO:
 # I need to fix this part to search for specific puddles.
 # Version to install deploy.
-OS_VER=10
+OS_VER=14
 PUDDLE_VER="latest"
 
 # Argument to pass to rhos-release.
@@ -264,7 +264,7 @@ controller_SDX=1
 # compute nodes
 compute_NAM="compute"
 compute_FLV="compute"
-compute_NUM=3
+compute_NUM=2
 compute_RAM=32768
 compute_SWP=256
 compute_CPU=4

@@ -75,7 +75,6 @@ EOF
 
             cat >> nodes.json <<EOF
       "name": "$name",
-      "disks": ["vda"],
       "disk": "$dsk",
       "pm_addr": "$DEFAULT_GATEWAY",
       "pm_port": "$pm_port",

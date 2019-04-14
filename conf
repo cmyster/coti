@@ -12,7 +12,6 @@ the script itself suits your needs.
 There is no reason to think it will work outside the internal network.
 
 Parameters:
-   -h, --help: Print this message.
    clean:   Cleans the system of _any_ virtual resource.
    host:    Host preparation, making sure the host and resources are ready.
    uc-prep: Prepares the undercloud machine for undercloud installation.
@@ -25,6 +24,10 @@ Parameters:
             restore onto a new undercloud. It needs a running deployment.
    tests:   Run tests from the tests folder on a deployment.
    full:    Aims to deploy a working environment.
+   once:    Run a single function.
+   until:   Run steps from clean to the required step (including).
+            For instance, prepare a system but don't run undercloud deploy:
+            './run until oc-prep'.
 
 For a full deployment:
     ./run clean
@@ -35,7 +38,6 @@ For a full deployment:
     ./run oc-prep
     ./run oc-depl
     ./run oc-post
-    ./run tests
 Or  ./run full
 "
 

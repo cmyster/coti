@@ -8,7 +8,7 @@ CWD="$(pwd)"
 echo "Adding functions."
 for file in ./functions/*.sh
 do
-    source "$file"
+    . "$file"
 done
 
 # Setting and recreating the work folder.
@@ -33,13 +33,12 @@ run ()
         tee -a "$LOG_FILE"
 }
 
-#          1     2    3       4       5       6       7       8
+# Installation step names
 STEP_NAME=(clean host uc-prep uc-inst uc-post oc-prep oc-depl oc-post)
 LAST_STEP=${#STEP_NAME[@]}
 
 # Special commands
-#        1     2    3     4   5
-SPECIAL=(tests once until bnr full)
+SPECIAL=(tests once until bnr full func-ls)
 
 STEP=$(echo ${STEP_NAME[@]} | tr " " "\n" | grep -n $1 2> /dev/null | cut -d ":" -f 1)
 SPECIAL=$(echo ${SPECIAL[@]} | tr " " "\n" | grep -n $1 2> /dev/null | cut -d ":" -f 1)
@@ -68,14 +67,13 @@ BNR=false
 if [ ! -z "$SPECIAL" ]
 then
     case $SPECIAL in 
-        1)
-            run_automation "${NODES[0]}-0" ;;
+        1) run_automation "${NODES[0]}-0" ;;
         2) 
             if [ ! -z "$2" ]
             then
-                run $2 $3
+                run $2 $3 $4 $5
             fi
-            ;;
+        ;;
         3)
             if [ -z "$2" ]
             then
@@ -87,13 +85,15 @@ then
             do
                 INSTALLATION_STEP[$(( i - 1 ))]=true
             done
-            ;;
+        ;;
         4) BNR=true ;;
         5) 
             for i in $(seq 1 $LAST_STEP)
             do
                 INSTALLATION_STEP[$(( i - 1 ))]=true
             done
+        ;;
+        6) head -qn 1 $CWD/functions/*.sh ;;
     esac
 fi
 

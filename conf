@@ -25,6 +25,7 @@ Parameters:
    tests:   Run tests from the tests folder on a deployment.
    full:    Aims to deploy a working environment.
    once:    Run a single function.
+   func-ls  List all funtions.
    until:   Run steps from clean to the required step (including).
             For instance, prepare a system but don't run undercloud deploy:
             './run until oc-prep'.

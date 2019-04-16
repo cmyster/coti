@@ -3,3 +3,4 @@
     -e /home/stack/environments/tweaks_env.yaml \
     -e /home/stack/environments/swap_env.yaml \
     -e /home/stack/environments/overrides.yaml \
+    -e /usr/share/openstack-tripleo-heat-templates/environments/services/collectd.yaml \

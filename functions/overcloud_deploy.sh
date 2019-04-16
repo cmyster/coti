@@ -47,7 +47,6 @@ EOF
 
     if [ $OS_VER -gt 11 ]
     then
-        echo "    -e /usr/share/openstack-tripleo-heat-templates/environments/services/octavia.yaml \\" >> deploy
         echo "    -e /home/stack/containers-prepare-parameter.yaml \\" >> deploy
     fi
 

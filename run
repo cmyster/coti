@@ -63,39 +63,7 @@ then
     INSTALLATION_STEP[$(( STEP - 1 ))]=true 
 fi
 
-BNR=false
-if [ ! -z "$SPECIAL" ]
-then
-    case $SPECIAL in 
-        1) run_automation "${NODES[0]}-0" ;;
-        2) 
-            if [ ! -z "$2" ]
-            then
-                run $2 $3 $4 $5
-            fi
-        ;;
-        3)
-            if [ -z "$2" ]
-            then
-                echo -ne "$HELP"
-                exit 1
-            fi
-            STEP_2=$(echo ${STEP_NAME[@]} | tr " " "\n" | grep -n $2 2> /dev/null | cut -d ":" -f 1)
-            for i in $(seq 1 $STEP_2 )
-            do
-                INSTALLATION_STEP[$(( i - 1 ))]=true
-            done
-        ;;
-        4) BNR=true ;;
-        5) 
-            for i in $(seq 1 $LAST_STEP)
-            do
-                INSTALLATION_STEP[$(( i - 1 ))]=true
-            done
-        ;;
-        6) head -qn 1 $CWD/functions/*.sh ;;
-    esac
-fi
+
 
 host_clean ()
 {
@@ -252,6 +220,42 @@ run_automation ()
     run "run_tests $1 stack overcloud"
 }
 
+# Handeling non-installation-steps arguments.
+if [ ! -z "$SPECIAL" ]
+then
+    case $SPECIAL in 
+        1) run_automation "${NODES[0]}-0" ;;
+        2) 
+            if [ ! -z "$2" ]
+            then
+                run $2 $3 $4 $5
+            fi
+        ;;
+        3)
+            if [ -z "$2" ]
+            then
+                echo -ne "$HELP"
+                exit 1
+            fi
+            STEP_2=$(echo ${STEP_NAME[@]} | tr " " "\n" | grep -n $2 2> /dev/null | cut -d ":" -f 1)
+            for i in $(seq 1 $STEP_2 )
+            do
+                INSTALLATION_STEP[$(( i - 1 ))]=true
+            done
+        ;;
+        4)
+            undercloud_backup
+            undercloud_restore
+        ;;
+        5) 
+            for i in $(seq 1 $LAST_STEP)
+            do
+                INSTALLATION_STEP[$(( i - 1 ))]=true
+            done
+        ;;
+        6) head -qn 1 $CWD/functions/*.sh ;;
+    esac
+fi
 # Step 0 - clean.
 if ${INSTALLATION_STEP[0]}; then host_clean; fi
 
@@ -281,11 +285,5 @@ if ${INSTALLATION_STEP[6]}; then deploy_overcloud; fi
 
 # Step 7 - post deploy tweaks.
 if ${INSTALLATION_STEP[7]}; then post_deploy_overcloud; fi
-
-if $BNR
-then
-    undercloud_backup
-    undercloud_restore
-fi
 
 echo "ALL DONE in $(time_diff $(( $(date +%s) - START)))"

@@ -79,7 +79,7 @@ LATEST_RR="http://download.eng.bos.redhat.com/rcm-guest/puddles/OpenStack/rhos-r
 # TODO:
 # I need to fix this part to search for specific puddles.
 # Version to install deploy.
-OS_VER=14
+OS_VER=15
 PUDDLE_VER="latest"
 
 # Argument to pass to rhos-release.
@@ -146,8 +146,8 @@ FILE_SERVER="http://ikook.tlv.redhat.com"
 SRV_DOMAIN=${FILE_SERVER##*://}
 
 # RHEL guest image.
-RHEL_VERSION="7.6"
-RHEL_GUEST="$FILE_SERVER/gen_images/cloud/rhel-guest-image-${RHEL_VERSION}-239.x86_64.qcow2"
+RHEL_VERSION="8.0"
+RHEL_GUEST="$FILE_SERVER/gen_images/cloud/rhel-guest-image-${RHEL_VERSION}-latest.x86_64.qcow2"
 GUEST_FILE=$(basename $RHEL_GUEST)
 
 # Director image RPMs path.

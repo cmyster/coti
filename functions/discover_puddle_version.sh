@@ -36,7 +36,7 @@ EOF
         echo "Extracting rhos-release RPM."
         try rpm2cpio rhos-release-latest.noarch.rpm | cpio -idmv &> /dev/null || failure
         echo "Getting repo URL from rhos-release."
-        URL=$(grep -A2 rhelosp-"${OS_VER}".0-puddle var/lib/rhos-release/repos/rhos-release-"${OS_VER}".repo | grep baseurl | cut -d = -f 2 | rev | cut -d "/" -f 5- | rev)
+        URL=$(grep -A2 rhelosp-"${OS_VER}".0-trunk var/lib/rhos-release/repos/rhos-release-"${OS_VER}"-trunk.repo | grep baseurl | cut -d = -f 2 | rev | cut -d "/" -f 6- | rev | head -n 1)
         echo "$URL" > puddle_dir_path
         echo "Using repo URL: $URL"
     }
@@ -44,7 +44,7 @@ EOF
     discover ()
     {
         URL=$(cat puddle_dir_path)
-        PUDDLE=$(elinks --dump $URL/passed_phase2/RH7-RHOS-"${OS_VER}".0.repo | grep baseurl | grep "basearch/os" | rev | cut -d "/" -f 4 | rev)
+        PUDDLE=$(elinks --dump $URL/latest-RHOS_TRUNK-"${OS_VER}"-RHEL-8/COMPOSE_ID | awk '{print $NF}')
 
         if [ -z "$PUDDLE" ]                                                        
         then                                                                  
@@ -54,7 +54,7 @@ EOF
 
         if [ $OS_VER -gt 11 ]
         then
-            try wget "$URL"/passed_phase2/overcloud_container_image_prepare.yaml || failure
+            try wget "$URL/$PUDDLE"/overcloud_container_image_prepare.yaml || failure
         fi
         set_puddle "$PUDDLE"
         echo "Using puddle: ${PUDDLE}."

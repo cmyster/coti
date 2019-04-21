@@ -1,0 +1,9 @@
+resource_registry:
+  OS::TripleO::Services::Rhsm: /usr/share/openstack-tripleo-heat-templates/extraconfig/services/rhsm.yaml
+
+parameter_defaults:
+  RhsmVars:
+    rhsm_server_hostname: subscription.rhn.stage.redhat.com
+    rhsm_method: portal
+    rhsm_activation_key: qa-automation
+    rhsm_org_id: 13356321

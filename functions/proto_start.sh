@@ -1,6 +1,8 @@
 proto_start ()
 {
-    try virt-install --ram 8192 --vcpus 4 --os-variant rhel7 --disk path="$VIRT_IMG"/proto.qcow2 --import --network network:default --name proto || failure
+    virt-install --ram 8192 --vcpus 4 --os-variant rhel8.0 --disk path="$VIRT_IMG/proto.qcow2" --import --network network:default --name proto --print-xml > proto.xml
+    try virsh define proto.xml || failure
+    try virt-customize $VIRSH_CUST --network -a "$VIRT_IMG/proto.qcow2" --run-command "/bin/sh /root/firstboot" || failure
 
     echo "Prepering a proto so it will be easier to install undercloud later."
 

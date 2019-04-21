@@ -10,6 +10,8 @@ discover_puddle_version ()
             echo "$1" > puddle
             RR_CMD="${OS_VER} -p $1"
             echo "$RR_CMD" > rr_cmd
+            # DELETE after trunk phase!
+            try sed 's/15/15-trunk/g' -i rr_cmd || failure
             if [ $OS_VER -gt 11 ]
             then
                 NAMESPACE=$(grep " namespace:" overcloud_container_image_prepare.yaml | awk '{print $NF}')

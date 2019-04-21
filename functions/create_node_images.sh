@@ -1,6 +1,11 @@
 create_node_images ()
 {
     echo "Creating images for each node."
+    if [ ! -d "$WORK_DIR/appliance" ]
+    then
+        get_appliance
+    fi
+
     for (( index=0; index<${#NODES[@]}; index++ ))
     do
         eval DSK="\$${NODES[$index]}"_DSK

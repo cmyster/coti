@@ -1,6 +1,6 @@
 create_images ()
 {
-    export DIB_LOCAL_IMAGE=$GUEST_IMAGE
+    export DIB_LOCAL_IMAGE=$(cat guest_image)
     export DIB_CLOUD_INIT_ETC_HOSTS=false
     DIB_YUM_REPO_CONF="$(find /etc/yum.repos.d -type f | grep -v redhat | tr "\n" " ")"
     export DIB_YUM_REPO_CONF

@@ -18,5 +18,4 @@ set_puddle_params ()
     MODIFIED_GUEST=${MODIFIED_GUEST:-"$TAR_PATH/guest-image.qcow2"}
     echo "$MODIFIED_GUEST" > modified_guest
     GUEST_IMAGE=$(basename "$MODIFIED_GUEST")
-    echo "$GUEST_IMAGE" > guest_image
 }

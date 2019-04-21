@@ -153,5 +153,6 @@ shutdown -hP -t 0 now | tee -a \$LOG_FILE
 
 EOF
     chmod +x firstboot
-    try virt-customize $VIRSH_CUST -a $VIRT_IMG/proto.qcow2 --firstboot ./firstboot || failure
+    try virt-sysprep -q -a "$VIRT_IMG"/proto.qcow2 --upload "$WORK_DIR"/firstboot:/root || failure
+#    try virt-customize $VIRSH_CUST -a $VIRT_IMG/proto.qcow2 --firstboot ./firstboot || failure
 }

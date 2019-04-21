@@ -142,17 +142,23 @@ LETTERS=( "a" "b" "c" "d" "e" "f" "g" "h" "i" "j" "k" "l" "m" "n" "o" "p" "q" "r
 # Server to download images from.
 FILE_SERVER="http://ikook.tlv.redhat.com"
 
-# Server's domain.
+# Server's domain name.
 SRV_DOMAIN=${FILE_SERVER##*://}
+
+# Where guest images are kept on the file server. 
+GUEST_BASE_PATH="/home/ftp/gen_images/cloud"
+GUEST_BASE_LINK="gen_images/cloud"
 
 # RHEL guest image.
 RHEL_VERSION="8.0"
-RHEL_GUEST="$FILE_SERVER/gen_images/cloud/rhel-guest-image-${RHEL_VERSION}-latest.x86_64.qcow2"
+IMAGE_PATH="$GUEST_BASE_LINK/rhel-guest-image-${RHEL_VERSION}-latest.x86_64.qcow2"
+RHEL_GUEST="$FILE_SERVER/$IMAGE_PATH"
 GUEST_FILE=$(basename $RHEL_GUEST)
 
 # Director image RPMs path.
-OC_IMAGES="$FILE_SERVER/rpms/rhos$OS_VER/rhosp-director-images-$OS_VER-latest.rpm"
-OC_IPA="$FILE_SERVER/rpms/rhos$OS_VER/rhosp-director-images-$OS_VER-ipa-latest.rpm"
+RPM_BASE_PATH="/home/ftp/images/rpms${OS_VER}"
+OC_IMAGES="$FILE_SERVER/rpms/rhos$OS_VER/rhosp-director-images-${OS_VER}-latest.rpm"
+OC_IPA="$FILE_SERVER/rpms/rhos$OS_VER/rhosp-director-images-${OS_VER}-ipa-latest.rpm"
 
 # Path to the folder that contains all the repos
 AUTO_PATH="$FILE_SERVER/auto"
@@ -173,6 +179,9 @@ ROOT_PASS="12345678"
 # NTP server to be used.
 # Default is taken from the host.
 NTP=$(grep "'^server'\|iburst" /etc/ntp.conf | cut -d " " -f 2 | head -n 1)
+
+# libvirt's appliance
+APPLIANCE="appliance-1.40.1.tar.xz"
 
 # Backup and restore. Starting Liberty, a backing up and restore mechanism for the
 # Undercloud node was created. If set to true here, undercloud-0 will be backed-up,

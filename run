@@ -62,7 +62,7 @@ then
     INSTALLATION_STEP[$(( STEP - 1 ))]=true 
 fi
 
-export LIBGUESTFS_PATH="$WORK_DIR/appliance"
+#export LIBGUESTFS_PATH="$WORK_DIR/appliance"
 export LIBGUESTFS_BACKEND="direct"
 
 host_clean ()
@@ -102,7 +102,6 @@ create_installation_images ()
     # If no installation images are available, create them for the requested version.
     if $CREATE_IMAGES
     then
-        run get_ntpd_settings
         run proto_create
         run proto_prerun
         run proto_firstrun

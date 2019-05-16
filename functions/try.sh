@@ -1,9 +1,11 @@
 try ()
 {
     rm -rf tmpcmd tmpcmd-err
-    echo "$@" &> tmpcmd
-    echo "$@" &>> "$LOG_FILE"
-    $@ 2> tmpcmd-err
+    cat > tmpcmd <<EOF
+$@
+EOF
+    chmod +x tmpcmd
+    ./tmpcmd 2> tmpcmd-err
     RETURN=$?
     case $RETURN in
         0) echo "DONE" &>> "$LOG_FILE" ;;

@@ -115,7 +115,7 @@ HOST_IP=$(ifconfig $NIC | grep "inet " | awk '{print $2}')
 HOST_PASS="12345678"
 
 # virt-customize arguments.
-VIRSH_CUST="-m 8192 --smp 6 -q"
+VIRSH_CUST="-m 8192 --smp 6"
 
 # SSH arguments.
 SSH_CUST="/usr/bin/ssh -qtt -o StrictHostKeyChecking=no"
@@ -151,7 +151,7 @@ GUEST_BASE_LINK="gen_images/cloud"
 
 # RHEL guest image.
 RHEL_VERSION="8.0"
-IMAGE_PATH="$GUEST_BASE_LINK/rhel-guest-image-${RHEL_VERSION}-latest.x86_64.qcow2"
+IMAGE_PATH="$GUEST_BASE_LINK/rhel-guest-image-${RHEL_VERSION}-stable.x86_64.qcow2"
 RHEL_GUEST="$FILE_SERVER/$IMAGE_PATH"
 GUEST_FILE=$(basename $RHEL_GUEST)
 
@@ -178,7 +178,20 @@ ROOT_PASS="12345678"
 
 # NTP server to be used.
 # Default is taken from the host.
-NTP=$(grep "'^server'\|iburst" /etc/ntp.conf | cut -d " " -f 2 | head -n 1)
+if [ -r /etc/ntp.conf ]
+then
+    TIME_SERVER=ntp
+elif [ -r /etc/chrony.conf ]
+then
+    TIME_SERVER=chrony
+fi
+
+if [ ! -z "$TIME_SERVER" ]
+then
+    NTP=$(grep "'^server'\|iburst" "/etc/${TIME_SERVER}.conf" | cut -d " " -f 2 | head -n 1)
+else
+    NTP="clock.redhat.com"
+fi
 
 # libvirt's appliance
 APPLIANCE="appliance-1.40.1.tar.xz"

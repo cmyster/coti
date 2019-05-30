@@ -8,7 +8,8 @@ pre_uc_install_wa ()
     echo "Running pre-undercloud install workarounds."
     cat > pre_uc_install_wa <<EOF
 ### Workrounds go here
-# This is to avoid some dependancy hell.
+# =====================================================================
+### This is to avoid some dependancy hell.
 for pack in "iptables" "subscription-manager" "bigswitch"
 do
     if rpm -qa | grep \$pack
@@ -17,6 +18,12 @@ do
     fi
 done
 sudo yum install -y subscription-manager iptables
+# =====================================================================
+### Self Signed IT CA needs to be refreshed
+cd /etc/pki/ca-trust/source/anchors
+sudo wget https://password.corp.redhat.com/RH-IT-Root-CA.crt
+update-ca-trust
+# =====================================================================
 ### End of workarounds
 EOF
 

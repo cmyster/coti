@@ -24,13 +24,6 @@ clean_vnets ()
             remove_vnet "$vnet"
         done
 
-        for br in $(brctl show | sed 1d | awk '{print $1}')
-        do
-            echo "Clearing virtual bridge: $br"
-            try ifconfig "$br" down || failure
-            try brctl delbr "$br" &> /dev/null || failure
-        done
-
         for br in $(ovs-vsctl list-br 2> /dev/null)
         do
             echo "Clearing ovs bridge: $br"

@@ -4,11 +4,11 @@ proto_firstrun ()
     cat > firstboot <<EOF
 set -e
 cd /root
-systemctl disable NetworkManager
-$PKG_CUST remove cloud-init* NetworkManager* *bigswitch*
-
-dhclient eth0
-ping -w 3 www.google.com
+if ! ps -ef | grep dhclient &> /dev/null
+then
+    dhclient eth0
+    ping -w 3 www.google.com
+fi
 
 if [ -r files.tar ]
 then
@@ -17,24 +17,21 @@ then
     rm -rf *rpm
 fi
 
+echo "Setting up repos."
 rm -rf /etc/yum.repos.d/* /var/cache/yum/*
-rhos-release $RR_CMD
+rhos-release $RR_CMD &> /dev/null
+sed "s|RHOS_TRUNK-15-trunk|RHOS_TRUNK-15|g" -i /etc/yum.repos.d/rhos-release-15-trunk.repo
 
-# Updating the system.
-if $UPDATE_IMAGE
-then
-    $PKG_CUST update
-fi
+echo "Updating the OS."
+$PKG_CUST update
 
-# Installing needed power management packages and other tools.
-$PKG_CUST install acpid createproto crudini device-mapper-multipath \
-dosfstools elinks gdb gdisk genisoimage git gpm hdparm ipmitool \
-iscsi-initiator-utils lsof mc mlocate net-tools ntp plotnetcfg \
-psmisc python-setuptools screen setroubleshoot sos sshpass \
-sysstat telnet tmux traceroute tree vim wget
+echo "Installing some tools."
+$PKG_CUST install acpid device-mapper-multipath dosfstools gdb gdisk \\
+genisoimage git gpm ipmitool iscsi-initiator-utils lsof mc mlocate psmisc \\
+setroubleshoot sos sysstat telnet tmux traceroute tree vim 
+$PKG_CUST groupinstall "Development Tools"
 
-
-# Installing OOO client.
+echo "Installing TripleO client."
 $PKG_CUST install python3-tripleoclient
 
 if ls *.conf 2> /dev/null
@@ -45,9 +42,9 @@ then
     done
 fi
 
-# creating a SWAP file and compresssing it.
 if [ $undercloud_SWP -gt 1 ]
 then
+    echo "Creating SWAP file."
     dd if=/dev/zero of=/swap bs=1M count=$undercloud_SWP
     chmod 600 /swap
     mkswap /swap

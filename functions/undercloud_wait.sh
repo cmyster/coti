@@ -21,7 +21,9 @@ undercloud_wait ()
                 raise "${FUNCNAME[0]}"
             else
                 echo "An undercloud called $HOST sent hello from ${IP}."
-                try set_hosts "$HOST" "$IP" || failure
+                echo "Writing $HOST ($IP) to /etc/hosts"
+                sed -i '/'"$HOST"'/d' /etc/hosts
+                echo "$IP $HOST" >> /etc/hosts
             fi
             break
         fi

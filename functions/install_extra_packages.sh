@@ -27,7 +27,7 @@ install_extra_packages ()
         if ! rpm -qa | grep "$1" &> /dev/null
         then
             echo "Installing $1"
-            pkg=$(/bin/ls -1 "${1}"*)
+            pkg=$(find -maxdepth 1 -name "*${1}*")
             rpm -Uvh "$pkg"
         fi
     }

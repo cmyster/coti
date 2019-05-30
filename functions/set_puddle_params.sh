@@ -15,7 +15,7 @@ set_puddle_params ()
     TAR_PATH=${TAR_PATH:-"$AUTO_PATH/$OS_VER/$PUDDLE"}
     echo "$TAR_PATH" > tar_path
     # Location of the modified guest image.
-    MODIFIED_GUEST=${MODIFIED_GUEST:-"$TAR_PATH/guest-image.qcow2"}
+    MODIFIED_GUEST=${MODIFIED_GUEST:-"$TAR_PATH/rhel-guest-image-8.0-stable.x86_64.qcow2"}
     echo "$MODIFIED_GUEST" > modified_guest
     GUEST_IMAGE=$(basename "$MODIFIED_GUEST")
 }

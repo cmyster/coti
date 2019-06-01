@@ -29,17 +29,15 @@ yum update -y
 # Install ceph-ansible.
 yum install -y ceph-ansible &> /dev/null
 
-# Saving the IPs set for br-ctlplane and docker0.
-rm -rf ctlplane-addr docker0-addr
+# Saving the IPs set for br-ctlplane.
+rm -rf ctlplane-addr
 /usr/sbin/ip a | grep -A10 "br-ctlplane:" | grep "inet " | awk '{print \$2}' | cut -d "/" -f 1 | sort | tr "\\n" " "  > /home/stack/ctlplane-addr
-/usr/sbin/ip a | grep -A4 "docker0:" | grep "inet " | awk '{print \$2}' | cut -d "/" -f 1 | sort | tr "\\n" " " > /home/stack/docker0-addr
-chown stack:stack /home/stack/ctlplane-addr /home/stack/docker0-addr
+chown stack:stack /home/stack/ctlplane-addr
 if [ ! -f /home/stack/ctlplane-addr ]
 then
     exit 1
 fi
 BR_IP=\$(cut -d " " -f 1 /home/stack/ctlplane-addr)
-DK_IP=\$(cut -d " " -f 1 /home/stack/docker0-addr)
 
 if [ -z $DEFAULT_GATEWAY ]; then exit 1; fi
 
@@ -49,24 +47,16 @@ then
     ssh-keygen -t rsa -N "" -f "/root/.ssh/id_rsa"
 fi
 
+sed '/PermitRootLogin/d' -i /etc/ssh/sshd_config
+echo "PermitRootLogin yes" >> /etc/ssh/sshd_config
+systemctl restart sshd
+
 # Copying SSH ids.
-for ip in $DEFAULT_GATEWAY \$(cat /home/stack/ctlplane-addr) \$(cat /home/stack/docker0-addr) $HOST_IP
+for ip in $DEFAULT_GATEWAY \$(cat /home/stack/ctlplane-addr) $HOST_IP
 do
     sshpass -p $HOST_PASS ssh-copy-id root@\$ip &> /dev/null
-done
-
-# Testing passwordless SSH.
-for ip in $DEFAULT_GATEWAY \$(cat /home/stack/ctlplane-addr) \$(cat /home/stack/docker0-addr) 
-do
     $SSH_CUST root@\$ip "echo hello"
 done
-
-# Changing preconfigured IP to the external net's IP
-if grep $PUBLIC_HOST $UI_CONF_FILE
-then
-    sed 's/$PUBLIC_HOST/$HOST_NAME/g' -i $UI_CONF_FILE
-    docker restart tripleo_ui &> /dev/null
-fi
 EOF
 
     run_script_file post_uc_install_tweaks_root root "$HOST" /root
@@ -77,14 +67,9 @@ set -e
 cd /home/stack
 
 # Copying SSH ids.
-for ip in $DEFAULT_GATEWAY \$(cat /home/stack/ctlplane-addr) \$(cat /home/stack/docker0-addr)
+for ip in $DEFAULT_GATEWAY \$(cat /home/stack/ctlplane-addr)
 do
     sshpass -p $HOST_PASS ssh-copy-id root@\$ip &> /dev/null
-done
-
-# Testing passwordless SSH.
-for ip in $DEFAULT_GATEWAY \$(cat /home/stack/ctlplane-addr) \$(cat /home/stack/docker0-addr) 
-do
     $SSH_CUST root@\$ip "echo hello"
 done
 EOF

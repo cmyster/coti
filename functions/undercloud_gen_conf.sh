@@ -13,7 +13,7 @@ undercloud_public_host=$PUBLIC_HOST
 undercloud_admin_host=$ADMIN_HOST
 undercloud_ntp_servers=$NTP
 container_images_file=/home/stack/containers-prepare-parameter.yaml
-docker_insecure_registries=$RHOS_REG,$CEPH_REG
+container_insecure_registries=$RHOS_REG,$CEPH_REG
 enable_tempest=false
 undercloud_enable_selinux=$UNDER_SEL
 [ctlplane-subnet]

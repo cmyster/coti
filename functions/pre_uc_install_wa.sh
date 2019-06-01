@@ -22,7 +22,7 @@ sudo yum install -y subscription-manager iptables
 ### Self Signed IT CA needs to be refreshed
 cd /etc/pki/ca-trust/source/anchors
 sudo wget https://password.corp.redhat.com/RH-IT-Root-CA.crt
-update-ca-trust
+sudo update-ca-trust
 # =====================================================================
 ### End of workarounds
 EOF

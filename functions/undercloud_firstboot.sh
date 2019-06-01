@@ -17,6 +17,8 @@ then
     tar -xC / -f \$BACKUP_FILE etc/yum.repos.d
 else
     rhos-release $RR_CMD || exit 1
+    ### TODO: Delete this after trunk is stable:
+    sed "s|RHOS_TRUNK-15-trunk|RHOS_TRUNK-15|g" -i /etc/yum.repos.d/rhos-release-15-trunk.repo
 fi
 
 echo "Creating a configuration file for each NIC." &>> \$LOG_FILE

@@ -21,7 +21,7 @@ discover_puddle_version ()
                 CEPH_IMAGE=$(grep " ceph-image:" overcloud_container_image_prepare.yaml | awk '{print $NF}')
                 CEPH_TAG=$(grep " ceph-tag:" overcloud_container_image_prepare.yaml | awk '{print $NF}')
 
-                cat > docker_image_params <<EOF
+                cat > container_image_params <<EOF
     --namespace $NAMESPACE \\
     --prefix $PREFIX \\
     --tag $TAG \\

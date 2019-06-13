@@ -132,7 +132,8 @@ create_virtual_environment ()
 prepare_main_undercloud ()
 {
     # Preparing the main Undercloud machine.
-    run "vm_power ${NODES[0]}-0 start" "$LONG"
+    run "vm_power ${NODES[0]}-0 start"
+    run "undercloud_initrun ${NODES[0]}-0" "$LONG"
     run "undercloud_wait ${NODES[0]}-0" "$LONG"
     run "undercloud_ssh_access ${NODES[0]}-0 root $ROOT_PASS"
     run "undercloud_ssh_access ${NODES[0]}-0 stack stack"

@@ -27,8 +27,8 @@ $PKG_CUST update
 
 echo "Installing some tools."
 $PKG_CUST install acpid device-mapper-multipath dosfstools gdb gdisk \\
-genisoimage git gpm ipmitool iscsi-initiator-utils lsof mc mlocate psmisc \\
-setroubleshoot sos sysstat telnet tmux traceroute tree vim 
+genisoimage git gpm ipmitool iscsi-initiator-utils lsof mc mlocate nmap-ncat \\
+psmisc setroubleshoot sos sysstat telnet tmux traceroute tree vim wget 
 $PKG_CUST groupinstall "Development Tools"
 
 echo "Installing TripleO client."

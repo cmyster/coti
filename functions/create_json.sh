@@ -15,9 +15,7 @@ create_json ()
     fi
 
     rm -rf nodes.json head.json
-    if [ $OS_VER -gt 11 ]
-    then
-        cat > head.json <<EOF
+    cat > head.json <<EOF
 {
   "ssh-user": "stack",
   "ssh-key": "FINDKEY",
@@ -26,13 +24,7 @@ create_json ()
   "arch": "x86_64",
   "nodes": [
 EOF
-    else
-        cat > head.json <<EOF
-{
-    "nodes": [
-EOF
-    fi
-    
+
     invs=( $(ls -1 ./*.inv | grep -v "${NODES[0]}") )
     if [ ${#invs[@]} -gt 0 ]
     then
@@ -103,38 +95,22 @@ EOF
     if ! $VIA_UI
     then
         cat > load_json <<EOF
+set -e
 cd /home/stack
-source stackrc
+. stackrc
 
-# Cleaning JIC
-for i in \$(ironic node-list | grep enroll | cut -d " " -f 2)
+for node in \$(openstack baremetal node list -f value | cut -d " " -f 1)
 do
-    ironic node-delete \$i
+    openstack baremetal node delete $node &> /dev/null
 done
 
-if [ $OS_VER -lt 11 ]
-then
-    KEY=\$(<.ssh/id_rsa)
-    KEY="\${KEY//\$'\\n'/\\\\\\\\n}"
-    sed -e "s|FINDKEY|\$KEY|g" -i temp.json
-fi
+KEY=\$(<.ssh/id_rsa)
+KEY="\${KEY//\$'\\n'/\\\\\\\\n}"
+sed -e "s|FINDKEY|\$KEY|g" -i temp.json
 
 cp temp.json instackenv.json
 
-if [ $OS_VER -gt 11 ]
-then
-    openstack overcloud node import instackenv.json
-else
-    sshpass -p "stack" ssh-copy-id stack@$DEFAULT_GATEWAY
-    openstack baremetal import --json instackenv.json
-
-    # Even after the commands exit successfully, ironic keeps talking to the
-    # host libvirt and try stuff. I have to wait here otherwise next steps
-    # will not succeed.
-    sleep 200
-fi
-
-
+openstack overcloud node import instackenv.json
 EOF
     run_script_file load_json stack "${HOST}" /home/stack
     fi

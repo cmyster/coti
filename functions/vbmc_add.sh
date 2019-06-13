@@ -4,7 +4,7 @@ vbmc_add ()
 
     if ! pgrep vbmcd
     then
-        try vbmcd || failure
+        vbmcd --foreground &
     fi
 
     invs=( $(ls -1 *.inv | grep -v "${NODES[0]}") )
